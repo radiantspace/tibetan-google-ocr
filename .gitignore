@@ -1,0 +1,6 @@
+# Ignore API keys and test outputs
+.env
+test_pages/
+ocr_results/
+__pycache__/
+*.pyc
