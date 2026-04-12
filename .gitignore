@@ -4,6 +4,7 @@ test_pages/
 ocr_results/
 roerich/
 roerich_output/
+roerich_test_output/
 __pycache__/
 *.pyc
 .venv/
