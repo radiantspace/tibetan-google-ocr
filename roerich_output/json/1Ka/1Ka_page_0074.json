@@ -1,0 +1,171 @@
+[
+  {
+    "continued_from_prev_page": true,
+    "english": "sir, master; 2) neighbour.",
+    "russian": "хозяин; 2) живущий по соседству, сосед."
+  },
+  {
+    "tibetan": "སྐུ་བཞུགས་གནང་བ།",
+    "wylie": "sku bzhugs gnang ba",
+    "english": "hon. to live, to dwell at.",
+    "russian": "почт. жить, пребывать."
+  },
+  {
+    "tibetan": "སྐུ་བཞེངས་གནང་བ།",
+    "wylie": "sku bzhengs gnang ba",
+    "english": "hon. to get up.",
+    "russian": "почт. соизволить встать, подняться."
+  },
+  {
+    "tibetan": "སྐུ་ཟླ།",
+    "wylie": "sku zla",
+    "english": "hon. spouse, consort (male or female).",
+    "russian": "почт. супруг; супруга."
+  },
+  {
+    "tibetan": "སྐུ་གཟན།",
+    "wylie": "sku gzan",
+    "english": "hon. wrapper worn by lamas.",
+    "russian": "почт. прямоугольный кусок красной ткани (длина 5-6 м, ширина 1м, носимый ламами. Перекидывается через левое плечо и обматывается вокруг талии)."
+  },
+  {
+    "tibetan": "སྐུ་གཟིམ་གནང་བ།",
+    "wylie": "sku gzim gnang ba",
+    "english": "hon. to fall asleep; སྐུ་གཟིམ་མནལ་འདོད་པ། drowsiness.",
+    "russian": "почт. засыпать, заснуть; སྐུ་གཟིམ་མནལ་འདོད་པ། дремота."
+  },
+  {
+    "tibetan": "སྐུ་གཟུགས།",
+    "wylie": "sku gzugs",
+    "english": "hon. 1) body; ~ བདེ་པོ། healthy; 2) image; statue; ~ ཀྱི་ཚད། dimensions of image.",
+    "russian": "почт. 1) тело; ~ བདེ་པོ། здоровый, не больной; 2) образ, изображение; статуя; ~ ཀྱི་ཚད། размеры изображения.",
+    "sanskrit": "pratimāmāna"
+  },
+  {
+    "tibetan": "སྐུ་ཡ་རབས།",
+    "wylie": "sku ya rabs",
+    "english": "noble.",
+    "russian": "благородный."
+  },
+  {
+    "tibetan": "སྐུ་ཡལ་བ།",
+    "wylie": "sku yal ba",
+    "english": "hon. to die.",
+    "russian": "почт. скончаться, умереть."
+  },
+  {
+    "tibetan": "སྐུ་ཡོན།",
+    "wylie": "sku yon",
+    "english": "I hon. reward.",
+    "russian": "I почт. вознаграждение, оплата."
+  },
+  {
+    "tibetan": "སྐུ་ཡོན།",
+    "wylie": "sku yon",
+    "english": "II hon. 1) virtue, good quality; 2) learning; ~ སྦྱོང་བ། to study.",
+    "russian": "II почт. 1) добродетель; заслуга; 2) учёность, познания; ~ སྦྱོང་བ། изучать."
+  },
+  {
+    "tibetan": "སྐུ་ཡོལ།",
+    "wylie": "sku yol",
+    "english": "hon. under-garments.",
+    "russian": "почт. нижнее бельё."
+  },
+  {
+    "tibetan": "སྐུ་ར་བད་པ།",
+    "wylie": "sku ra bad pa",
+    "english": "hon. to be drunk.",
+    "russian": "почт. быть пьяным."
+  },
+  {
+    "tibetan": "སྐུ་རགས།",
+    "wylie": "sku rags",
+    "english": "hon. sash, belt.",
+    "russian": "почт. пояс, ремень, кушак."
+  },
+  {
+    "tibetan": "སྐུ་རིང།",
+    "wylie": "sku ring",
+    "english": "hon. period of life.",
+    "russian": "почт. период земного существования, продолжительность жизни."
+  },
+  {
+    "tibetan": "སྐུ་རིམ།",
+    "wylie": "sku rim",
+    "english": "hon. 1) respect, reverence; 2) religious service; ~ ཆོས་རྭ། evening classes in a monastery.",
+    "russian": "почт. 1) почтение, уважение, благоговение; 2) религиозная церемония, религиозный обряд; ~ ཆོས་རྭ། вечерние занятия в монастыре на богословском факультете."
+  },
+  {
+    "tibetan": "སྐུ་རུ།",
+    "wylie": "sku ru",
+    "english": "water-wheel without a rim (such are the water-wheels at all the mills in the Himalayas).",
+    "russian": "водяное колесо без обода (такие колёса стоят на водяных мельницах в Гималаях)."
+  },
+  {
+    "tibetan": "སྐུ་རུ་ཁ།",
+    "wylie": "sku ru kha",
+    "english": "polygr. asterisk.",
+    "russian": "полигр. звёздочка."
+  },
+  {
+    "tibetan": "སྐུ་རུས།",
+    "wylie": "sku rus",
+    "english": "hon. 1) relics; 2) family, lineage.",
+    "russian": "почт. 1) останки; мощи; 2) род, происхождение."
+  },
+  {
+    "tibetan": "སྐུ་ལུས།",
+    "wylie": "sku lus",
+    "english": "hon. body.",
+    "russian": "почт. тело."
+  },
+  {
+    "tibetan": "སྐུ་ཤ།",
+    "wylie": "sku sha",
+    "english": "hon. meat, flesh; ~ རྒྱགས་པ། fat, corpulent; ~ བསྐམས་པ། lean, thin; ~ འཐུར་བ། corpulent.",
+    "russian": "почт. мясо; ~ རྒྱགས་པ། тучный, дородный; ~ བསྐམས་པ། тощий, худой; ~ འཐུར་བ། дородный, полный."
+  },
+  {
+    "tibetan": "སྐུ་ཤིག",
+    "wylie": "sku shig",
+    "english": "hon. insect.",
+    "russian": "почт. насекомое."
+  },
+  {
+    "tibetan": "སྐུ་ཤུགས།",
+    "wylie": "sku shugs",
+    "english": "hon. force, strength.",
+    "russian": "почт. сила."
+  },
+  {
+    "tibetan": "སྐུ་ཤེད།",
+    "wylie": "sku shed",
+    "english": "hon. force, strength.",
+    "russian": "почт. сила."
+  },
+  {
+    "tibetan": "སྐུ་གཤེགས།",
+    "wylie": "sku gshegs",
+    "english": "hon. death.",
+    "russian": "почт. смерть."
+  },
+  {
+    "tibetan": "སྐུ་གཤེགས་པ།",
+    "wylie": "sku gshegs pa",
+    "english": "hon. to die.",
+    "russian": "почт. умирать."
+  },
+  {
+    "tibetan": "སྐུ་གཤེན།",
+    "wylie": "sku gshen",
+    "english": "respectful address to the great teacher of the Bön (གཤེན་རབས་མི་བོ།).",
+    "russian": "почтительное обращение к основателю религии Бон (གཤེན་རབས་མི་བོ།)."
+  },
+  {
+    "tibetan": "སྐུ་སྲས།",
+    "wylie": "sku sras",
+    "english": "hon. child, boy; ~ བརྒྱད། the eight spiritual sons of གཤེན་རབས་མི་བོ། (the great teacher of the Bön): 1) མུ་ཆོ། 2) འོལ་དྲུག་ཐང་པོ།",
+    "russian": "почт. ребёнок, сын; ~ བརྒྱད། восемь духовных сыновей གཤེན་རབས་མི་བོ། (основателя религии Бон): 1) མུ་ཆོ། 2) འོལ་དྲུག་ཐང་པོ།",
+    "continues_next_page": true
+  }
+]

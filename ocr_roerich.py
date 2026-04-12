@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""OCR a Roerich dictionary PDF volume into structured JSON.
+"""OCR Roerich dictionary PDF volumes into structured JSON.
 
 Idempotent - skips pages that already have JSON output unless --force is used.
-Organizes output into roerich_output/pages/ (PNG) and roerich_output/json/ (JSON).
+Uses compact line-oriented output format to minimize token usage, then converts to JSON.
+Processes pages in parallel for speed.
 
 Usage:
-    # Process a single volume
+    # Process a single volume (20 workers by default)
     python ocr_roerich.py roerich/1Ka.pdf
 
     # Process all volumes
@@ -14,96 +15,183 @@ Usage:
     # Force re-OCR of already processed pages
     python ocr_roerich.py roerich/1Ka.pdf --force
 
-    # Skip first N pages (e.g. blank/title pages)
-    python ocr_roerich.py roerich/1Ka.pdf --skip-pages 0
+    # Custom worker count and DPI
+    python ocr_roerich.py roerich/1Ka.pdf --workers 10 --dpi 400
 
-    # Custom DPI
-    python ocr_roerich.py roerich/1Ka.pdf --dpi 400
+    # Test mode - output to dedicated test directory, don't touch production files
+    python ocr_roerich.py roerich/1Ka.pdf --test
 """
 
 import argparse
 import json
 import os
-import re
 import sys
 import time
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import fitz  # pymupdf
 
-OUTPUT_DIR = "roerich_output"
-PAGES_DIR = os.path.join(OUTPUT_DIR, "pages")
-JSON_DIR = os.path.join(OUTPUT_DIR, "json")
+MAX_RETRIES = 2
+RETRY_DELAY = 10  # seconds
 
-OCR_PROMPT = """OCR this dictionary page and extract structured entries as a JSON array.
+DEFAULT_OUTPUT_DIR = "roerich_output"
+TEST_OUTPUT_DIR = "roerich_test_output"
+
+# Compact line-oriented format - ~52% fewer output tokens than JSON
+OCR_PROMPT = """OCR this dictionary page and extract structured entries.
 This is from an old Tibetan-English-Russian-Sanskrit dictionary.
 
-For each dictionary entry on the page, output a JSON object with these fields:
-- "tibetan": the headword in Tibetan script
-- "wylie": Wylie transliteration if you can determine it
-- "english": English definition/translation
-- "russian": Russian translation (omit field if not present on this page)
-- "sanskrit": Sanskrit/Devanagari equivalent (omit field if not present)
+Output in this EXACT compact format, one entry after another, separated by ===
+Use these field prefixes (omit a line if the field is empty):
+T: Tibetan headword (in Tibetan script)
+W: Wylie transliteration
+E: English definition
+R: Russian translation
+S: Sanskrit equivalent
 
-IMPORTANT - handle entries that span page boundaries:
-- If the FIRST entry on the page has NO headword and starts mid-definition
-  (it is a continuation from a previous page), set "continued_from_prev_page": true
-  and put the partial text in the appropriate language fields. The "tibetan" field
-  should be empty string "" if no headword is visible.
-- If the LAST entry on the page appears CUT OFF (definition ends mid-sentence,
-  has unclosed parentheses, or clearly continues), set "continues_next_page": true
+For entries that span page boundaries:
+- First line > means this entry continues from the previous page (T: may be empty)
+- Last line < means this entry is cut off and continues on the next page
 
-Preserve all diacritical marks. Output ONLY the JSON array, no markdown fences or commentary.
+IMPORTANT:
+- Keep each field on a SINGLE line, no matter how long
+- Do NOT add blank lines within an entry
+- Output ONLY the entries in this format, no commentary or markdown fences
 
-Example:
-[{
-    "continued_from_prev_page": true,
-    "tibetan": "",
-    "wylie": "",
-    "english": "of the monk Katyayana.",
-    "russian": "монаха Катьяяна."
-  },
-  {
-    "tibetan": "ཐ་སྐར",
-    "wylie": "tha skar",
-    "english": "stars beta and gamma Aries",
-    "russian": "звезды бета и гамма созвездия Овен",
-    "sanskrit": "ashvini"
-  },
-  {
-    "tibetan": "ཐ་ཆེན",
-    "wylie": "tha chen",
-    "english": "1) building with columns; 2) supporter (one of the four",
-    "russian": "1) здание с колоннами; 2) приверженец (один из четырёх",
-    "continues_next_page": true
-  }]"""
+Example output:
+>
+E:of the monk Katyayana.
+R:монаха Катьяяна.
+===
+T:ཐ་སྐར
+W:tha skar
+E:stars beta and gamma Aries
+R:звезды бета и гамма созвездия Овен
+S:ashvini
+===
+T:ཐ་ཆེན
+W:tha chen
+E:1) building with columns; 2) supporter (one of the four
+R:1) здание с колоннами; 2) приверженец (один из четырёх
+<
+==="""
+
+FIELD_MAP = {
+    "T": "tibetan",
+    "W": "wylie",
+    "E": "english",
+    "R": "russian",
+    "S": "sanskrit",
+}
+
+
+def parse_compact_entries(text):
+    """Parse compact line-oriented format into list of dicts."""
+    if not text:
+        return []
+    text = text.strip()
+    # Strip markdown fences if present
+    if text.startswith("```"):
+        first_nl = text.find("\n")
+        if first_nl >= 0:
+            text = text[first_nl + 1:]
+    if text.endswith("```"):
+        text = text[:-3].rstrip()
+
+    entries = []
+    blocks = [b.strip() for b in text.split("===") if b.strip()]
+
+    for block in blocks:
+        entry = {}
+        lines = block.split("\n")
+
+        # Check for continuation flags
+        if lines and lines[0].strip() == ">":
+            entry["continued_from_prev_page"] = True
+            lines = lines[1:]
+        has_continues = False
+        if lines and lines[-1].strip() == "<":
+            has_continues = True
+            lines = lines[:-1]
+
+        # Parse field lines - handle multi-line values by appending
+        current_key = None
+        for line in lines:
+            if not line.strip():
+                continue
+            matched = False
+            for prefix, key in FIELD_MAP.items():
+                tag = f"{prefix}:"
+                if line.startswith(tag):
+                    current_key = key
+                    entry[current_key] = line[len(tag):]
+                    matched = True
+                    break
+            if not matched and current_key:
+                # Continuation of previous field value
+                entry[current_key] = entry.get(current_key, "") + " " + line.strip()
+
+        if has_continues:
+            entry["continues_next_page"] = True
+
+        # Only add entries that have at least one content field
+        if any(entry.get(k) for k in FIELD_MAP.values()):
+            entries.append(entry)
+
+    return entries
+
+
+def _is_server_error(exc):
+    """Check if an exception indicates a 5xx server error."""
+    status = getattr(exc, "status_code", None) or getattr(exc, "code", None)
+    if isinstance(status, int) and 500 <= status < 600:
+        return True
+    msg = str(exc)
+    return any(code in msg for code in ("500", "502", "503", "504"))
 
 
 def ocr_page_gemini(image_path, client):
-    """OCR a single page image using Gemini 3.1 Pro."""
+    """OCR a single page image using Gemini 3.1 Pro with compact format.
+
+    Retries once on 5xx server errors only.
+    """
     from google.genai import types
 
     with open(image_path, "rb") as f:
         image_data = f.read()
 
-    response = client.models.generate_content(
-        model="gemini-3.1-pro-preview",
-        contents=[
-            types.Part.from_text(text=OCR_PROMPT),
-            types.Part.from_bytes(data=image_data, mime_type="image/png"),
-        ],
-    )
-    return response.text
+    contents = [
+        types.Part.from_text(text=OCR_PROMPT),
+        types.Part.from_bytes(data=image_data, mime_type="image/png"),
+    ]
 
-
-def strip_markdown_fences(text):
-    """Strip markdown code fences if present."""
-    cleaned = text.strip()
-    if cleaned.startswith("```"):
-        first_newline = cleaned.index("\n")
-        cleaned = cleaned[first_newline + 1:]
-    if cleaned.endswith("```"):
-        cleaned = cleaned[:-3].rstrip()
-    return cleaned
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.1-pro-preview",
+                contents=contents,
+            )
+            text = response.text
+            if text is None or not text.strip():
+                reason = ""
+                if hasattr(response, "prompt_feedback"):
+                    reason = f" (feedback: {response.prompt_feedback})"
+                elif hasattr(response, "candidates") and response.candidates:
+                    c = response.candidates[0]
+                    if hasattr(c, "finish_reason"):
+                        reason = f" (finish_reason: {c.finish_reason})"
+                raise ValueError(
+                    f"Gemini returned empty response{reason}"
+                )
+            return text
+        except ValueError:
+            raise  # empty response - no retry, page has no text
+        except Exception as e:
+            if attempt < MAX_RETRIES - 1 and _is_server_error(e):
+                time.sleep(RETRY_DELAY)
+                continue
+            raise
 
 
 def extract_page(doc, page_num, output_path, dpi=300):
@@ -115,8 +203,117 @@ def extract_page(doc, page_num, output_path, dpi=300):
     pix.save(output_path)
 
 
-def process_volume(pdf_path, force=False, dpi=300, skip_pages=0):
-    """Process all pages of a single PDF volume."""
+class ProgressTracker:
+    """Thread-safe progress tracker with velocity and ETA."""
+
+    def __init__(self, total_pages):
+        self.total = total_pages
+        self.processed = 0
+        self.skipped = 0
+        self.errors = 0
+        self.error_pages = []
+        self.start_time = time.time()
+        self.lock = threading.Lock()
+
+    def record_success(self, page_num, elapsed, entries, chars):
+        with self.lock:
+            self.processed += 1
+            self._print_status(page_num, f"OK {elapsed:.0f}s {entries}ent {chars}ch")
+
+    def record_skip(self):
+        with self.lock:
+            self.skipped += 1
+
+    def record_error(self, page_num, elapsed, msg):
+        with self.lock:
+            self.errors += 1
+            self.error_pages.append(page_num)
+            self._print_status(page_num, f"ERR {elapsed:.0f}s {msg}")
+
+    def _print_status(self, page_num, detail):
+        done = self.processed + self.errors
+        remaining = self.total - done - self.skipped
+        elapsed_total = time.time() - self.start_time
+
+        if done > 0:
+            velocity = done / (elapsed_total / 60)
+            eta_min = remaining / velocity if velocity > 0 else 0
+            eta_str = f"ETA {eta_min:.0f}m" if eta_min > 1 else "ETA <1m"
+        else:
+            velocity = 0
+            eta_str = "ETA --"
+
+        bar_width = 20
+        pct = (done + self.skipped) / self.total if self.total > 0 else 0
+        filled = int(bar_width * pct)
+        bar = "=" * filled + "-" * (bar_width - filled)
+
+        err_str = f" err:{self.errors}" if self.errors else ""
+        print(
+            f"  [{bar}] {done + self.skipped}/{self.total} "
+            f"p:{page_num} {detail} "
+            f"| {velocity:.1f}pg/min {eta_str}{err_str}",
+            flush=True,
+        )
+
+    def summary(self):
+        elapsed = time.time() - self.start_time
+        mins = elapsed / 60
+        velocity = self.processed / mins if mins > 0 else 0
+        return {
+            "processed": self.processed,
+            "skipped": self.skipped,
+            "errors": self.errors,
+            "error_pages": self.error_pages,
+            "elapsed_min": mins,
+            "velocity": velocity,
+        }
+
+
+def process_single_page(page_num, png_path, json_path, client, tracker, force):
+    """Process a single page - called by worker threads."""
+    # Idempotent check
+    if os.path.isfile(json_path) and os.path.getsize(json_path) > 0 and not force:
+        tracker.record_skip()
+        return
+
+    raw = None
+    start = time.time()
+    try:
+        raw = ocr_page_gemini(png_path, client)
+        entries = parse_compact_entries(raw)
+
+        if not entries:
+            raise ValueError("no entries parsed from response")
+
+        json_str = json.dumps(entries, ensure_ascii=False, indent=2)
+
+        with open(json_path, "w", encoding="utf-8") as f:
+            f.write(json_str)
+
+        # Clean up stale error file if a previous run left one
+        err_path = json_path + ".error"
+        if os.path.isfile(err_path):
+            os.remove(err_path)
+
+        elapsed = time.time() - start
+        tracker.record_success(page_num, elapsed, len(entries), len(raw))
+
+    except Exception as e:
+        elapsed = time.time() - start
+        err_path = json_path + ".error"
+        try:
+            content = raw if raw is not None else str(e)
+            with open(err_path, "w", encoding="utf-8") as f:
+                f.write(f"ERROR: {e}\n---\n{content}")
+        except Exception:
+            pass
+        tracker.record_error(page_num, elapsed, str(e)[:60])
+
+
+def process_volume(pdf_path, force=False, dpi=300, skip_pages=0, workers=20,
+                   output_dir=DEFAULT_OUTPUT_DIR):
+    """Process all pages of a single PDF volume with parallel workers."""
     from google import genai
 
     api_key = os.environ.get("GOOGLE_API_KEY")
@@ -127,81 +324,69 @@ def process_volume(pdf_path, force=False, dpi=300, skip_pages=0):
     client = genai.Client(api_key=api_key)
     volume = os.path.splitext(os.path.basename(pdf_path))[0]
 
-    vol_pages_dir = os.path.join(PAGES_DIR, volume)
-    vol_json_dir = os.path.join(JSON_DIR, volume)
+    pages_dir = os.path.join(output_dir, "pages")
+    json_dir = os.path.join(output_dir, "json")
+    vol_pages_dir = os.path.join(pages_dir, volume)
+    vol_json_dir = os.path.join(json_dir, volume)
     os.makedirs(vol_pages_dir, exist_ok=True)
     os.makedirs(vol_json_dir, exist_ok=True)
 
     doc = fitz.open(pdf_path)
     total = len(doc)
     start_page = skip_pages + 1
+    page_count = total - skip_pages
 
     print(f"\n{'='*60}")
-    print(f"Volume: {volume} ({total} pages, starting at page {start_page})")
-    print(f"Pages:  {vol_pages_dir}/")
-    print(f"JSON:   {vol_json_dir}/")
+    print(f"Volume: {volume} ({total} pages, starting at {start_page})")
+    print(f"Workers: {workers} | DPI: {dpi} | Force: {force}")
+    print(f"Output: {vol_json_dir}/")
     print(f"{'='*60}")
 
-    processed = 0
-    skipped = 0
-    errors = 0
-    error_pages = []
-
+    # Phase 1: extract all page images (sequential, fast)
+    print(f"\nExtracting page images...")
+    page_tasks = []
     for page_num in range(start_page, total + 1):
         page_name = f"{volume}_page_{page_num:04d}"
         png_path = os.path.join(vol_pages_dir, f"{page_name}.png")
         json_path = os.path.join(vol_json_dir, f"{page_name}.json")
 
-        # Skip if already processed (idempotent)
-        if os.path.isfile(json_path) and os.path.getsize(json_path) > 0 and not force:
-            skipped += 1
-            continue
-
-        # Extract page image if needed
         if not os.path.isfile(png_path) or force:
             extract_page(doc, page_num, png_path, dpi)
 
-        # OCR
-        print(f"  [{page_num}/{total}] OCR...", end=" ", flush=True)
-        start = time.time()
-        try:
-            raw = ocr_page_gemini(png_path, client)
-            cleaned = strip_markdown_fences(raw)
-
-            # Validate JSON
-            json.loads(cleaned)
-
-            with open(json_path, "w", encoding="utf-8") as f:
-                f.write(cleaned)
-
-            elapsed = time.time() - start
-            print(f"OK ({elapsed:.0f}s, {len(cleaned)} chars)")
-            processed += 1
-        except json.JSONDecodeError as e:
-            elapsed = time.time() - start
-            # Save raw output for debugging
-            err_path = json_path + ".error"
-            with open(err_path, "w", encoding="utf-8") as f:
-                f.write(raw)
-            print(f"BAD JSON ({elapsed:.0f}s) - saved raw to {err_path}")
-            errors += 1
-            error_pages.append(page_num)
-        except Exception as e:
-            elapsed = time.time() - start
-            print(f"ERROR ({elapsed:.0f}s): {e}")
-            errors += 1
-            error_pages.append(page_num)
+        page_tasks.append((page_num, png_path, json_path))
 
     doc.close()
+    print(f"  {len(page_tasks)} page images ready")
 
-    print(f"\n--- {volume} summary ---")
-    print(f"  Processed: {processed}")
-    print(f"  Skipped:   {skipped} (already done)")
-    print(f"  Errors:    {errors}")
-    if error_pages:
-        print(f"  Error pages: {error_pages}")
+    # Phase 2: parallel OCR
+    print(f"\nStarting OCR with {workers} workers...")
+    tracker = ProgressTracker(page_count)
 
-    return processed, skipped, errors
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = []
+        for page_num, png_path, json_path in page_tasks:
+            f = pool.submit(
+                process_single_page,
+                page_num, png_path, json_path, client, tracker, force,
+            )
+            futures.append(f)
+
+        for f in as_completed(futures):
+            exc = f.exception()
+            if exc:
+                print(f"  UNEXPECTED: {exc}")
+
+    # Summary
+    s = tracker.summary()
+    print(f"\n--- {volume} ---")
+    print(f"  Processed: {s['processed']} ({s['velocity']:.1f} pg/min)")
+    print(f"  Skipped:   {s['skipped']} (already done)")
+    print(f"  Errors:    {s['errors']}")
+    print(f"  Time:      {s['elapsed_min']:.1f} min")
+    if s["error_pages"]:
+        print(f"  Error pages: {s['error_pages']}")
+
+    return s["processed"], s["skipped"], s["errors"]
 
 
 def main():
@@ -236,27 +421,50 @@ def main():
         default=0,
         help="Skip first N pages of each PDF (e.g. title pages)",
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=20,
+        help="Number of parallel OCR workers (default: 20)",
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Test mode - write output to roerich_test_output/ instead of production dir",
+    )
 
     args = parser.parse_args()
+    output_dir = TEST_OUTPUT_DIR if args.test else DEFAULT_OUTPUT_DIR
+
+    if args.test:
+        print(f"*** TEST MODE - output goes to {TEST_OUTPUT_DIR}/ ***")
 
     total_processed = 0
     total_skipped = 0
     total_errors = 0
+    overall_start = time.time()
 
     for pdf_path in sorted(args.pdfs):
         if not os.path.isfile(pdf_path):
             print(f"Warning: {pdf_path} not found, skipping")
             continue
         p, s, e = process_volume(
-            pdf_path, force=args.force, dpi=args.dpi, skip_pages=args.skip_pages
+            pdf_path,
+            force=args.force,
+            dpi=args.dpi,
+            skip_pages=args.skip_pages,
+            workers=args.workers,
+            output_dir=output_dir,
         )
         total_processed += p
         total_skipped += s
         total_errors += e
 
     if len(args.pdfs) > 1:
+        overall_min = (time.time() - overall_start) / 60
         print(f"\n{'='*60}")
         print(f"TOTAL: {total_processed} processed, {total_skipped} skipped, {total_errors} errors")
+        print(f"TIME:  {overall_min:.1f} min")
 
 
 if __name__ == "__main__":
