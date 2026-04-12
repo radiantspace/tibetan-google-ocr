@@ -12,6 +12,7 @@ Covers:
 
 import json
 import tempfile
+import threading
 import unittest
 
 from ocr_roerich import BatchState, parse_compact_entries
@@ -498,6 +499,139 @@ class TestBatchState(unittest.TestCase):
         self.assertFalse(self.state.is_completed("p1"))
         self.state.mark_completed("p1")
         self.assertTrue(self.state.is_completed("p1"))
+
+    def test_record_upload_and_save_periodic(self):
+        """record_upload_and_save flushes every save_every uploads."""
+        counter = [0]
+        for i in range(25):
+            self.state.record_upload_and_save(
+                f"p{i}", f"files/{i}", f"https://{i}",
+                save_every=10, counter=counter,
+            )
+        self.assertEqual(counter[0], 25)
+        # Should have saved at 10 and 20
+        reloaded = BatchState(self.test_dir)
+        self.assertEqual(len(reloaded.data["uploaded_files"]), 20)
+        # Final save captures all 25
+        self.state.save()
+        reloaded2 = BatchState(self.test_dir)
+        self.assertEqual(len(reloaded2.data["uploaded_files"]), 25)
+
+
+class TestBatchStateThreadSafety(unittest.TestCase):
+    """Tests for concurrent BatchState access."""
+
+    def setUp(self):
+        self.test_dir = tempfile.mkdtemp()
+        self.state = BatchState(self.test_dir)
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.test_dir, ignore_errors=True)
+
+    def test_concurrent_record_uploads(self):
+        """Many threads recording uploads should not lose data."""
+        num_threads = 10
+        uploads_per_thread = 50
+        errors = []
+
+        def _worker(thread_id):
+            try:
+                for i in range(uploads_per_thread):
+                    pk = f"t{thread_id}_p{i}"
+                    self.state.record_upload(pk, f"files/{pk}", f"https://{pk}")
+            except Exception as e:
+                errors.append(e)
+
+        threads = []
+        for t in range(num_threads):
+            th = threading.Thread(target=_worker, args=(t,))
+            threads.append(th)
+            th.start()
+        for th in threads:
+            th.join()
+
+        self.assertEqual(errors, [])
+        expected = num_threads * uploads_per_thread
+        self.assertEqual(len(self.state.data["uploaded_files"]), expected)
+
+    def test_concurrent_record_upload_and_save(self):
+        """Parallel record_upload_and_save should not corrupt state."""
+        num_threads = 8
+        uploads_per_thread = 30
+        counter = [0]
+        errors = []
+
+        def _worker(thread_id):
+            try:
+                for i in range(uploads_per_thread):
+                    pk = f"t{thread_id}_p{i}"
+                    self.state.record_upload_and_save(
+                        pk, f"files/{pk}", f"https://{pk}",
+                        save_every=10, counter=counter,
+                    )
+            except Exception as e:
+                errors.append(e)
+
+        threads = []
+        for t in range(num_threads):
+            th = threading.Thread(target=_worker, args=(t,))
+            threads.append(th)
+            th.start()
+        for th in threads:
+            th.join()
+
+        self.assertEqual(errors, [])
+        expected = num_threads * uploads_per_thread
+        self.assertEqual(counter[0], expected)
+        self.assertEqual(len(self.state.data["uploaded_files"]), expected)
+
+        # Final save and reload should have all data
+        self.state.save()
+        reloaded = BatchState(self.test_dir)
+        self.assertEqual(len(reloaded.data["uploaded_files"]), expected)
+
+    def test_concurrent_mixed_operations(self):
+        """Mix of uploads, batch records, and completions."""
+        errors = []
+
+        def _uploader():
+            try:
+                for i in range(30):
+                    self.state.record_upload(f"up_{i}", f"files/{i}", f"https://{i}")
+            except Exception as e:
+                errors.append(e)
+
+        def _batch_recorder():
+            try:
+                for i in range(10):
+                    self.state.record_batch(
+                        f"batches/{i}", f"vol{i}", [f"p{i}"], f"test-{i}"
+                    )
+            except Exception as e:
+                errors.append(e)
+
+        def _completer():
+            try:
+                for i in range(20):
+                    self.state.mark_completed(f"done_{i}")
+            except Exception as e:
+                errors.append(e)
+
+        threads = [
+            threading.Thread(target=_uploader),
+            threading.Thread(target=_batch_recorder),
+            threading.Thread(target=_completer),
+        ]
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join()
+
+        self.assertEqual(errors, [])
+        self.assertEqual(len(self.state.data["uploaded_files"]), 30)
+        self.assertEqual(len(self.state.data["batches"]), 10)
+        self.assertEqual(len(self.state.data["completed_pages"]), 20)
 
 
 class TestBatchCollectParsing(unittest.TestCase):

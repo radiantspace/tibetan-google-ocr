@@ -172,10 +172,12 @@ class BatchState:
 
     Tracks uploaded files, batch jobs, and completed pages.
     Saves atomically via temp file + rename.
+    Thread-safe - all reads and writes are protected by a lock.
     """
 
     def __init__(self, output_dir):
         self.path = os.path.join(output_dir, "batch_state.json")
+        self._lock = threading.Lock()
         self.data = self._load()
 
     def _load(self):
@@ -185,6 +187,11 @@ class BatchState:
         return {"uploaded_files": {}, "batches": {}, "completed_pages": []}
 
     def save(self):
+        with self._lock:
+            self._save_unlocked()
+
+    def _save_unlocked(self):
+        """Save without acquiring lock (caller must hold lock)."""
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
         fd, tmp = tempfile.mkstemp(
             dir=os.path.dirname(self.path) or ".",
@@ -201,89 +208,120 @@ class BatchState:
     # -- uploaded files --
 
     def is_uploaded(self, page_key):
-        return page_key in self.data["uploaded_files"]
+        with self._lock:
+            return page_key in self.data["uploaded_files"]
 
     def record_upload(self, page_key, file_name, uri):
-        self.data["uploaded_files"][page_key] = {
-            "file_name": file_name,
-            "uri": uri,
-            "uploaded_at": _now_iso(),
-        }
+        with self._lock:
+            self.data["uploaded_files"][page_key] = {
+                "file_name": file_name,
+                "uri": uri,
+                "uploaded_at": _now_iso(),
+            }
+
+    def record_upload_and_save(self, page_key, file_name, uri,
+                               save_every=20, counter=None):
+        """Record an upload and periodically save (thread-safe).
+
+        Args:
+            counter: a list with one int element used as an atomic counter.
+                     Incremented under the lock to decide when to flush.
+        """
+        with self._lock:
+            self.data["uploaded_files"][page_key] = {
+                "file_name": file_name,
+                "uri": uri,
+                "uploaded_at": _now_iso(),
+            }
+            if counter is not None:
+                counter[0] += 1
+                if counter[0] % save_every == 0:
+                    self._save_unlocked()
 
     def get_upload(self, page_key):
-        return self.data["uploaded_files"].get(page_key)
+        with self._lock:
+            return self.data["uploaded_files"].get(page_key)
 
     # -- batches --
 
     def record_batch(self, batch_name, volume, page_keys, display_name):
-        self.data["batches"][batch_name] = {
-            "display_name": display_name,
-            "volume": volume,
-            "page_keys": page_keys,
-            "state": "JOB_STATE_PENDING",
-            "created_at": _now_iso(),
-            "last_checked": _now_iso(),
-        }
+        with self._lock:
+            self.data["batches"][batch_name] = {
+                "display_name": display_name,
+                "volume": volume,
+                "page_keys": page_keys,
+                "state": "JOB_STATE_PENDING",
+                "created_at": _now_iso(),
+                "last_checked": _now_iso(),
+            }
 
     def update_batch_state(self, batch_name, state):
-        if batch_name in self.data["batches"]:
-            self.data["batches"][batch_name]["state"] = state
-            self.data["batches"][batch_name]["last_checked"] = _now_iso()
+        with self._lock:
+            if batch_name in self.data["batches"]:
+                self.data["batches"][batch_name]["state"] = state
+                self.data["batches"][batch_name]["last_checked"] = _now_iso()
 
     def get_active_batches(self):
         """Return batches that are still pending or running."""
-        active = {}
-        for name, info in self.data["batches"].items():
-            if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
-                active[name] = info
-        return active
+        with self._lock:
+            active = {}
+            for name, info in self.data["batches"].items():
+                if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
+                    active[name] = info
+            return active
 
     def get_succeeded_batches(self):
         """Return batches that succeeded but haven't been fully collected."""
-        result = {}
-        for name, info in self.data["batches"].items():
-            if info["state"] == "JOB_STATE_SUCCEEDED":
-                # Check if all pages are already collected
-                uncollected = [
-                    pk for pk in info["page_keys"]
-                    if pk not in self.data["completed_pages"]
-                ]
-                if uncollected:
-                    result[name] = info
-        return result
+        with self._lock:
+            result = {}
+            for name, info in self.data["batches"].items():
+                if info["state"] == "JOB_STATE_SUCCEEDED":
+                    uncollected = [
+                        pk for pk in info["page_keys"]
+                        if pk not in self.data["completed_pages"]
+                    ]
+                    if uncollected:
+                        result[name] = info
+            return result
 
     def get_failed_batches(self):
-        result = {}
-        for name, info in self.data["batches"].items():
-            if info["state"] in ("JOB_STATE_FAILED", "JOB_STATE_EXPIRED"):
-                result[name] = info
-        return result
+        with self._lock:
+            result = {}
+            for name, info in self.data["batches"].items():
+                if info["state"] in ("JOB_STATE_FAILED", "JOB_STATE_EXPIRED"):
+                    result[name] = info
+            return result
 
     # -- completed pages --
 
     def is_completed(self, page_key):
-        return page_key in self.data["completed_pages"]
+        with self._lock:
+            return page_key in self.data["completed_pages"]
 
     def mark_completed(self, page_key):
-        if page_key not in self.data["completed_pages"]:
-            self.data["completed_pages"].append(page_key)
+        with self._lock:
+            if page_key not in self.data["completed_pages"]:
+                self.data["completed_pages"].append(page_key)
 
     # -- queries --
 
     def is_page_pending(self, page_key):
         """Check if a page is in an active (pending/running) batch."""
-        for info in self.data["batches"].values():
-            if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
-                if page_key in info["page_keys"]:
-                    return True
-        return False
+        with self._lock:
+            for info in self.data["batches"].values():
+                if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
+                    if page_key in info["page_keys"]:
+                        return True
+            return False
 
     def remove_batch(self, batch_name):
-        self.data["batches"].pop(batch_name, None)
+        with self._lock:
+            self.data["batches"].pop(batch_name, None)
 
     def clear_uploads_for_pages(self, page_keys):
-        for pk in page_keys:
-            self.data["uploaded_files"].pop(pk, None)
+        with self._lock:
+            for pk in page_keys:
+                self.data["uploaded_files"].pop(pk, None)
 
 
 # ---------------------------------------------------------------------------
@@ -312,7 +350,8 @@ def _extract_volume_pages(pdf_path, output_dir, dpi=300, skip_pages=0):
     return volume, pages
 
 
-def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False):
+def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
+                 workers=20):
     """Upload page images and submit batch jobs for each volume."""
     from google.genai import types
 
@@ -349,29 +388,67 @@ def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False):
             print(f"{volume}: all {len(all_pages)} pages already done or queued")
             continue
 
-        print(f"\n{volume}: {len(pages_to_submit)} pages to submit "
-              f"({len(all_pages)} total)")
+        # Filter to only pages needing upload
+        pages_needing_upload = [
+            (pk, pp) for pk, pp in pages_to_submit
+            if force or not state.is_uploaded(pk)
+        ]
 
-        # Upload images to File API
-        print(f"  Uploading images...", end="", flush=True)
-        uploaded_count = 0
-        for page_key, png_path in pages_to_submit:
-            if state.is_uploaded(page_key) and not force:
-                continue
-            f = client.files.upload(
-                file=png_path,
-                config=types.UploadFileConfig(
-                    display_name=page_key,
-                    mime_type="image/png",
-                ),
-            )
-            state.record_upload(page_key, f.name, f.uri)
-            uploaded_count += 1
-            if uploaded_count % 10 == 0:
-                print(f" {uploaded_count}", end="", flush=True)
-                state.save()  # incremental save
-        print(f" done ({uploaded_count} new)")
-        state.save()
+        print(f"\n{volume}: {len(pages_to_submit)} pages to submit "
+              f"({len(all_pages)} total), "
+              f"{len(pages_needing_upload)} need upload")
+
+        # Parallel upload images to File API
+        if pages_needing_upload:
+            upload_workers = min(workers, len(pages_needing_upload))
+            counter = [0]  # mutable counter shared across threads
+            errors = []
+            start_t = time.time()
+
+            def _upload_one(item):
+                page_key, png_path = item
+                f = client.files.upload(
+                    file=png_path,
+                    config=types.UploadFileConfig(
+                        display_name=page_key,
+                        mime_type="image/png",
+                    ),
+                )
+                state.record_upload_and_save(
+                    page_key, f.name, f.uri,
+                    save_every=20, counter=counter,
+                )
+                return page_key
+
+            print(f"  Uploading {len(pages_needing_upload)} images "
+                  f"({upload_workers} workers)...", end="", flush=True)
+
+            with ThreadPoolExecutor(max_workers=upload_workers) as pool:
+                futures = {
+                    pool.submit(_upload_one, item): item[0]
+                    for item in pages_needing_upload
+                }
+                done_count = 0
+                for future in as_completed(futures):
+                    page_key = futures[future]
+                    try:
+                        future.result()
+                        done_count += 1
+                        if done_count % 20 == 0:
+                            elapsed = time.time() - start_t
+                            rate = done_count / elapsed if elapsed > 0 else 0
+                            print(f" {done_count}/{len(pages_needing_upload)}"
+                                  f" ({rate:.1f}/s)", end="", flush=True)
+                    except Exception as e:
+                        errors.append((page_key, str(e)))
+
+            elapsed = time.time() - start_t
+            print(f" done ({done_count} in {elapsed:.1f}s)")
+            if errors:
+                print(f"  WARNING: {len(errors)} upload errors:")
+                for pk, err in errors[:5]:
+                    print(f"    {pk}: {err}")
+            state.save()
 
         # Build JSONL request file
         print(f"  Building JSONL request...", end="", flush=True)
@@ -964,7 +1041,7 @@ def main():
         "--workers",
         type=int,
         default=20,
-        help="Number of parallel OCR workers (default: 20, real-time only)",
+        help="Number of parallel workers (default: 20)",
     )
     parser.add_argument(
         "--test",
@@ -986,6 +1063,7 @@ def main():
             batch_submit(
                 args.pdfs, output_dir,
                 dpi=args.dpi, skip_pages=args.skip_pages, force=args.force,
+                workers=args.workers,
             )
         elif args.batch == "status":
             batch_status(output_dir)
