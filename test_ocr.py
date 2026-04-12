@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Test multiple OCR models on dictionary page images and compare results.
 
-Supports: Gemini 2.5 Pro, GPT-4o, Claude Sonnet, Surya OCR.
+Extracts structured dictionary entries (headword, translations, etc.) as JSON.
+Supports: Gemini 3.1 Pro, GPT-4o, Claude Sonnet, Surya OCR.
 API keys are read from environment variables or a .env file.
 
 Usage:
@@ -13,9 +14,6 @@ Usage:
 
     # Test on a directory of images
     python test_ocr.py test_pages/ --models gemini claude surya
-
-    # Compare existing outputs
-    python test_ocr.py test_pages/roerich_page_0050.png --compare-only
 
 Environment variables (or .env file):
     GOOGLE_API_KEY    - for Gemini
@@ -38,26 +36,26 @@ except ImportError:
     pass
 
 
-OCR_PROMPT = """OCR this dictionary page. Extract ALL text exactly as printed, preserving:
-- The original layout and line structure
-- All scripts: Tibetan (བོད་ཡིག), English, Russian (Русский), Sanskrit/Devanagari (संस्कृत)
-- Entry numbering, indentation, and formatting
-- Diacritical marks and special characters
-
-This is a page from an old Tibetan-English-Russian-Sanskrit dictionary.
-Output the raw text only, no commentary."""
-
-STRUCTURED_PROMPT = """OCR this dictionary page and extract structured entries.
+OCR_PROMPT = """OCR this dictionary page and extract structured entries as a JSON array.
 This is from an old Tibetan-English-Russian-Sanskrit dictionary.
 
-For each dictionary entry on the page, output:
-- headword (in Tibetan script)
-- wylie (Wylie transliteration if you can determine it)
-- english (English definition/translation)
-- russian (Russian translation, if present)
-- sanskrit (Sanskrit/Devanagari equivalent, if present)
+For each dictionary entry on the page, output a JSON object with these fields:
+- "tibetan": the headword in Tibetan script
+- "wylie": Wylie transliteration if you can determine it
+- "english": English definition/translation
+- "russian": Russian translation (omit field if not present on this page)
+- "sanskrit": Sanskrit/Devanagari equivalent (omit field if not present)
 
-Output as a list of entries. Preserve all diacritical marks."""
+Preserve all diacritical marks. Output ONLY the JSON array, no markdown fences or commentary.
+
+Example:
+[{
+    "tibetan": "ཐ་སྐར",
+    "wylie": "tha skar",
+    "english": "stars beta and gamma Aries (represented in Buddhist astronomy by a woman on horseback)",
+    "russian": "звезды бета и гамма созвездия Овен (изображаемые в буддийской астрономии в виде женщины на лошади)",
+    "sanskrit": "ashvini"
+  },...]"""
 
 
 def encode_image(image_path):
@@ -80,8 +78,8 @@ def get_mime_type(image_path):
 
 # -- Gemini --
 
-def ocr_gemini(image_path, structured=False):
-    """OCR using Google Gemini 2.5 Pro."""
+def ocr_gemini(image_path):
+    """OCR using Google Gemini 3.1 Pro."""
     import google.generativeai as genai
 
     api_key = os.environ.get("GOOGLE_API_KEY")
@@ -89,17 +87,16 @@ def ocr_gemini(image_path, structured=False):
         return None, "GOOGLE_API_KEY not set"
 
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.5-pro-preview-06-05")
+    model = genai.GenerativeModel("gemini-3.1-pro-preview")
 
     with open(image_path, "rb") as f:
         image_data = f.read()
 
-    prompt = STRUCTURED_PROMPT if structured else OCR_PROMPT
     mime = get_mime_type(image_path)
 
     start = time.time()
     response = model.generate_content([
-        prompt,
+        OCR_PROMPT,
         {"mime_type": mime, "data": image_data},
     ])
     elapsed = time.time() - start
@@ -109,7 +106,7 @@ def ocr_gemini(image_path, structured=False):
 
 # -- GPT-4o --
 
-def ocr_gpt4o(image_path, structured=False):
+def ocr_gpt4o(image_path):
     """OCR using OpenAI GPT-4o."""
     from openai import OpenAI
 
@@ -120,7 +117,6 @@ def ocr_gpt4o(image_path, structured=False):
     client = OpenAI(api_key=api_key)
     b64 = encode_image(image_path)
     mime = get_mime_type(image_path)
-    prompt = STRUCTURED_PROMPT if structured else OCR_PROMPT
 
     start = time.time()
     response = client.chat.completions.create(
@@ -129,7 +125,7 @@ def ocr_gpt4o(image_path, structured=False):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": prompt},
+                    {"type": "text", "text": OCR_PROMPT},
                     {
                         "type": "image_url",
                         "image_url": {
@@ -149,7 +145,7 @@ def ocr_gpt4o(image_path, structured=False):
 
 # -- Claude --
 
-def ocr_claude(image_path, structured=False):
+def ocr_claude(image_path):
     """OCR using Anthropic Claude Sonnet."""
     import anthropic
 
@@ -160,7 +156,6 @@ def ocr_claude(image_path, structured=False):
     client = anthropic.Anthropic(api_key=api_key)
     b64 = encode_image(image_path)
     mime = get_mime_type(image_path)
-    prompt = STRUCTURED_PROMPT if structured else OCR_PROMPT
 
     start = time.time()
     response = client.messages.create(
@@ -178,7 +173,7 @@ def ocr_claude(image_path, structured=False):
                             "data": b64,
                         },
                     },
-                    {"type": "text", "text": prompt},
+                    {"type": "text", "text": OCR_PROMPT},
                 ],
             }
         ],
@@ -190,8 +185,8 @@ def ocr_claude(image_path, structured=False):
 
 # -- Surya --
 
-def ocr_surya(image_path, structured=False):
-    """OCR using Surya (local, open-source)."""
+def ocr_surya(image_path):
+    """OCR using Surya (local, open-source). Returns raw text - not structured JSON."""
     try:
         from surya.recognition import RecognitionPredictor
         from surya.detection import DetectionPredictor
@@ -219,7 +214,7 @@ def ocr_surya(image_path, structured=False):
 # -- Dispatcher --
 
 MODEL_FUNCS = {
-    "gemini": ("Gemini 2.5 Pro", ocr_gemini),
+    "gemini": ("Gemini 3.1 Pro", ocr_gemini),
     "gpt4o": ("GPT-4o", ocr_gpt4o),
     "claude": ("Claude Sonnet", ocr_claude),
     "surya": ("Surya OCR", ocr_surya),
@@ -227,18 +222,18 @@ MODEL_FUNCS = {
 
 
 def save_result(image_path, model_name, text, output_dir):
-    """Save OCR result to a text file alongside the image."""
+    """Save OCR result to a JSON file alongside the image."""
     os.makedirs(output_dir, exist_ok=True)
     stem = Path(image_path).stem
     safe_model = model_name.lower().replace(" ", "_").replace(".", "")
-    output_path = os.path.join(output_dir, f"{stem}_{safe_model}.txt")
+    output_path = os.path.join(output_dir, f"{stem}_{safe_model}.json")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(text)
     return output_path
 
 
-def run_comparison(image_paths, models, output_dir, structured=False):
-    """Run OCR comparison across models and images."""
+def run_comparison(image_paths, models, output_dir):
+    """Run structured OCR extraction across models and images."""
     results = {}
 
     for image_path in image_paths:
@@ -256,7 +251,7 @@ def run_comparison(image_paths, models, output_dir, structured=False):
             print(f"\n  [{model_name}] Processing...", end=" ", flush=True)
 
             try:
-                text, timing = func(image_path, structured=structured)
+                text, timing = func(image_path)
                 if text is None:
                     print(f"SKIPPED ({timing})")
                     continue
@@ -319,16 +314,6 @@ def main():
         default="./ocr_results",
         help="Directory to save results (default: ./ocr_results)",
     )
-    parser.add_argument(
-        "--structured",
-        action="store_true",
-        help="Use structured extraction prompt instead of raw OCR",
-    )
-    parser.add_argument(
-        "--compare-only",
-        action="store_true",
-        help="Only show comparison of existing results",
-    )
 
     args = parser.parse_args()
 
@@ -353,7 +338,7 @@ def main():
     print(f"Output: {args.output_dir}")
 
     results = run_comparison(
-        image_paths, args.models, args.output_dir, structured=args.structured
+        image_paths, args.models, args.output_dir
     )
     print_summary(results)
 

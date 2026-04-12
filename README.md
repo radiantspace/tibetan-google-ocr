@@ -11,19 +11,19 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # Copy and fill in API keys
 cp .env.example .env
 
 # Extract test pages from a dictionary PDF
-python extract_pages.py ~/dictionaries/roerich.pdf --pages 50,100,200
+python3 extract_pages.py ~/dictionaries/roerich.pdf --pages 50,100,200
 
 # Run OCR comparison across all models
-python test_ocr.py test_pages/ --models gemini gpt4o claude surya
+python3 test_ocr.py test_pages/ --models gemini gpt4o claude surya
 
 # Run with structured extraction (headword, definitions, translations)
-python test_ocr.py test_pages/ --models gemini --structured
+python3 test_ocr.py test_pages/ --models gemini
 ```
 
 ## Tools
@@ -32,20 +32,20 @@ python test_ocr.py test_pages/ --models gemini --structured
 Extracts specific pages from dictionary PDFs as high-res PNG images.
 
 ```bash
-python extract_pages.py <pdf_path> [--pages 1,50,100] [--dpi 300] [--output-dir ./test_pages]
-python extract_pages.py <pdf_path> --info  # just show page count
+python3 extract_pages.py <pdf_path> [--pages 1,50,100] [--dpi 300] [--output-dir ./test_pages]
+python3 extract_pages.py <pdf_path> --info  # just show page count
 ```
 
 ### `test_ocr.py` - Multi-model OCR comparison
 Tests multiple OCR models on the same images and saves results side-by-side.
 
 Supported models:
-- **gemini** - Google Gemini 2.5 Pro (needs `GOOGLE_API_KEY`)
+- **gemini** - Google Gemini 3.1 Pro (needs `GOOGLE_API_KEY`)
 - **gpt4o** - OpenAI GPT-4o (needs `OPENAI_API_KEY`)
 - **claude** - Anthropic Claude Sonnet (needs `ANTHROPIC_API_KEY`)
 - **surya** - Surya OCR, local open-source (no API key needed, `pip install surya-ocr`)
 
-Results are saved to `./ocr_results/` as text files named `{page}_{model}.txt`.
+Results are saved to `./ocr_results/` as JSON files named `{page}_{model}.json`.
 
 ### `ocr.py` - Legacy Google Drive OCR
 Original OCR tool using Google Drive API with Wylie transliteration. See file header for setup.
