@@ -46,16 +46,38 @@ For each dictionary entry on the page, output a JSON object with these fields:
 - "russian": Russian translation (omit field if not present on this page)
 - "sanskrit": Sanskrit/Devanagari equivalent (omit field if not present)
 
+IMPORTANT - handle entries that span page boundaries:
+- If the FIRST entry on the page has NO headword and starts mid-definition
+  (it is a continuation from a previous page), set "continued_from_prev_page": true
+  and put the partial text in the appropriate language fields. The "tibetan" field
+  should be empty string "" if no headword is visible.
+- If the LAST entry on the page appears CUT OFF (definition ends mid-sentence,
+  has unclosed parentheses, or clearly continues), set "continues_next_page": true
+
 Preserve all diacritical marks. Output ONLY the JSON array, no markdown fences or commentary.
 
 Example:
 [{
+    "continued_from_prev_page": true,
+    "tibetan": "",
+    "wylie": "",
+    "english": "of the monk Katyayana.",
+    "russian": "монаха Катьяяна."
+  },
+  {
     "tibetan": "ཐ་སྐར",
     "wylie": "tha skar",
-    "english": "stars beta and gamma Aries (represented in Buddhist astronomy by a woman on horseback)",
-    "russian": "звезды бета и гамма созвездия Овен (изображаемые в буддийской астрономии в виде женщины на лошади)",
+    "english": "stars beta and gamma Aries",
+    "russian": "звезды бета и гамма созвездия Овен",
     "sanskrit": "ashvini"
-  },...]"""
+  },
+  {
+    "tibetan": "ཐ་ཆེན",
+    "wylie": "tha chen",
+    "english": "1) building with columns; 2) supporter (one of the four",
+    "russian": "1) здание с колоннами; 2) приверженец (один из четырёх",
+    "continues_next_page": true
+  }]"""
 
 
 def encode_image(image_path):
