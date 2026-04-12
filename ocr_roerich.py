@@ -32,6 +32,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import fitz  # pymupdf
 
+MAX_RETRIES = 3
+RETRY_BACKOFF = [5, 15, 30]  # seconds between retries
+
 DEFAULT_OUTPUT_DIR = "roerich_output"
 TEST_OUTPUT_DIR = "roerich_test_output"
 
@@ -85,6 +88,8 @@ FIELD_MAP = {
 
 def parse_compact_entries(text):
     """Parse compact line-oriented format into list of dicts."""
+    if not text:
+        return []
     text = text.strip()
     # Strip markdown fences if present
     if text.startswith("```"):
@@ -138,20 +143,53 @@ def parse_compact_entries(text):
 
 
 def ocr_page_gemini(image_path, client):
-    """OCR a single page image using Gemini 3.1 Pro with compact format."""
+    """OCR a single page image using Gemini 3.1 Pro with compact format.
+
+    Retries up to MAX_RETRIES times on empty/None responses and transient errors.
+    """
     from google.genai import types
 
     with open(image_path, "rb") as f:
         image_data = f.read()
 
-    response = client.models.generate_content(
-        model="gemini-3.1-pro-preview",
-        contents=[
-            types.Part.from_text(text=OCR_PROMPT),
-            types.Part.from_bytes(data=image_data, mime_type="image/png"),
-        ],
-    )
-    return response.text
+    contents = [
+        types.Part.from_text(text=OCR_PROMPT),
+        types.Part.from_bytes(data=image_data, mime_type="image/png"),
+    ]
+
+    last_error = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.1-pro-preview",
+                contents=contents,
+            )
+            text = response.text
+            if text is None or not text.strip():
+                # Dig out block reason if available
+                reason = ""
+                if hasattr(response, "prompt_feedback"):
+                    reason = f" (feedback: {response.prompt_feedback})"
+                elif hasattr(response, "candidates") and response.candidates:
+                    c = response.candidates[0]
+                    if hasattr(c, "finish_reason"):
+                        reason = f" (finish_reason: {c.finish_reason})"
+                last_error = ValueError(
+                    f"Gemini returned empty response{reason}"
+                )
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(RETRY_BACKOFF[attempt])
+                    continue
+                raise last_error
+            return text
+        except ValueError:
+            raise
+        except Exception as e:
+            last_error = e
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(RETRY_BACKOFF[attempt])
+                continue
+            raise
 
 
 def extract_page(doc, page_num, output_path, dpi=300):

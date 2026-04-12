@@ -77,6 +77,10 @@ S:kapala
         self.assertEqual(parse_compact_entries("   "), [])
         self.assertEqual(parse_compact_entries("\n\n"), [])
 
+    def test_none_returns_empty_list(self):
+        """Gemini can return None for response.text - must not crash."""
+        self.assertEqual(parse_compact_entries(None), [])
+
 
 class TestPageBoundaryFlags(unittest.TestCase):
     """Continuation and truncation flags."""
