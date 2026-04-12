@@ -11,9 +11,10 @@ Covers:
 """
 
 import json
+import tempfile
 import unittest
 
-from ocr_roerich import parse_compact_entries
+from ocr_roerich import BatchState, parse_compact_entries
 
 
 class TestBasicParsing(unittest.TestCase):
@@ -409,6 +410,181 @@ S:kapikacchu
         # Should round-trip cleanly
         roundtrip = json.loads(json_str)
         self.assertEqual(roundtrip, entries)
+
+
+class TestBatchState(unittest.TestCase):
+    """Tests for BatchState load/save/query."""
+
+    def setUp(self):
+        self.test_dir = tempfile.mkdtemp()
+        self.state = BatchState(self.test_dir)
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.test_dir, ignore_errors=True)
+
+    def test_empty_state(self):
+        self.assertEqual(self.state.data["uploaded_files"], {})
+        self.assertEqual(self.state.data["batches"], {})
+        self.assertEqual(self.state.data["completed_pages"], [])
+
+    def test_save_and_reload(self):
+        self.state.record_upload("1Ka_page_0001", "files/abc", "https://x")
+        self.state.save()
+        reloaded = BatchState(self.test_dir)
+        self.assertTrue(reloaded.is_uploaded("1Ka_page_0001"))
+        self.assertEqual(reloaded.get_upload("1Ka_page_0001")["file_name"], "files/abc")
+
+    def test_atomic_save(self):
+        """Save should not leave partial files on success."""
+        self.state.record_upload("p1", "files/a", "https://a")
+        self.state.save()
+        # File should exist and be valid JSON
+        with open(self.state.path) as f:
+            data = json.load(f)
+        self.assertIn("p1", data["uploaded_files"])
+
+    def test_record_batch_and_query(self):
+        self.state.record_batch(
+            "batches/123", "1Ka", ["p1", "p2"], "roerich-1Ka"
+        )
+        self.assertEqual(len(self.state.get_active_batches()), 1)
+        self.assertTrue(self.state.is_page_pending("p1"))
+        self.assertFalse(self.state.is_page_pending("p3"))
+
+    def test_batch_state_transitions(self):
+        self.state.record_batch("batches/1", "1Ka", ["p1"], "test")
+        self.state.update_batch_state("batches/1", "JOB_STATE_RUNNING")
+        self.assertEqual(len(self.state.get_active_batches()), 1)
+
+        self.state.update_batch_state("batches/1", "JOB_STATE_SUCCEEDED")
+        self.assertEqual(len(self.state.get_active_batches()), 0)
+        self.assertEqual(len(self.state.get_succeeded_batches()), 1)
+
+    def test_succeeded_batch_excluded_after_collect(self):
+        self.state.record_batch("batches/1", "1Ka", ["p1", "p2"], "test")
+        self.state.update_batch_state("batches/1", "JOB_STATE_SUCCEEDED")
+        self.assertEqual(len(self.state.get_succeeded_batches()), 1)
+
+        # Mark all pages completed
+        self.state.mark_completed("p1")
+        self.state.mark_completed("p2")
+        self.assertEqual(len(self.state.get_succeeded_batches()), 0)
+
+    def test_failed_batches(self):
+        self.state.record_batch("batches/1", "1Ka", ["p1"], "test")
+        self.state.update_batch_state("batches/1", "JOB_STATE_FAILED")
+        self.assertEqual(len(self.state.get_failed_batches()), 1)
+
+        self.state.record_batch("batches/2", "2Kha", ["p2"], "test2")
+        self.state.update_batch_state("batches/2", "JOB_STATE_EXPIRED")
+        self.assertEqual(len(self.state.get_failed_batches()), 2)
+
+    def test_remove_batch_and_clear_uploads(self):
+        self.state.record_upload("p1", "files/a", "https://a")
+        self.state.record_batch("batches/1", "1Ka", ["p1"], "test")
+        self.state.remove_batch("batches/1")
+        self.assertEqual(len(self.state.data["batches"]), 0)
+
+        self.state.clear_uploads_for_pages(["p1"])
+        self.assertFalse(self.state.is_uploaded("p1"))
+
+    def test_idempotent_mark_completed(self):
+        self.state.mark_completed("p1")
+        self.state.mark_completed("p1")  # duplicate
+        self.assertEqual(self.state.data["completed_pages"].count("p1"), 1)
+
+    def test_is_completed(self):
+        self.assertFalse(self.state.is_completed("p1"))
+        self.state.mark_completed("p1")
+        self.assertTrue(self.state.is_completed("p1"))
+
+
+class TestBatchCollectParsing(unittest.TestCase):
+    """Test parsing of batch API JSONL response format."""
+
+    def test_parse_batch_response_line(self):
+        """Simulate a single JSONL response line from batch API."""
+        response_line = json.dumps({
+            "key": "1Ka_page_0002",
+            "response": {
+                "candidates": [{
+                    "content": {
+                        "parts": [{
+                            "text": "T:ཀ་པ\nW:ka pa\nE:first.\nR:первый\n==="
+                        }],
+                        "role": "model",
+                    },
+                    "finishReason": "STOP",
+                }],
+            },
+        })
+
+        parsed = json.loads(response_line)
+        text = parsed["response"]["candidates"][0]["content"]["parts"][0]["text"]
+        entries = parse_compact_entries(text)
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["tibetan"], "ཀ་པ")
+
+    def test_parse_batch_error_response(self):
+        """Batch API error response should be handled gracefully."""
+        response_line = json.dumps({
+            "key": "1Ka_page_0076",
+            "error": {"code": 400, "message": "Invalid request"},
+        })
+        parsed = json.loads(response_line)
+        self.assertIn("error", parsed)
+        self.assertNotIn("response", parsed)
+
+    def test_parse_batch_empty_response(self):
+        """Batch API can return empty candidates."""
+        response_line = json.dumps({
+            "key": "1Ka_page_0001",
+            "response": {
+                "candidates": [{
+                    "content": {"parts": [], "role": "model"},
+                    "finishReason": "SAFETY",
+                }],
+            },
+        })
+        parsed = json.loads(response_line)
+        parts = parsed["response"]["candidates"][0]["content"]["parts"]
+        text = None
+        for part in parts:
+            if "text" in part:
+                text = part["text"]
+        self.assertIsNone(text)
+
+    def test_parse_multi_entry_batch_response(self):
+        """Full page with multiple entries from batch."""
+        compact = """T:ཀ་ར།
+W:ka ra
+E:I 1) sugar
+R:I 1) сахар
+S:sharkaraa
+===
+T:ཀ་ར།
+W:ka ra
+E:II tent-pole.
+R:II шест палатки
+==="""
+        response_line = json.dumps({
+            "key": "1Ka_page_0007",
+            "response": {
+                "candidates": [{
+                    "content": {
+                        "parts": [{"text": compact}],
+                        "role": "model",
+                    },
+                }],
+            },
+        })
+        parsed = json.loads(response_line)
+        text = parsed["response"]["candidates"][0]["content"]["parts"][0]["text"]
+        entries = parse_compact_entries(text)
+        self.assertEqual(len(entries), 2)
+        self.assertIn("sugar", entries[0]["english"])
+        self.assertIn("tent-pole", entries[1]["english"])
 
 
 if __name__ == "__main__":

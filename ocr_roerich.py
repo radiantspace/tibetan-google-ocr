@@ -1,39 +1,37 @@
 #!/usr/bin/env python3
 """OCR Roerich dictionary PDF volumes into structured JSON.
 
-Idempotent - skips pages that already have JSON output unless --force is used.
-Uses compact line-oriented output format to minimize token usage, then converts to JSON.
-Processes pages in parallel for speed.
+Two modes:
+  Real-time (default): parallel workers, immediate results
+  Batch (--batch): uses Gemini Batch API for 50% cost savings, async processing
 
-Usage:
-    # Process a single volume (20 workers by default)
+Real-time usage:
     python ocr_roerich.py roerich/1Ka.pdf
-
-    # Process all volumes
-    python ocr_roerich.py roerich/*.pdf
-
-    # Force re-OCR of already processed pages
-    python ocr_roerich.py roerich/1Ka.pdf --force
-
-    # Custom worker count and DPI
-    python ocr_roerich.py roerich/1Ka.pdf --workers 10 --dpi 400
-
-    # Test mode - output to dedicated test directory, don't touch production files
+    python ocr_roerich.py roerich/*.pdf --workers 10 --dpi 400
     python ocr_roerich.py roerich/1Ka.pdf --test
+
+Batch usage:
+    python ocr_roerich.py --batch submit roerich/*.pdf
+    python ocr_roerich.py --batch status
+    python ocr_roerich.py --batch collect
+    python ocr_roerich.py --batch retry
 """
 
 import argparse
 import json
 import os
 import sys
+import tempfile
 import time
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 
 import fitz  # pymupdf
 
 MAX_RETRIES = 2
 RETRY_DELAY = 10  # seconds
+GEMINI_MODEL = "gemini-3.1-pro-preview"
 
 DEFAULT_OUTPUT_DIR = "roerich_output"
 TEST_OUTPUT_DIR = "roerich_test_output"
@@ -142,6 +140,553 @@ def parse_compact_entries(text):
     return entries
 
 
+def extract_page(doc, page_num, output_path, dpi=300):
+    """Extract a single page from a PDF as PNG."""
+    zoom = dpi / 72.0
+    mat = fitz.Matrix(zoom, zoom)
+    page = doc[page_num - 1]
+    pix = page.get_pixmap(matrix=mat)
+    pix.save(output_path)
+
+
+def _get_client():
+    """Create and return a Gemini API client."""
+    from google import genai
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if not api_key:
+        print("Error: GOOGLE_API_KEY not set")
+        sys.exit(1)
+    return genai.Client(api_key=api_key)
+
+
+def _now_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+
+# ---------------------------------------------------------------------------
+# Batch state management
+# ---------------------------------------------------------------------------
+
+class BatchState:
+    """Persistent state for batch API workflow.
+
+    Tracks uploaded files, batch jobs, and completed pages.
+    Saves atomically via temp file + rename.
+    """
+
+    def __init__(self, output_dir):
+        self.path = os.path.join(output_dir, "batch_state.json")
+        self.data = self._load()
+
+    def _load(self):
+        if os.path.isfile(self.path):
+            with open(self.path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        return {"uploaded_files": {}, "batches": {}, "completed_pages": []}
+
+    def save(self):
+        os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
+        fd, tmp = tempfile.mkstemp(
+            dir=os.path.dirname(self.path) or ".",
+            suffix=".tmp",
+        )
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump(self.data, f, ensure_ascii=False, indent=2)
+            os.replace(tmp, self.path)
+        except Exception:
+            os.unlink(tmp)
+            raise
+
+    # -- uploaded files --
+
+    def is_uploaded(self, page_key):
+        return page_key in self.data["uploaded_files"]
+
+    def record_upload(self, page_key, file_name, uri):
+        self.data["uploaded_files"][page_key] = {
+            "file_name": file_name,
+            "uri": uri,
+            "uploaded_at": _now_iso(),
+        }
+
+    def get_upload(self, page_key):
+        return self.data["uploaded_files"].get(page_key)
+
+    # -- batches --
+
+    def record_batch(self, batch_name, volume, page_keys, display_name):
+        self.data["batches"][batch_name] = {
+            "display_name": display_name,
+            "volume": volume,
+            "page_keys": page_keys,
+            "state": "JOB_STATE_PENDING",
+            "created_at": _now_iso(),
+            "last_checked": _now_iso(),
+        }
+
+    def update_batch_state(self, batch_name, state):
+        if batch_name in self.data["batches"]:
+            self.data["batches"][batch_name]["state"] = state
+            self.data["batches"][batch_name]["last_checked"] = _now_iso()
+
+    def get_active_batches(self):
+        """Return batches that are still pending or running."""
+        active = {}
+        for name, info in self.data["batches"].items():
+            if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
+                active[name] = info
+        return active
+
+    def get_succeeded_batches(self):
+        """Return batches that succeeded but haven't been fully collected."""
+        result = {}
+        for name, info in self.data["batches"].items():
+            if info["state"] == "JOB_STATE_SUCCEEDED":
+                # Check if all pages are already collected
+                uncollected = [
+                    pk for pk in info["page_keys"]
+                    if pk not in self.data["completed_pages"]
+                ]
+                if uncollected:
+                    result[name] = info
+        return result
+
+    def get_failed_batches(self):
+        result = {}
+        for name, info in self.data["batches"].items():
+            if info["state"] in ("JOB_STATE_FAILED", "JOB_STATE_EXPIRED"):
+                result[name] = info
+        return result
+
+    # -- completed pages --
+
+    def is_completed(self, page_key):
+        return page_key in self.data["completed_pages"]
+
+    def mark_completed(self, page_key):
+        if page_key not in self.data["completed_pages"]:
+            self.data["completed_pages"].append(page_key)
+
+    # -- queries --
+
+    def is_page_pending(self, page_key):
+        """Check if a page is in an active (pending/running) batch."""
+        for info in self.data["batches"].values():
+            if info["state"] in ("JOB_STATE_PENDING", "JOB_STATE_RUNNING"):
+                if page_key in info["page_keys"]:
+                    return True
+        return False
+
+    def remove_batch(self, batch_name):
+        self.data["batches"].pop(batch_name, None)
+
+    def clear_uploads_for_pages(self, page_keys):
+        for pk in page_keys:
+            self.data["uploaded_files"].pop(pk, None)
+
+
+# ---------------------------------------------------------------------------
+# Batch commands
+# ---------------------------------------------------------------------------
+
+def _extract_volume_pages(pdf_path, output_dir, dpi=300, skip_pages=0):
+    """Extract all pages from a PDF and return list of (page_key, png_path)."""
+    volume = os.path.splitext(os.path.basename(pdf_path))[0]
+    vol_pages_dir = os.path.join(output_dir, "pages", volume)
+    os.makedirs(vol_pages_dir, exist_ok=True)
+
+    doc = fitz.open(pdf_path)
+    total = len(doc)
+    start_page = skip_pages + 1
+
+    pages = []
+    for page_num in range(start_page, total + 1):
+        page_key = f"{volume}_page_{page_num:04d}"
+        png_path = os.path.join(vol_pages_dir, f"{page_key}.png")
+        if not os.path.isfile(png_path):
+            extract_page(doc, page_num, png_path, dpi)
+        pages.append((page_key, png_path))
+
+    doc.close()
+    return volume, pages
+
+
+def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False):
+    """Upload page images and submit batch jobs for each volume."""
+    from google.genai import types
+
+    client = _get_client()
+    state = BatchState(output_dir)
+    json_dir = os.path.join(output_dir, "json")
+
+    for pdf_path in sorted(pdf_paths):
+        if not os.path.isfile(pdf_path):
+            print(f"Warning: {pdf_path} not found, skipping")
+            continue
+
+        volume, all_pages = _extract_volume_pages(
+            pdf_path, output_dir, dpi, skip_pages
+        )
+        vol_json_dir = os.path.join(json_dir, volume)
+        os.makedirs(vol_json_dir, exist_ok=True)
+
+        # Filter out pages that already have results or are in active batches
+        pages_to_submit = []
+        for page_key, png_path in all_pages:
+            json_path = os.path.join(vol_json_dir, f"{page_key}.json")
+            has_json = (
+                os.path.isfile(json_path)
+                and os.path.getsize(json_path) > 0
+            )
+            if has_json and not force:
+                continue
+            if state.is_page_pending(page_key) and not force:
+                continue
+            pages_to_submit.append((page_key, png_path))
+
+        if not pages_to_submit:
+            print(f"{volume}: all {len(all_pages)} pages already done or queued")
+            continue
+
+        print(f"\n{volume}: {len(pages_to_submit)} pages to submit "
+              f"({len(all_pages)} total)")
+
+        # Upload images to File API
+        print(f"  Uploading images...", end="", flush=True)
+        uploaded_count = 0
+        for page_key, png_path in pages_to_submit:
+            if state.is_uploaded(page_key) and not force:
+                continue
+            f = client.files.upload(
+                file=png_path,
+                config=types.UploadFileConfig(
+                    display_name=page_key,
+                    mime_type="image/png",
+                ),
+            )
+            state.record_upload(page_key, f.name, f.uri)
+            uploaded_count += 1
+            if uploaded_count % 10 == 0:
+                print(f" {uploaded_count}", end="", flush=True)
+                state.save()  # incremental save
+        print(f" done ({uploaded_count} new)")
+        state.save()
+
+        # Build JSONL request file
+        print(f"  Building JSONL request...", end="", flush=True)
+        page_keys = []
+        jsonl_path = os.path.join(output_dir, f"_batch_{volume}.jsonl")
+        with open(jsonl_path, "w", encoding="utf-8") as jf:
+            for page_key, _ in pages_to_submit:
+                upload_info = state.get_upload(page_key)
+                if not upload_info:
+                    print(f"\n  WARNING: no upload for {page_key}, skipping")
+                    continue
+                req = {
+                    "key": page_key,
+                    "request": {
+                        "contents": [{
+                            "parts": [
+                                {"text": OCR_PROMPT},
+                                {"file_data": {
+                                    "file_uri": upload_info["uri"],
+                                    "mime_type": "image/png",
+                                }},
+                            ],
+                            "role": "user",
+                        }],
+                    },
+                }
+                jf.write(json.dumps(req) + "\n")
+                page_keys.append(page_key)
+        print(f" {len(page_keys)} requests")
+
+        # Upload JSONL to File API
+        print(f"  Uploading JSONL...", end="", flush=True)
+        jsonl_file = client.files.upload(
+            file=jsonl_path,
+            config=types.UploadFileConfig(
+                display_name=f"batch-{volume}",
+                mime_type="jsonl",
+            ),
+        )
+        print(f" {jsonl_file.name}")
+
+        # Create batch job
+        display_name = f"roerich-{volume}"
+        batch = client.batches.create(
+            model=GEMINI_MODEL,
+            src=jsonl_file.name,
+            config={"display_name": display_name},
+        )
+        state.record_batch(batch.name, volume, page_keys, display_name)
+        state.save()
+
+        # Clean up local JSONL
+        os.remove(jsonl_path)
+
+        print(f"  Batch created: {batch.name} ({len(page_keys)} pages)")
+
+    print(f"\nDone. Use '--batch status' to check progress.")
+
+
+def batch_status(output_dir):
+    """Poll and display status of all batch jobs."""
+    client = _get_client()
+    state = BatchState(output_dir)
+
+    all_batches = state.data["batches"]
+    if not all_batches:
+        print("No batch jobs found.")
+        return
+
+    # Poll active batches
+    active = state.get_active_batches()
+    for batch_name in active:
+        try:
+            job = client.batches.get(name=batch_name)
+            state.update_batch_state(batch_name, job.state.name)
+        except Exception as e:
+            print(f"  Warning: could not poll {batch_name}: {e}")
+    state.save()
+
+    # Display table
+    print(f"\n{'Volume':<12} {'State':<24} {'Pages':>6} {'Created':<20} Batch")
+    print("-" * 90)
+
+    for batch_name, info in sorted(
+        all_batches.items(), key=lambda x: x[1].get("created_at", "")
+    ):
+        vol = info.get("volume", "?")
+        st = info.get("state", "?")
+        pages = len(info.get("page_keys", []))
+        created = info.get("created_at", "?")[:19].replace("T", " ")
+        print(f"{vol:<12} {st:<24} {pages:>6} {created:<20} {batch_name}")
+
+    # Summary
+    states = {}
+    for info in all_batches.values():
+        s = info.get("state", "?")
+        states[s] = states.get(s, 0) + len(info.get("page_keys", []))
+
+    print(f"\nSummary: {len(all_batches)} batches, "
+          f"{len(state.data['completed_pages'])} pages collected")
+    for s, count in sorted(states.items()):
+        print(f"  {s}: {count} pages")
+
+
+def batch_collect(output_dir):
+    """Download results from completed batch jobs and save as JSON."""
+    client = _get_client()
+    state = BatchState(output_dir)
+    json_dir = os.path.join(output_dir, "json")
+
+    # First refresh state of active batches
+    for batch_name in list(state.get_active_batches()):
+        try:
+            job = client.batches.get(name=batch_name)
+            state.update_batch_state(batch_name, job.state.name)
+        except Exception as e:
+            print(f"  Warning: could not poll {batch_name}: {e}")
+    state.save()
+
+    succeeded = state.get_succeeded_batches()
+    if not succeeded:
+        print("No completed batches with uncollected results.")
+        active = state.get_active_batches()
+        if active:
+            total_pages = sum(
+                len(info["page_keys"]) for info in active.values()
+            )
+            print(f"  ({len(active)} batches still running, {total_pages} pages)")
+        return
+
+    total_collected = 0
+    total_errors = 0
+
+    for batch_name, info in succeeded.items():
+        volume = info["volume"]
+        vol_json_dir = os.path.join(json_dir, volume)
+        os.makedirs(vol_json_dir, exist_ok=True)
+
+        print(f"\n{volume}: collecting from {batch_name}...")
+
+        try:
+            job = client.batches.get(name=batch_name)
+        except Exception as e:
+            print(f"  ERROR getting batch: {e}")
+            continue
+
+        # Download result file
+        if job.dest and job.dest.file_name:
+            print(f"  Downloading results...", end="", flush=True)
+            try:
+                result_bytes = client.files.download(file=job.dest.file_name)
+                result_text = result_bytes.decode("utf-8")
+            except Exception as e:
+                print(f" ERROR: {e}")
+                continue
+            print(f" OK")
+
+            # Parse JSONL responses
+            collected = 0
+            errors = 0
+            for line in result_text.splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    parsed = json.loads(line)
+                except json.JSONDecodeError:
+                    errors += 1
+                    continue
+
+                page_key = parsed.get("key", "")
+                json_path = os.path.join(vol_json_dir, f"{page_key}.json")
+
+                if "response" in parsed and parsed["response"]:
+                    resp = parsed["response"]
+                    # Extract text from response
+                    text = None
+                    if "candidates" in resp and resp["candidates"]:
+                        parts = resp["candidates"][0].get(
+                            "content", {}
+                        ).get("parts", [])
+                        for part in parts:
+                            if "text" in part:
+                                text = part["text"]
+                                break
+
+                    if text:
+                        entries = parse_compact_entries(text)
+                        if entries:
+                            with open(json_path, "w", encoding="utf-8") as f:
+                                json.dump(
+                                    entries, f, ensure_ascii=False, indent=2
+                                )
+                            # Clean up stale error file
+                            err_path = json_path + ".error"
+                            if os.path.isfile(err_path):
+                                os.remove(err_path)
+                            state.mark_completed(page_key)
+                            collected += 1
+                        else:
+                            err_path = json_path + ".error"
+                            with open(err_path, "w", encoding="utf-8") as f:
+                                f.write(f"ERROR: no entries parsed\n---\n{text}")
+                            errors += 1
+                    else:
+                        err_path = json_path + ".error"
+                        with open(err_path, "w", encoding="utf-8") as f:
+                            f.write(f"ERROR: empty response text\n---\n"
+                                    f"{json.dumps(resp, indent=2)}")
+                        state.mark_completed(page_key)  # don't retry blanks
+                        errors += 1
+
+                elif "error" in parsed:
+                    err_path = json_path + ".error"
+                    with open(err_path, "w", encoding="utf-8") as f:
+                        f.write(f"ERROR: {parsed['error']}")
+                    errors += 1
+                else:
+                    errors += 1
+
+            total_collected += collected
+            total_errors += errors
+            print(f"  {collected} pages collected, {errors} errors")
+
+        elif job.dest and job.dest.inlined_responses:
+            # Inline responses (small batches)
+            collected = 0
+            page_keys = info["page_keys"]
+            for i, inline_resp in enumerate(job.dest.inlined_responses):
+                if i >= len(page_keys):
+                    break
+                page_key = page_keys[i]
+                json_path = os.path.join(vol_json_dir, f"{page_key}.json")
+
+                if inline_resp.response:
+                    text = None
+                    try:
+                        text = inline_resp.response.text
+                    except AttributeError:
+                        pass
+
+                    if text:
+                        entries = parse_compact_entries(text)
+                        if entries:
+                            with open(json_path, "w", encoding="utf-8") as f:
+                                json.dump(
+                                    entries, f, ensure_ascii=False, indent=2
+                                )
+                            state.mark_completed(page_key)
+                            collected += 1
+                            continue
+
+                    state.mark_completed(page_key)
+                    total_errors += 1
+                elif inline_resp.error:
+                    total_errors += 1
+
+            total_collected += collected
+            print(f"  {collected} pages collected")
+        else:
+            print(f"  No results found in batch response")
+
+    state.save()
+    print(f"\nTotal: {total_collected} collected, {total_errors} errors")
+
+
+def batch_retry(output_dir, dpi=300, skip_pages=0):
+    """Re-submit failed or expired batch jobs."""
+    from google.genai import types
+
+    client = _get_client()
+    state = BatchState(output_dir)
+
+    failed = state.get_failed_batches()
+    if not failed:
+        print("No failed or expired batches to retry.")
+        return
+
+    for batch_name, info in failed.items():
+        volume = info["volume"]
+        page_keys = info["page_keys"]
+        print(f"\n{volume}: retrying {len(page_keys)} pages "
+              f"(was {info['state']})")
+
+        # Clear old upload refs - files may have expired
+        state.clear_uploads_for_pages(page_keys)
+        state.remove_batch(batch_name)
+        state.save()
+
+    # Now re-submit by finding the PDFs
+    # The volumes correspond to PDF filenames in roerich/
+    volumes_to_retry = set()
+    for info in failed.values():
+        volumes_to_retry.add(info["volume"])
+
+    pdf_paths = []
+    for vol in volumes_to_retry:
+        candidates = [
+            f"roerich/{vol}.pdf",
+            os.path.join(os.path.dirname(output_dir), "roerich", f"{vol}.pdf"),
+        ]
+        for c in candidates:
+            if os.path.isfile(c):
+                pdf_paths.append(c)
+                break
+        else:
+            print(f"  WARNING: could not find PDF for volume {vol}")
+
+    if pdf_paths:
+        batch_submit(pdf_paths, output_dir, dpi=dpi, skip_pages=skip_pages)
+
+
+# ---------------------------------------------------------------------------
+# Real-time mode (existing)
+# ---------------------------------------------------------------------------
+
 def _is_server_error(exc):
     """Check if an exception indicates a 5xx server error."""
     status = getattr(exc, "status_code", None) or getattr(exc, "code", None)
@@ -169,7 +714,7 @@ def ocr_page_gemini(image_path, client):
     for attempt in range(MAX_RETRIES):
         try:
             response = client.models.generate_content(
-                model="gemini-3.1-pro-preview",
+                model=GEMINI_MODEL,
                 contents=contents,
             )
             text = response.text
@@ -192,15 +737,6 @@ def ocr_page_gemini(image_path, client):
                 time.sleep(RETRY_DELAY)
                 continue
             raise
-
-
-def extract_page(doc, page_num, output_path, dpi=300):
-    """Extract a single page from a PDF as PNG."""
-    zoom = dpi / 72.0
-    mat = fitz.Matrix(zoom, zoom)
-    page = doc[page_num - 1]
-    pix = page.get_pixmap(matrix=mat)
-    pix.save(output_path)
 
 
 class ProgressTracker:
@@ -314,14 +850,7 @@ def process_single_page(page_num, png_path, json_path, client, tracker, force):
 def process_volume(pdf_path, force=False, dpi=300, skip_pages=0, workers=20,
                    output_dir=DEFAULT_OUTPUT_DIR):
     """Process all pages of a single PDF volume with parallel workers."""
-    from google import genai
-
-    api_key = os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        print("Error: GOOGLE_API_KEY not set")
-        sys.exit(1)
-
-    client = genai.Client(api_key=api_key)
+    client = _get_client()
     volume = os.path.splitext(os.path.basename(pdf_path))[0]
 
     pages_dir = os.path.join(output_dir, "pages")
@@ -389,6 +918,10 @@ def process_volume(pdf_path, force=False, dpi=300, skip_pages=0, workers=20,
     return s["processed"], s["skipped"], s["errors"]
 
 
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
 def main():
     try:
         from dotenv import load_dotenv
@@ -400,9 +933,15 @@ def main():
         description="OCR Roerich dictionary PDFs into structured JSON"
     )
     parser.add_argument(
+        "--batch",
+        metavar="CMD",
+        choices=["submit", "status", "collect", "retry"],
+        help="Batch API mode: submit, status, collect, or retry",
+    )
+    parser.add_argument(
         "pdfs",
-        nargs="+",
-        help="PDF file(s) to process",
+        nargs="*",
+        help="PDF file(s) to process (required for real-time and batch submit)",
     )
     parser.add_argument(
         "--force",
@@ -425,19 +964,40 @@ def main():
         "--workers",
         type=int,
         default=20,
-        help="Number of parallel OCR workers (default: 20)",
+        help="Number of parallel OCR workers (default: 20, real-time only)",
     )
     parser.add_argument(
         "--test",
         action="store_true",
-        help="Test mode - write output to roerich_test_output/ instead of production dir",
+        help="Test mode - use roerich_test_output/ instead of production dir",
     )
 
     args = parser.parse_args()
     output_dir = TEST_OUTPUT_DIR if args.test else DEFAULT_OUTPUT_DIR
 
     if args.test:
-        print(f"*** TEST MODE - output goes to {TEST_OUTPUT_DIR}/ ***")
+        print(f"*** TEST MODE - output goes to {output_dir}/ ***")
+
+    # Batch mode
+    if args.batch:
+        if args.batch == "submit":
+            if not args.pdfs:
+                parser.error("--batch submit requires PDF file(s)")
+            batch_submit(
+                args.pdfs, output_dir,
+                dpi=args.dpi, skip_pages=args.skip_pages, force=args.force,
+            )
+        elif args.batch == "status":
+            batch_status(output_dir)
+        elif args.batch == "collect":
+            batch_collect(output_dir)
+        elif args.batch == "retry":
+            batch_retry(output_dir, dpi=args.dpi, skip_pages=args.skip_pages)
+        return
+
+    # Real-time mode
+    if not args.pdfs:
+        parser.error("PDF file(s) required (or use --batch CMD)")
 
     total_processed = 0
     total_skipped = 0
