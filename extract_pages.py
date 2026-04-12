@@ -63,15 +63,15 @@ def extract_pages(pdf_path, page_numbers, output_dir, dpi=300):
 
 
 def get_page_info(pdf_path):
-    """Print basic info about a PDF."""
+    """Print basic info about a PDF and return (total_pages, doc) - caller must close doc."""
     doc = fitz.open(pdf_path)
+    total = len(doc)
     print(f"PDF: {pdf_path}")
-    print(f"Pages: {len(doc)}")
-    if len(doc) > 0:
+    print(f"Pages: {total}")
+    if total > 0:
         page = doc[0]
         print(f"Page size: {page.rect.width:.0f} x {page.rect.height:.0f} pts")
-    doc.close()
-    return len(doc)
+    return total, doc
 
 
 def main():
@@ -114,7 +114,8 @@ def main():
         print(f"Error: file not found: {args.pdf_path}")
         sys.exit(1)
 
-    total = get_page_info(args.pdf_path)
+    total, doc = get_page_info(args.pdf_path)
+    doc.close()
 
     if args.info:
         return

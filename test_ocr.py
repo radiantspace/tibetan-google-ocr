@@ -80,14 +80,14 @@ def get_mime_type(image_path):
 
 def ocr_gemini(image_path):
     """OCR using Google Gemini 3.1 Pro."""
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 
     api_key = os.environ.get("GOOGLE_API_KEY")
     if not api_key:
         return None, "GOOGLE_API_KEY not set"
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-3.1-pro-preview")
+    client = genai.Client(api_key=api_key)
 
     with open(image_path, "rb") as f:
         image_data = f.read()
@@ -95,10 +95,13 @@ def ocr_gemini(image_path):
     mime = get_mime_type(image_path)
 
     start = time.time()
-    response = model.generate_content([
-        OCR_PROMPT,
-        {"mime_type": mime, "data": image_data},
-    ])
+    response = client.models.generate_content(
+        model="gemini-3.1-pro-preview",
+        contents=[
+            types.Part.from_text(text=OCR_PROMPT),
+            types.Part.from_bytes(data=image_data, mime_type=mime),
+        ],
+    )
     elapsed = time.time() - start
 
     return response.text, f"{elapsed:.1f}s"
@@ -227,8 +230,17 @@ def save_result(image_path, model_name, text, output_dir):
     stem = Path(image_path).stem
     safe_model = model_name.lower().replace(" ", "_").replace(".", "")
     output_path = os.path.join(output_dir, f"{stem}_{safe_model}.json")
+
+    # Strip markdown code fences if present
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        first_newline = cleaned.index("\n")
+        cleaned = cleaned[first_newline + 1:]
+    if cleaned.endswith("```"):
+        cleaned = cleaned[:-3].rstrip()
+
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(text)
+        f.write(cleaned)
     return output_path
 
 

@@ -2,5 +2,7 @@
 .env
 test_pages/
 ocr_results/
+roerich/
 __pycache__/
 *.pyc
+.venv/
