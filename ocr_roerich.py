@@ -32,8 +32,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import fitz  # pymupdf
 
-MAX_RETRIES = 3
-RETRY_BACKOFF = [5, 15, 30]  # seconds between retries
+MAX_RETRIES = 2
+RETRY_DELAY = 10  # seconds
 
 DEFAULT_OUTPUT_DIR = "roerich_output"
 TEST_OUTPUT_DIR = "roerich_test_output"
@@ -142,10 +142,19 @@ def parse_compact_entries(text):
     return entries
 
 
+def _is_server_error(exc):
+    """Check if an exception indicates a 5xx server error."""
+    status = getattr(exc, "status_code", None) or getattr(exc, "code", None)
+    if isinstance(status, int) and 500 <= status < 600:
+        return True
+    msg = str(exc)
+    return any(code in msg for code in ("500", "502", "503", "504"))
+
+
 def ocr_page_gemini(image_path, client):
     """OCR a single page image using Gemini 3.1 Pro with compact format.
 
-    Retries up to MAX_RETRIES times on empty/None responses and transient errors.
+    Retries once on 5xx server errors only.
     """
     from google.genai import types
 
@@ -157,7 +166,6 @@ def ocr_page_gemini(image_path, client):
         types.Part.from_bytes(data=image_data, mime_type="image/png"),
     ]
 
-    last_error = None
     for attempt in range(MAX_RETRIES):
         try:
             response = client.models.generate_content(
@@ -166,7 +174,6 @@ def ocr_page_gemini(image_path, client):
             )
             text = response.text
             if text is None or not text.strip():
-                # Dig out block reason if available
                 reason = ""
                 if hasattr(response, "prompt_feedback"):
                     reason = f" (feedback: {response.prompt_feedback})"
@@ -174,20 +181,15 @@ def ocr_page_gemini(image_path, client):
                     c = response.candidates[0]
                     if hasattr(c, "finish_reason"):
                         reason = f" (finish_reason: {c.finish_reason})"
-                last_error = ValueError(
+                raise ValueError(
                     f"Gemini returned empty response{reason}"
                 )
-                if attempt < MAX_RETRIES - 1:
-                    time.sleep(RETRY_BACKOFF[attempt])
-                    continue
-                raise last_error
             return text
         except ValueError:
-            raise
+            raise  # empty response - no retry, page has no text
         except Exception as e:
-            last_error = e
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_BACKOFF[attempt])
+            if attempt < MAX_RETRIES - 1 and _is_server_error(e):
+                time.sleep(RETRY_DELAY)
                 continue
             raise
 
