@@ -1,0 +1,297 @@
+[
+  {
+    "tibetan": " གྲལ་སྒྲིག",
+    "wylie": " gral sgrig",
+    "english": " arrangement; ready; finished.",
+    "russian": " устроенный, готовый; законченный"
+  },
+  {
+    "tibetan": " གྲལ་པ།",
+    "wylie": " gral pa",
+    "english": " file; line.",
+    "russian": " ряд, шеренга; линия"
+  },
+  {
+    "tibetan": " གྲལ་བུ།",
+    "wylie": " gral bu",
+    "english": " lath.",
+    "russian": " планка, рейка"
+  },
+  {
+    "tibetan": " གྲལ་བོ།",
+    "wylie": " gral bo",
+    "russian": " см. གྲལ་པ།"
+  },
+  {
+    "tibetan": " གྲལ་མ།",
+    "wylie": " gral ma",
+    "english": " small beam; rafter.",
+    "russian": " небольшое бревно; балка, стропило"
+  },
+  {
+    "tibetan": " གྲལ་ཙེ།",
+    "wylie": " gral tse",
+    "english": " messenger.",
+    "russian": " посыльный, вестник"
+  },
+  {
+    "tibetan": " གྲལ་ཚེས།",
+    "wylie": " gral tshes",
+    "english": " date; consecutive date.",
+    "russian": " число (месяца)",
+    "sanskrit": " gama"
+  },
+  {
+    "tibetan": " གྲལ་རིམ།",
+    "wylie": " gral rim",
+    "english": " line, row; range, class; ~ གྱིས། after another, in succession.",
+    "russian": " линия, ряд; порядок; разряд, слой, класс; ~ གྱིས། по порядку",
+    "sanskrit": " paṅkti"
+  },
+  {
+    "tibetan": " གྲལ་རེས།",
+    "wylie": " gral res",
+    "english": " 1) line, stripe; 2) striped (n. of a poisonless snake).",
+    "russian": " 1) линия, полоса; 2) \"полосатый\" (назв. неядовитой змеи)",
+    "sanskrit": " rājila"
+  },
+  {
+    "tibetan": " གྲས།",
+    "wylie": " gras",
+    "english": " class; order; rank; dignity.",
+    "russian": " класс; порядок; ряд; сан, чин"
+  },
+  {
+    "tibetan": " གྲས་ཀ།",
+    "wylie": " gras ka",
+    "russian": " см. གྲས།"
+  },
+  {
+    "tibetan": " གྲས་པ།",
+    "wylie": " gras pa",
+    "russian": " I см. གྲས།"
+  },
+  {
+    "tibetan": " གྲས་པ།",
+    "wylie": " gras pa",
+    "english": " to bind (load, burden).",
+    "russian": " II связывать, увязывать (груз, ношу)"
+  },
+  {
+    "tibetan": " གྲས་མ།",
+    "wylie": " gras ma",
+    "english": " n. of a medicinal plant.",
+    "russian": " назв. лекарственного растения"
+  },
+  {
+    "tibetan": " གྲི།",
+    "wylie": " gri",
+    "english": " knife; dagger; sword;",
+    "russian": " нож; кинжал; меч",
+    "sanskrit": " asi, śastra"
+  },
+  {
+    "tibetan": " གྲི་ཀླུག",
+    "wylie": " gri klug",
+    "russian": " см. གྲི་གུག"
+  },
+  {
+    "tibetan": " གྲི་ཀླད",
+    "wylie": " gri klad",
+    "english": " head or skull of a man killed by a knife;",
+    "russian": " череп или голова человека, убитого ножом"
+  },
+  {
+    "tibetan": " གྲི་སྐོར་བ།",
+    "wylie": " gri skor ba",
+    "english": " to swing a knife(sword);",
+    "russian": " размахивать ножом, мечом"
+  },
+  {
+    "tibetan": " གྲི་ཁ།",
+    "wylie": " gri kha",
+    "english": " edge of a knife;",
+    "russian": " лезвие, острие ножа"
+  },
+  {
+    "tibetan": " གྲི་ཁ་གྲུ་ཀ།",
+    "wylie": " gri kha gru ka",
+    "english": " jagged edge of a knife;",
+    "russian": " зазубренное лезвие, остриё ножа"
+  },
+  {
+    "tibetan": " གྲི་འཁྱོག་པ།",
+    "wylie": " gri 'khyog pa",
+    "russian": " см. གྲི་གུག"
+  },
+  {
+    "tibetan": " གྲི་གུག།",
+    "wylie": " gri gug",
+    "english": " crooked knife; a short, crooked sabre or sword;",
+    "russian": " кривой нож; короткая кривая сабля(меч)"
+  },
+  {
+    "tibetan": " གྲི་སྒྲོག་པ།",
+    "wylie": " gri sgrog pa",
+    "english": " see above;",
+    "russian": " см. выше"
+  },
+  {
+    "tibetan": " གྲི་དངོ།",
+    "wylie": " gri dngo",
+    "english": " the edge of a knife;",
+    "russian": " лезвие ножа"
+  },
+  {
+    "tibetan": " གྲི་ལྕེ།",
+    "wylie": " gri lce",
+    "english": " the knife's blade;",
+    "russian": " клинок ножа"
+  },
+  {
+    "tibetan": " གྲི་ཆུང༌།",
+    "wylie": " gri chung",
+    "english": " small knife, pocket knife; pen-knife;",
+    "russian": " маленький, карманный нож; складной нож"
+  },
+  {
+    "tibetan": " གྲི་ལྟག།",
+    "wylie": " gri ltag",
+    "english": " the butt-end of a knife;",
+    "russian": " тупая сторона ножа"
+  },
+  {
+    "tibetan": " གྲི་བཙབས་བྱེད་པ།",
+    "wylie": " gri btsabs byed pa",
+    "english": " to chop, to shred;",
+    "russian": " мелко резать ножом, шинковать"
+  },
+  {
+    "tibetan": " གྲི་ཐུང༌།",
+    "wylie": " gri thung",
+    "english": " a short sword, knife;",
+    "russian": " короткий меч, нож"
+  },
+  {
+    "tibetan": " གྲི་རྡར་བ།",
+    "wylie": " gri rdar ba",
+    "english": " to sharpen a knife;",
+    "russian": " точить нож"
+  },
+  {
+    "tibetan": " གྲི་རྡུལ།",
+    "wylie": " gri rdul",
+    "english": " blunt knife;",
+    "russian": " тупой нож"
+  },
+  {
+    "tibetan": " གྲི་ལྡབས།",
+    "wylie": " gri ldabs",
+    "english": " blade surface;",
+    "russian": " плоскость лезвия ножа"
+  },
+  {
+    "tibetan": " གྲི་རྣོན།",
+    "wylie": " gri rnon",
+    "english": " sharp knife;",
+    "russian": " острый нож"
+  },
+  {
+    "tibetan": " གྲི་བྱ་གཤོག་གཤོག་པ་ལྟ་བུ།",
+    "wylie": " gri bya gshog gshog pa lta bu",
+    "english": " knife of the shape of the wings of a cock;",
+    "russian": " нож в форме крыльев петуха"
+  },
+  {
+    "tibetan": " གྲི་བྱ་རོག་གི་མཆུ།",
+    "wylie": " gri bya rog gi mchu",
+    "english": " knife of the shape of the crow's bill;",
+    "russian": " нож в форме вороньего клюва"
+  },
+  {
+    "tibetan": " གྲི་དམར།",
+    "wylie": " gri dmar",
+    "english": " knife of a superior quality(lit. the redknife);",
+    "russian": " клинок высшего качества (букв. красный нож)"
+  },
+  {
+    "tibetan": " གྲི་རྩེ།",
+    "wylie": " gri rtse",
+    "english": " the knife's point;",
+    "russian": " кончик ножа"
+  },
+  {
+    "tibetan": " གྲི་ཚགས་པ།",
+    "wylie": " gri tshags pa",
+    "russian": " см. གྲི་བཙབས་བྱེད་པ།"
+  },
+  {
+    "tibetan": " གྲི་ཡུ།",
+    "wylie": " gri yu",
+    "english": " the handle of a knife;",
+    "russian": " рукоятка ножа"
+  },
+  {
+    "tibetan": " གྲི་རིང༌།",
+    "wylie": " gri ring",
+    "english": " sword;",
+    "russian": " длинный нож, меч"
+  },
+  {
+    "tibetan": " གྲི་རུས།",
+    "wylie": " gri rus",
+    "english": " skeleton of a man that has been killed with a sword;",
+    "russian": " скелет человека, убитого ножом(мечом)"
+  },
+  {
+    "tibetan": " གྲི་ལམ།",
+    "wylie": " gri lam",
+    "english": " cut, incision(lit. the path of the knife);",
+    "russian": " порез, рана(букв. тропа ножа)"
+  },
+  {
+    "tibetan": " གྲི་ཤ།",
+    "wylie": " gri sha",
+    "english": " flesh of a man killed by a sword(used in sorcery);",
+    "russian": " тело человека, убитого мечом, ножом (используется при колдовстве)"
+  },
+  {
+    "tibetan": " གྲི་ཤུབས།",
+    "wylie": " gri shubs",
+    "english": " scabbard;",
+    "russian": " ножны"
+  },
+  {
+    "tibetan": " གྲི་སོག།",
+    "wylie": " gri sog",
+    "english": " a small sword or knife;",
+    "russian": " маленький меч или нож"
+  },
+  {
+    "tibetan": " གྲི་སོ།",
+    "wylie": " gri so",
+    "english": " blade of a knife(sword);",
+    "russian": " лезвие ножа(меча)"
+  },
+  {
+    "tibetan": " གྲིའི་དངོ།",
+    "wylie": " gri'i dngo",
+    "russian": " см. གྲི་དངོ།"
+  },
+  {
+    "tibetan": " གྲིའི་ཆུང༌།",
+    "wylie": " gri'i chung",
+    "russian": " см. གྲི་ཆུང༌།"
+  },
+  {
+    "tibetan": " གྲིའི་སོ།",
+    "wylie": " gri'i so",
+    "russian": " см. གྲི་སོ།"
+  },
+  {
+    "tibetan": " གྲིར་གུམ་པ།",
+    "wylie": " grir gum pa",
+    "english": " to kill",
+    "russian": " убивать ножом"
+  }
+]

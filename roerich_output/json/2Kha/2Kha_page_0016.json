@@ -1,0 +1,150 @@
+[
+  {
+    "tibetan": "ཁག་འགེལ་བ།",
+    "wylie": "khag 'gel ba",
+    "english": "to place in charge.",
+    "russian": "поручать, давать поручение"
+  },
+  {
+    "tibetan": "ཁག་ཁྲི།",
+    "wylie": "khag khri",
+    "russian": "см. ཁག་འཁྲི།"
+  },
+  {
+    "tibetan": "ཁག་རྒྱག་པ།",
+    "wylie": "khag rgyag pa",
+    "russian": "см. ཁག་ཐེག་པ།"
+  },
+  {
+    "tibetan": "ཁག་ཅན།",
+    "wylie": "khag can",
+    "english": "important.",
+    "russian": "важный, значительный"
+  },
+  {
+    "tibetan": "ཁག་ཆེན།",
+    "wylie": "khag chen",
+    "english": "important.",
+    "russian": "важный, значительный"
+  },
+  {
+    "tibetan": "ཁག་ཏོག།",
+    "wylie": "khag tog",
+    "russian": "см. ཁ་ཏོག། II."
+  },
+  {
+    "tibetan": "ཁག་ཐེག།",
+    "wylie": "khag theg",
+    "russian": "см. ཁག་ཐེག་པ།"
+  },
+  {
+    "tibetan": "ཁག་ཐེག་པ།",
+    "wylie": "khag theg pa",
+    "english": "to guarantee.",
+    "russian": "гарантировать, ручаться"
+  },
+  {
+    "tibetan": "ཁག་པོ།",
+    "wylie": "khag po",
+    "english": "difficult, hard.",
+    "russian": "трудный, тяжёлый"
+  },
+  {
+    "tibetan": "ཁག་འཁྲི།",
+    "wylie": "khag 'khri",
+    "english": "responsibility; ཁག་འཁྲི་མེད་པ། irresponsible.",
+    "russian": "ответственность; ཁག་འཁྲི་མེད་པ། безответственный"
+  },
+  {
+    "tibetan": "ཁང་།",
+    "wylie": "khang",
+    "english": "1) building, house, dwelling, residence; ཁང་མིག། room; འོག་ཁང་། lower story; མྱ་ངན་གྱི་ཁང་། body (lit. mourning house); 2) buddh. inside, heart; ཁང་རུལ་བ་ནང་གྱི་རྣག་འཛག། inwardly being corrupt, the pus drops from him; 3) gram. derivational morpheme: ཚོང་ཁང་། shop; སྨན་ཁང་། drug-store; ཁྲིམས་ཁང་། court; ཆང་ཁང་། inn.",
+    "russian": "1) здание, дом, жилище; помещение; ཁང་མིག། комната; འོག་ཁང་། нижний этаж; མྱ་ངན་གྱི་ཁང་། человеческое тело (букв. обитель печали); 2) будд. внутренность, сердце; ཁང་རུལ་བ་ནང་གྱི་རྣག་འཛག། внутренность сгнила, и наружу выходит гной; 3) грам. словообразующая морфема: ཚོང་ཁང་། магазин; སྨན་ཁང་། аптека; ཁྲིམས་ཁང་། суд; ཆང་ཁང་། трактир.",
+    "sanskrit": "gṛha, mandira, bhavana, kuṭi, nilaya, āvasatha"
+  },
+  {
+    "tibetan": "ཁང་ཁྱིམ།",
+    "wylie": "khang khyim",
+    "english": "house.",
+    "russian": "дом; здание",
+    "sanskrit": "gṛha"
+  },
+  {
+    "tibetan": "ཁང་གླ།",
+    "wylie": "khang gla",
+    "english": "house rent.",
+    "russian": "квартирная плата"
+  },
+  {
+    "tibetan": "ཁང་ཆུང་།",
+    "wylie": "khang chung",
+    "english": "small house; house (room) reserved for decrepit parents; ཁང་ཆུང་པ། occupant of a small house.",
+    "russian": "маленький домик; дом (комната) для престарелых родителей; ཁང་ཆུང་པ། обитатель маленького домика"
+  },
+  {
+    "tibetan": "ཁང་ཆེན།",
+    "wylie": "khang chen",
+    "english": "1) large house; ཁང་ཆེན་པ། a) occupant of a large house; b) buddh. old persons belonging to Gautama's family; 2) monastery.",
+    "russian": "1) большой дом; ཁང་ཆེན་པ། a) обитатель большого дома; б) будд. престарелые члены семьи Гаутамы; 2) монастырь"
+  },
+  {
+    "tibetan": "ཁང་ཆེན་པོ། ཁང་བཟང་།",
+    "wylie": "khang chen po, khang bzang",
+    "english": "palace.",
+    "russian": "дворец",
+    "sanskrit": "mahāvimana"
+  },
+  {
+    "tibetan": "ཁང་མཆོག།",
+    "wylie": "khang mchog",
+    "english": "palace.",
+    "russian": "дворец"
+  },
+  {
+    "tibetan": "ཁང་གཉེར།",
+    "wylie": "khang gnyer",
+    "english": "house-keeper, manager.",
+    "russian": "домоуправитель",
+    "sanskrit": "gṛhapāla"
+  },
+  {
+    "tibetan": "ཁང་རྙིང་།",
+    "wylie": "khang rnying",
+    "english": "old house.",
+    "russian": "старый дом"
+  },
+  {
+    "tibetan": "ཁང་སྟེང་།",
+    "wylie": "khang steng",
+    "english": "the upper roof or terrace of a house.",
+    "russian": "крыша, кровля дома; террасная кровля",
+    "sanskrit": "talakopari"
+  },
+  {
+    "tibetan": "ཁང་སྟོང་།",
+    "wylie": "khang stong",
+    "english": "1) bed, couch; 2) lonely house.",
+    "russian": "1) постель, ложе; 2) уединённый дом",
+    "sanskrit": "talpa"
+  },
+  {
+    "tibetan": "ཁང་ཐོག།",
+    "wylie": "khang thog",
+    "english": "1) roof of a house; 2) upper store.",
+    "russian": "1) крыша дома; 2) верхний этаж",
+    "sanskrit": "paṭala, chāda"
+  },
+  {
+    "tibetan": "ཁང་པ།",
+    "wylie": "khang pa",
+    "english": "building, house, dwelling, residence; ཁང་པ་བཀྲ་བ། vicitragṛha painted house; ཁང་པ་བཙན་པ། well guarded house; ཁང་པ་བརྩེགས་པ། kūṭāgāra masonry building; storeyed house; ཁང་པ་བཤིག་པ། to demolish a house; ཁང་པ་བཟོ་བ། to build a house; ཁང་པའི་སྦུག།, ཁང་པའི་ཕུག་པ། apavaraka room, inner appartment; ཁང་པའི་ནང་། antargṛha, koṣṭra room, inner appartment; ཁང་པར་འགྲོ་བ། to go home.",
+    "russian": "здание, дом, жилище; помещение; ཁང་པ་བཙན་པ། хорошо охраняемый дом; ཁང་པ་བརྩེགས་པ། каменное строение; здание в несколько этажей; ཁང་པ་བཤིག་པ། разрушать (сносить) дом; ཁང་པ་བཟོ་བ། строить дом; ཁང་པའི་སྦུག།, ཁང་པའི་ཕུག་པ། комната, внутренние покои; ཁང་པའི་ནང་། комната, внутренние покои; ཁང་པར་འགྲོ་བ། идти домой.",
+    "sanskrit": "gṛha, mandira, bhavana, kuṭika, prāsāda"
+  },
+  {
+    "tibetan": "ཁང་བུ།",
+    "wylie": "khang bu",
+    "english": "1) small house, cottage; 2) n. of a fabulous country.",
+    "russian": "1) домик; 2) назв. мифической страны."
+  }
+]
