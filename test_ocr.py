@@ -7,13 +7,13 @@ API keys are read from environment variables or a .env file.
 
 Usage:
     # Test all available models on a single image
-    python test_ocr.py test_pages/roerich_page_0050.png
+    python3 test_ocr.py test_pages/roerich_page_0050.png
 
     # Test specific models
-    python test_ocr.py test_pages/*.png --models gemini gpt4o
+    python3 test_ocr.py test_pages/*.png --models gemini gpt4o
 
     # Test on a directory of images
-    python test_ocr.py test_pages/ --models gemini claude surya
+    python3 test_ocr.py test_pages/ --models gemini claude surya
 
 Environment variables (or .env file):
     GOOGLE_API_KEY    - for Gemini

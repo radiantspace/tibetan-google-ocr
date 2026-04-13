@@ -6,15 +6,15 @@ Two modes:
   Batch (--batch): uses Gemini Batch API for 50% cost savings, async processing
 
 Real-time usage:
-    python ocr_roerich.py roerich/1Ka.pdf
-    python ocr_roerich.py roerich/*.pdf --workers 10 --dpi 400
-    python ocr_roerich.py roerich/1Ka.pdf --test
+    python3 ocr_roerich.py roerich/1Ka.pdf
+    python3 ocr_roerich.py roerich/*.pdf --workers 10 --dpi 400
+    python3 ocr_roerich.py roerich/1Ka.pdf --test
 
 Batch usage:
-    python ocr_roerich.py --batch submit roerich/*.pdf
-    python ocr_roerich.py --batch status
-    python ocr_roerich.py --batch collect
-    python ocr_roerich.py --batch retry
+    python3 ocr_roerich.py --batch submit roerich/*.pdf
+    python3 ocr_roerich.py --batch status
+    python3 ocr_roerich.py --batch collect
+    python3 ocr_roerich.py --batch retry
 """
 
 import argparse

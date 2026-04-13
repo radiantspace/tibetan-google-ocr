@@ -2,17 +2,17 @@
 """Extract pages from dictionary PDFs as high-resolution images for OCR testing.
 
 Usage:
-    python extract_pages.py <pdf_path> [--pages 1,5,10] [--output-dir ./test_pages] [--dpi 300]
+    python3 extract_pages.py <pdf_path> [--pages 1,5,10] [--output-dir ./test_pages] [--dpi 300]
 
 Examples:
     # Extract specific pages from Roerich dictionary
-    python extract_pages.py ~/dictionaries/roerich.pdf --pages 1,50,100
+    python3 extract_pages.py ~/dictionaries/roerich.pdf --pages 1,50,100
 
     # Extract first 3 pages at high DPI
-    python extract_pages.py ~/dictionaries/das.pdf --pages 1,2,3 --dpi 400
+    python3 extract_pages.py ~/dictionaries/das.pdf --pages 1,2,3 --dpi 400
 
     # Extract all pages (careful - can be large)
-    python extract_pages.py ~/dictionaries/jaschke.pdf --all --output-dir ./jaschke_pages
+    python3 extract_pages.py ~/dictionaries/jaschke.pdf --all --output-dir ./jaschke_pages
 """
 
 import argparse
