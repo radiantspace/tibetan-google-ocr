@@ -108,7 +108,7 @@ IMPORTANT:
 
 Example output:
 >
-E:(continued) the water of the river dra (sgra) just as...
+E: the water of the river dra (sgra) just as...
 ===
 T:སྐྱེན་པ་
 J:skyeN-pa
@@ -421,8 +421,11 @@ def _extract_volume_pages(pdf_path, output_dir, dpi=300, skip_pages=0):
 
 
 def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
-                 workers=20, prompt=OCR_PROMPT):
-    """Upload page images and submit batch jobs for each volume."""
+                 workers=20, prompt=OCR_PROMPT, batch_size=50):
+    """Upload page images and submit batch jobs for each volume.
+
+    Large volumes are split into chunks of batch_size pages.
+    """
     from google.genai import types
 
     client = _get_client()
@@ -464,9 +467,11 @@ def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
             if force or not state.is_uploaded(pk)
         ]
 
+        num_chunks = (len(pages_to_submit) + batch_size - 1) // batch_size
         print(f"\n{volume}: {len(pages_to_submit)} pages to submit "
               f"({len(all_pages)} total), "
-              f"{len(pages_needing_upload)} need upload")
+              f"{len(pages_needing_upload)} need upload, "
+              f"{num_chunks} batch(es) of {batch_size}")
 
         # Parallel upload images to File API
         if pages_needing_upload:
@@ -520,60 +525,78 @@ def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
                     print(f"    {pk}: {err}")
             state.save()
 
-        # Build JSONL request file
-        print(f"  Building JSONL request...", end="", flush=True)
-        page_keys = []
-        jsonl_path = os.path.join(output_dir, f"_batch_{volume}.jsonl")
-        with open(jsonl_path, "w", encoding="utf-8") as jf:
-            for page_key, _ in pages_to_submit:
-                upload_info = state.get_upload(page_key)
-                if not upload_info:
-                    print(f"\n  WARNING: no upload for {page_key}, skipping")
-                    continue
-                req = {
-                    "key": page_key,
-                    "request": {
-                        "contents": [{
-                            "parts": [
-                                {"text": prompt},
-                                {"file_data": {
-                                    "file_uri": upload_info["uri"],
-                                    "mime_type": "image/png",
-                                }},
-                            ],
-                            "role": "user",
-                        }],
-                    },
-                }
-                jf.write(json.dumps(req) + "\n")
-                page_keys.append(page_key)
-        print(f" {len(page_keys)} requests")
+        # Split into chunks and submit one batch per chunk
+        for chunk_idx in range(num_chunks):
+            chunk_start = chunk_idx * batch_size
+            chunk_end = min(chunk_start + batch_size, len(pages_to_submit))
+            chunk = pages_to_submit[chunk_start:chunk_end]
+            chunk_label = f"{chunk_idx + 1}/{num_chunks}" if num_chunks > 1 else ""
 
-        # Upload JSONL to File API
-        print(f"  Uploading JSONL...", end="", flush=True)
-        jsonl_file = client.files.upload(
-            file=jsonl_path,
-            config=types.UploadFileConfig(
-                display_name=f"batch-{volume}",
-                mime_type="jsonl",
-            ),
-        )
-        print(f" {jsonl_file.name}")
+            # Build JSONL request file
+            if chunk_label:
+                print(f"  Batch {chunk_label}: building JSONL...",
+                      end="", flush=True)
+            else:
+                print(f"  Building JSONL request...", end="", flush=True)
+            page_keys = []
+            jsonl_path = os.path.join(
+                output_dir, f"_batch_{volume}_{chunk_idx}.jsonl"
+            )
+            with open(jsonl_path, "w", encoding="utf-8") as jf:
+                for page_key, _ in chunk:
+                    upload_info = state.get_upload(page_key)
+                    if not upload_info:
+                        print(f"\n  WARNING: no upload for {page_key}, skipping")
+                        continue
+                    req = {
+                        "key": page_key,
+                        "request": {
+                            "contents": [{
+                                "parts": [
+                                    {"text": prompt},
+                                    {"file_data": {
+                                        "file_uri": upload_info["uri"],
+                                        "mime_type": "image/png",
+                                    }},
+                                ],
+                                "role": "user",
+                            }],
+                        },
+                    }
+                    jf.write(json.dumps(req) + "\n")
+                    page_keys.append(page_key)
+            print(f" {len(page_keys)} requests")
 
-        # Create batch job
-        display_name = f"roerich-{volume}"
-        batch = client.batches.create(
-            model=GEMINI_MODEL,
-            src=jsonl_file.name,
-            config={"display_name": display_name},
-        )
-        state.record_batch(batch.name, volume, page_keys, display_name)
-        state.save()
+            if not page_keys:
+                os.remove(jsonl_path)
+                continue
 
-        # Clean up local JSONL
-        os.remove(jsonl_path)
+            # Upload JSONL to File API
+            print(f"  Uploading JSONL...", end="", flush=True)
+            suffix = f"-{chunk_idx}" if num_chunks > 1 else ""
+            jsonl_file = client.files.upload(
+                file=jsonl_path,
+                config=types.UploadFileConfig(
+                    display_name=f"batch-{volume}{suffix}",
+                    mime_type="jsonl",
+                ),
+            )
+            print(f" {jsonl_file.name}")
 
-        print(f"  Batch created: {batch.name} ({len(page_keys)} pages)")
+            # Create batch job
+            display_name = f"{volume}{suffix}"
+            batch = client.batches.create(
+                model=GEMINI_MODEL,
+                src=jsonl_file.name,
+                config={"display_name": display_name},
+            )
+            state.record_batch(batch.name, volume, page_keys, display_name)
+            state.save()
+
+            # Clean up local JSONL
+            os.remove(jsonl_path)
+
+            print(f"  Batch created: {batch.name} ({len(page_keys)} pages)")
 
     print(f"\nDone. Use '--batch status' to check progress.")
 
@@ -784,7 +807,8 @@ def batch_collect(output_dir):
     print(f"\nTotal: {total_collected} collected, {total_errors} errors")
 
 
-def batch_retry(output_dir, dpi=300, skip_pages=0):
+def batch_retry(output_dir, dpi=300, skip_pages=0, prompt=OCR_PROMPT,
+                batch_size=50):
     """Re-submit failed or expired batch jobs."""
     from google.genai import types
 
@@ -827,7 +851,8 @@ def batch_retry(output_dir, dpi=300, skip_pages=0):
             print(f"  WARNING: could not find PDF for volume {vol}")
 
     if pdf_paths:
-        batch_submit(pdf_paths, output_dir, dpi=dpi, skip_pages=skip_pages)
+        batch_submit(pdf_paths, output_dir, dpi=dpi, skip_pages=skip_pages,
+                     prompt=prompt, batch_size=batch_size)
 
 
 # ---------------------------------------------------------------------------
@@ -1122,6 +1147,12 @@ def main():
         help="Number of parallel workers (default: 20)",
     )
     parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=50,
+        help="Max pages per batch job (default: 50, batch mode only)",
+    )
+    parser.add_argument(
         "--test",
         action="store_true",
         help="Test mode - use test output dir instead of production dir",
@@ -1152,13 +1183,15 @@ def main():
                 args.pdfs, output_dir,
                 dpi=args.dpi, skip_pages=args.skip_pages, force=args.force,
                 workers=args.workers, prompt=prompt,
+                batch_size=args.batch_size,
             )
         elif args.batch == "status":
             batch_status(output_dir)
         elif args.batch == "collect":
             batch_collect(output_dir)
         elif args.batch == "retry":
-            batch_retry(output_dir, dpi=args.dpi, skip_pages=args.skip_pages)
+            batch_retry(output_dir, dpi=args.dpi, skip_pages=args.skip_pages,
+                        prompt=prompt, batch_size=args.batch_size)
         return
 
     # Real-time mode
