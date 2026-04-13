@@ -75,13 +75,80 @@ R:1) здание с колоннами; 2) приверженец (один и�
 <
 ==="""
 
+JAESCHKE_PROMPT = """OCR this dictionary page and extract structured entries.
+This is from Jaeschke's Tibetan-English Dictionary (1881). It uses an older
+transliteration system with diacritics (acute accents, haceks, dots) rather than
+standard Wylie. The page has two columns - read left column first, then right.
+
+Output in this EXACT compact format, one entry after another, separated by ===
+Use these field prefixes (omit a line if the field is empty):
+T: Tibetan headword (in Tibetan script exactly as printed)
+J: Jaeschke transliteration (exactly as printed, preserving all diacritics)
+W: Standard Wylie transliteration of the Tibetan headword
+E: English definition (full text including usage examples and source citations)
+S: Sanskrit equivalent (if given, in Devanagari and/or romanized)
+
+CRITICAL - Wylie annotations in E: field:
+Wherever a Tibetan word appears in Jaeschke transliteration inside the E: field,
+add the standard Wylie equivalent in parentheses right after it. For example:
+  skyeN-pa (skyen pa)   kro- (khro-)   sdaN-skyen-pa (sdang skyen pa)
+Do this for EVERY Tibetan word in Jaeschke form within definitions and examples.
+
+For entries that span page boundaries:
+- First line > means this entry continues from the previous page (T: may be empty)
+- Last line < means this entry is cut off and continues on the next page
+
+IMPORTANT:
+- Preserve the EXACT diacritics from Jaeschke (acute accents, haceks, etc.)
+- Generate proper Wylie for the W: field based on the Tibetan script
+- Include ALL entries on the page, including very short cross-reference entries
+- Keep each field on a SINGLE line, no matter how long
+- Do NOT add blank lines within an entry
+- Output ONLY the entries in this format, no commentary or markdown fences
+
+Example output:
+>
+E:(continued) the water of the river dra (sgra) just as...
+===
+T:སྐྱེན་པ་
+J:skyeN-pa
+W:skyen pa
+E:adj. 1. quick, swift Lex., kro- (khro-) or sdaN-skyen-pa (sdang skyen pa) quick to wrath Stg.; byed-skyen-pa (byed skyen pa) rash, hasty, precipitate Glr. - 2. nimble, dexterous C.W.
+===
+T:སྐྱེར་པ་
+J:skyer-pa
+W:skyer pa
+E:Lex.: curcuma, turmeric; in W. barberry.
+S:harita
+==="""
+
+# Dictionary configurations
+DICTIONARY_CONFIGS = {
+    "roerich": {
+        "prompt": OCR_PROMPT,
+        "output_dir": "roerich_output",
+        "test_output_dir": "roerich_test_output",
+        "default_skip_pages": 0,
+    },
+    "jaeschke": {
+        "prompt": JAESCHKE_PROMPT,
+        "output_dir": "jaeschke_output",
+        "test_output_dir": "jaeschke_test_output",
+        "default_skip_pages": 20,
+    },
+}
+
 FIELD_MAP = {
     "T": "tibetan",
+    "J": "jaeschke",
     "W": "wylie",
     "E": "english",
     "R": "russian",
     "S": "sanskrit",
 }
+
+# Fields where leading whitespace should be preserved
+_KEEP_LEADING_SPACE = {"english"}
 
 
 def parse_compact_entries(text):
@@ -123,7 +190,10 @@ def parse_compact_entries(text):
                 tag = f"{prefix}:"
                 if line.startswith(tag):
                     current_key = key
-                    entry[current_key] = line[len(tag):]
+                    value = line[len(tag):]
+                    if current_key not in _KEEP_LEADING_SPACE:
+                        value = value.lstrip()
+                    entry[current_key] = value
                     matched = True
                     break
             if not matched and current_key:
@@ -351,7 +421,7 @@ def _extract_volume_pages(pdf_path, output_dir, dpi=300, skip_pages=0):
 
 
 def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
-                 workers=20):
+                 workers=20, prompt=OCR_PROMPT):
     """Upload page images and submit batch jobs for each volume."""
     from google.genai import types
 
@@ -465,7 +535,7 @@ def batch_submit(pdf_paths, output_dir, dpi=300, skip_pages=0, force=False,
                     "request": {
                         "contents": [{
                             "parts": [
-                                {"text": OCR_PROMPT},
+                                {"text": prompt},
                                 {"file_data": {
                                     "file_uri": upload_info["uri"],
                                     "mime_type": "image/png",
@@ -773,7 +843,7 @@ def _is_server_error(exc):
     return any(code in msg for code in ("500", "502", "503", "504"))
 
 
-def ocr_page_gemini(image_path, client):
+def ocr_page_gemini(image_path, client, prompt=OCR_PROMPT):
     """OCR a single page image using Gemini 3.1 Pro with compact format.
 
     Retries once on 5xx server errors only.
@@ -784,7 +854,7 @@ def ocr_page_gemini(image_path, client):
         image_data = f.read()
 
     contents = [
-        types.Part.from_text(text=OCR_PROMPT),
+        types.Part.from_text(text=prompt),
         types.Part.from_bytes(data=image_data, mime_type="image/png"),
     ]
 
@@ -883,7 +953,8 @@ class ProgressTracker:
         }
 
 
-def process_single_page(page_num, png_path, json_path, client, tracker, force):
+def process_single_page(page_num, png_path, json_path, client, tracker, force,
+                        prompt=OCR_PROMPT):
     """Process a single page - called by worker threads."""
     # Idempotent check
     if os.path.isfile(json_path) and os.path.getsize(json_path) > 0 and not force:
@@ -893,7 +964,7 @@ def process_single_page(page_num, png_path, json_path, client, tracker, force):
     raw = None
     start = time.time()
     try:
-        raw = ocr_page_gemini(png_path, client)
+        raw = ocr_page_gemini(png_path, client, prompt=prompt)
         entries = parse_compact_entries(raw)
 
         if not entries:
@@ -925,7 +996,7 @@ def process_single_page(page_num, png_path, json_path, client, tracker, force):
 
 
 def process_volume(pdf_path, force=False, dpi=300, skip_pages=0, workers=20,
-                   output_dir=DEFAULT_OUTPUT_DIR):
+                   output_dir=DEFAULT_OUTPUT_DIR, prompt=OCR_PROMPT):
     """Process all pages of a single PDF volume with parallel workers."""
     client = _get_client()
     volume = os.path.splitext(os.path.basename(pdf_path))[0]
@@ -974,6 +1045,7 @@ def process_volume(pdf_path, force=False, dpi=300, skip_pages=0, workers=20,
             f = pool.submit(
                 process_single_page,
                 page_num, png_path, json_path, client, tracker, force,
+                prompt,
             )
             futures.append(f)
 
@@ -1007,13 +1079,19 @@ def main():
         pass
 
     parser = argparse.ArgumentParser(
-        description="OCR Roerich dictionary PDFs into structured JSON"
+        description="OCR Tibetan dictionary PDFs into structured JSON"
     )
     parser.add_argument(
         "--batch",
         metavar="CMD",
         choices=["submit", "status", "collect", "retry"],
         help="Batch API mode: submit, status, collect, or retry",
+    )
+    parser.add_argument(
+        "--dictionary",
+        choices=list(DICTIONARY_CONFIGS.keys()),
+        default="roerich",
+        help="Dictionary to process (default: roerich)",
     )
     parser.add_argument(
         "pdfs",
@@ -1046,11 +1124,21 @@ def main():
     parser.add_argument(
         "--test",
         action="store_true",
-        help="Test mode - use roerich_test_output/ instead of production dir",
+        help="Test mode - use test output dir instead of production dir",
     )
 
     args = parser.parse_args()
-    output_dir = TEST_OUTPUT_DIR if args.test else DEFAULT_OUTPUT_DIR
+    dict_cfg = DICTIONARY_CONFIGS[args.dictionary]
+    prompt = dict_cfg["prompt"]
+
+    if args.test:
+        output_dir = dict_cfg["test_output_dir"]
+    else:
+        output_dir = dict_cfg["output_dir"]
+
+    # Apply dictionary-specific skip-pages default if not explicitly set
+    if args.skip_pages == 0 and dict_cfg["default_skip_pages"] > 0:
+        args.skip_pages = dict_cfg["default_skip_pages"]
 
     if args.test:
         print(f"*** TEST MODE - output goes to {output_dir}/ ***")
@@ -1063,7 +1151,7 @@ def main():
             batch_submit(
                 args.pdfs, output_dir,
                 dpi=args.dpi, skip_pages=args.skip_pages, force=args.force,
-                workers=args.workers,
+                workers=args.workers, prompt=prompt,
             )
         elif args.batch == "status":
             batch_status(output_dir)
@@ -1093,6 +1181,7 @@ def main():
             skip_pages=args.skip_pages,
             workers=args.workers,
             output_dir=output_dir,
+            prompt=prompt,
         )
         total_processed += p
         total_skipped += s
