@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-build_dictionary.py - Build unified Roerich dictionary from per-page JSON files.
+build_dictionary.py - Build unified dictionary from per-page JSON files.
 
+Supports both Roerich (chapter subdirs) and Jaeschke (flat dir) layouts.
 Loads all OCR'd page JSONs, merges entries that span page boundaries using
 explicit markers and heuristics, then exports:
   1. A single merged JSON file
-  2. Two CSVs for SQLite import (tib-eng and tib-rus)
+  2. CSVs for SQLite import (one per language field present)
   3. A searchable Markdown file
 """
 
@@ -29,23 +30,42 @@ def page_sort_key(filename):
 
 
 def load_all_pages(json_dir):
-    """Load all page JSON files in chapter/page order. Returns list of (filename, entries)."""
+    """
+    Load all page JSON files in order. Supports two layouts:
+    - Chapter subdirs (Roerich): json_dir/<chapter>/<page>.json
+    - Flat directory (Jaeschke): json_dir/<page>.json
+    Returns list of (filename, entries).
+    """
     pages = []
-    chapters = sorted(
+
+    subdirs = sorted(
         [d for d in os.listdir(json_dir) if os.path.isdir(os.path.join(json_dir, d))],
         key=chapter_sort_key,
     )
-    for chapter in chapters:
-        chapter_dir = os.path.join(json_dir, chapter)
+
+    if subdirs:
+        for chapter in subdirs:
+            chapter_dir = os.path.join(json_dir, chapter)
+            files = sorted(
+                [f for f in os.listdir(chapter_dir) if f.endswith(".json")],
+                key=page_sort_key,
+            )
+            for fname in files:
+                fpath = os.path.join(chapter_dir, fname)
+                with open(fpath, encoding="utf-8") as fh:
+                    data = json.load(fh)
+                pages.append((fname, data))
+    else:
         files = sorted(
-            [f for f in os.listdir(chapter_dir) if f.endswith(".json")],
+            [f for f in os.listdir(json_dir) if f.endswith(".json")],
             key=page_sort_key,
         )
         for fname in files:
-            fpath = os.path.join(chapter_dir, fname)
+            fpath = os.path.join(json_dir, fname)
             with open(fpath, encoding="utf-8") as fh:
                 data = json.load(fh)
             pages.append((fname, data))
+
     return pages
 
 
@@ -126,6 +146,8 @@ def merge_entries(prev, curr):
         prev["tibetan"] = curr["tibetan"]
     if curr.get("wylie") and not prev.get("wylie"):
         prev["wylie"] = curr["wylie"]
+    if curr.get("jaeschke") and not prev.get("jaeschke"):
+        prev["jaeschke"] = curr["jaeschke"]
 
     return prev
 
@@ -184,7 +206,7 @@ def build_merged_dictionary(json_dir):
         if "concat_info" not in entry:
             pass  # no concat_info field at all for non-concatenated entries
         # Strip leading/trailing whitespace from text fields
-        for field in ("english", "russian", "tibetan", "wylie", "sanskrit"):
+        for field in ("english", "russian", "tibetan", "wylie", "sanskrit", "jaeschke"):
             if entry.get(field):
                 entry[field] = entry[field].strip()
 
@@ -220,9 +242,9 @@ def export_csv(entries, output_path, lang_field, lang_col_name):
     print(f"Wrote {count} rows to {output_path}", file=sys.stderr)
 
 
-def export_markdown(entries, output_path):
+def export_markdown(entries, output_path, title):
     """Export entries to a searchable Markdown file."""
-    lines = ["# Roerich Tibetan-Russian-English Dictionary\n"]
+    lines = [f"# {title}\n"]
 
     for entry in entries:
         wylie = entry.get("wylie", "")
@@ -238,6 +260,8 @@ def export_markdown(entries, output_path):
         else:
             lines.append("### (unknown headword)")
 
+        if entry.get("jaeschke"):
+            lines.append(entry["jaeschke"])
         if entry.get("sanskrit"):
             lines.append(entry["sanskrit"])
         if entry.get("english"):
@@ -252,19 +276,50 @@ def export_markdown(entries, output_path):
     print(f"Wrote {len(entries)} entries to {output_path}", file=sys.stderr)
 
 
+DICT_PRESETS = {
+    "roerich": {
+        "json_dir": "roerich_output/json",
+        "output_dir": "roerich_output",
+        "name": "roerich",
+        "title": "Roerich Tibetan-Russian-English Dictionary",
+        "csv_specs": [
+            ("roe.csv", "english", "english"),
+            ("ror.csv", "russian", "russian"),
+        ],
+    },
+    "jaeschke": {
+        "json_dir": "jaeschke_output/json/(1882) Jaeschke - Tib-Eng",
+        "output_dir": "jaeschke_output",
+        "name": "jaeschke",
+        "title": "Jaeschke Tibetan-English Dictionary (1882)",
+        "csv_specs": [
+            ("jae.csv", "english", "english"),
+        ],
+    },
+}
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Build unified Roerich dictionary from per-page JSON files."
+        description="Build unified dictionary from per-page JSON files."
+    )
+    parser.add_argument(
+        "dict",
+        nargs="?",
+        choices=list(DICT_PRESETS.keys()),
+        help="Dictionary preset (roerich or jaeschke). Sets defaults for all options.",
     )
     parser.add_argument(
         "--json-dir",
-        default="roerich_output/json",
-        help="Directory containing chapter subdirs with page JSONs (default: roerich_output/json)",
+        help="Directory containing page JSONs (overrides preset)",
     )
     parser.add_argument(
         "--output-dir",
-        default="roerich_output",
-        help="Output directory for merged files (default: roerich_output)",
+        help="Output directory for merged files (overrides preset)",
+    )
+    parser.add_argument(
+        "--name",
+        help="Base name for output files (overrides preset)",
     )
     parser.add_argument(
         "--skip-json", action="store_true", help="Skip JSON output"
@@ -277,19 +332,29 @@ def main():
     )
     args = parser.parse_args()
 
-    os.makedirs(args.output_dir, exist_ok=True)
+    if not args.dict and not args.json_dir:
+        parser.error("Specify a dictionary preset or --json-dir")
 
-    entries = build_merged_dictionary(args.json_dir)
+    preset = DICT_PRESETS.get(args.dict, {})
+    json_dir = args.json_dir or preset.get("json_dir", ".")
+    output_dir = args.output_dir or preset.get("output_dir", ".")
+    name = args.name or preset.get("name", "dictionary")
+    title = preset.get("title", f"{name} Dictionary")
+    csv_specs = preset.get("csv_specs", [("dictionary.csv", "english", "english")])
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    entries = build_merged_dictionary(json_dir)
 
     if not args.skip_json:
-        export_json(entries, os.path.join(args.output_dir, "roerich_dictionary.json"))
+        export_json(entries, os.path.join(output_dir, f"{name}_dictionary.json"))
 
     if not args.skip_csv:
-        export_csv(entries, os.path.join(args.output_dir, "roe.csv"), "english", "english")
-        export_csv(entries, os.path.join(args.output_dir, "ror.csv"), "russian", "russian")
+        for csv_name, lang_field, col_name in csv_specs:
+            export_csv(entries, os.path.join(output_dir, csv_name), lang_field, col_name)
 
     if not args.skip_md:
-        export_markdown(entries, os.path.join(args.output_dir, "roerich_dictionary.md"))
+        export_markdown(entries, os.path.join(output_dir, f"{name}_dictionary.md"), title)
 
 
 if __name__ == "__main__":
