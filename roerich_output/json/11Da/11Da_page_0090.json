@@ -1,0 +1,139 @@
+[
+  {
+    "tibetan": "འདུན་པ",
+    "wylie": "'dun pa",
+    "english": "II assembly; association.",
+    "russian": "II собрание; общество, ассоциация"
+  },
+  {
+    "tibetan": "འདུན་མ",
+    "wylie": "'dun ma",
+    "english": "1) meeting, conference; council, committee; འདུན་མའི་འགྲོས་ the committee did not agree; 2) advice; འདུན་མ་འདེབས་པ to give advice; 3) company.",
+    "russian": "1) собрание; совет, комитет; འདུན་མའི་འགྲོས་ комитет не пришел к соглашению; 2) совет; འདུན་མ་འདེབས་པ давать совет; 3) компания, общество"
+  },
+  {
+    "tibetan": "འདུན་ས",
+    "wylie": "'dun sa",
+    "english": "meeting place; assembly; འདུན་ས་ཁང་ meeting-hall; འདུན་སར་འཁོད་པ posted, appointed to a position.",
+    "russian": "место собрания; собрание; འདུན་ས་ཁང་ зал собрания"
+  },
+  {
+    "tibetan": "འདུ་བ་བསྙུན",
+    "wylie": "'du ba bsnyun",
+    "english": "ill-health.",
+    "russian": "нездоровье"
+  },
+  {
+    "tibetan": "འདུ་བ་སྙོམས",
+    "wylie": "'du ba snyoms",
+    "english": "health.",
+    "russian": "здоровье"
+  },
+  {
+    "tibetan": "འདུག་པ",
+    "wylie": "'dug pa",
+    "english": "1) to be fixed; 2) to be quiet.",
+    "russian": "1) быть оседлым; 2) быть спокойным"
+  },
+  {
+    "tibetan": "འདུམ",
+    "wylie": "'dum",
+    "english": "concord, treaty; peace; འདུམ་གཏོང་བ to reconcile.",
+    "russian": "согласие; соглашение; мир; འདུམ་གཏོང་བ улаживать, мирно разрешать"
+  },
+  {
+    "tibetan": "འདུམ་ཁ",
+    "wylie": "'dum kha",
+    "english": "agreement, contract; treaty.",
+    "russian": "соглашение; контракт; договор"
+  },
+  {
+    "tibetan": "འདུམ་ཤག",
+    "wylie": "'dum shag",
+    "english": "agreement.",
+    "russian": "согласие, соглашение"
+  },
+  {
+    "tibetan": "འདུམས",
+    "wylie": "'dums",
+    "english": "to agree; to bring to reconciliation.",
+    "russian": "прош. вр. འདུམས быть согласным; мирно разрешать, улаживать"
+  },
+  {
+    "tibetan": "འདུམ་བྱེད་པ",
+    "wylie": "'dum byed pa",
+    "english": "to come to agreement; to make treaty.",
+    "russian": "приходить к согласию; заключать договор"
+  },
+  {
+    "tibetan": "འདུམས",
+    "wylie": "'dums",
+    "russian": "прош. вр. от འདུམ་པ"
+  },
+  {
+    "tibetan": "འདུར",
+    "wylie": "'dur",
+    "english": "thick and clammy.",
+    "russian": "густой и клейкий"
+  },
+  {
+    "tibetan": "འདུར་བྲོས",
+    "wylie": "'dur bros",
+    "english": "trot, amble.",
+    "russian": "рысь, аллюр"
+  },
+  {
+    "tibetan": "འདུར་ཕྱེ་དཀར",
+    "wylie": "'dur phye dkar",
+    "english": "very fine flour.",
+    "russian": "мука очень мелкого помола"
+  },
+  {
+    "tibetan": "འདུར་ཕྱེ་ནག",
+    "wylie": "'dur phye nag",
+    "english": "coarse flour.",
+    "russian": "мука грубого помола"
+  },
+  {
+    "tibetan": "འདུར་བ",
+    "wylie": "'dur ba",
+    "english": "to trot.",
+    "russian": "бежать рысью"
+  },
+  {
+    "tibetan": "འདུར་བོན",
+    "wylie": "'dur bon",
+    "english": "the class of Bön-po who practise necromancy."
+  },
+  {
+    "tibetan": "འདུལ་བྱས",
+    "wylie": "'dul byas",
+    "english": "\"Born by taming\" (epith. of the mythical Garuda bird).",
+    "russian": "\"Рождённая укрощением\" (эпит. мифической птицы Гаруды)"
+  },
+  {
+    "tibetan": "འདུལ་གྲྭ",
+    "wylie": "'dul grwa",
+    "english": "monastery school for the study of the Vinaya [see འདུལ་བ 2.2)].",
+    "russian": "отделение в монастыре, где изучают Винаю [см. འདུལ་བ 2.2)]"
+  },
+  {
+    "tibetan": "འདུལ་བྱེད",
+    "wylie": "'dul byed",
+    "english": "1) tamer; 2) met. president.",
+    "russian": "1) укротитель; усмиритель; 2) перен. председатель, президент"
+  },
+  {
+    "tibetan": "འདུལ་བ",
+    "wylie": "'dul ba",
+    "english": "I. 1) to tame; to discipline; to convert; 2) to subdue; to conquer, to vanquish; 3) to cultivate (waste land); 2. 1) taming; discipline; conversion; 2) buddh. vinaya, the laws of moral conduct (of Buddhist monk); 3) Vinaya (the title of the first section of the Kanjur); འདུལ་བ་ཁྲིམས་ཀྱི་གླེང་གཞི see གླེང་གཞི་ནང་གྱེས; འདུལ་བ་དང་འགལ་བ buddh. transgressing the laws of moral conduct; འདུལ་བ་སྨྲ་བ a follower of the vinaya;",
+    "russian": "I. прош. вр. བཏུལ, буд. вр. གདུལ, пов. ཐུལ 1) укрощать; приручать; дисциплинировать, делать послушным; обращать (на путь истинный); 2) усмирять; покорять; побеждать (врага); 3) возделывать, пахать (пустошь); 2. 1) укрощение, приручение; дисциплина; обращение (в истинную веру); 2) будд. виная, правила нравственного поведения (буддийского монаха); 3) Виная (назв. первого раздела Канджура); འདུལ་བ་ཁྲིམས་ཀྱི་གླེང་གཞི см. གླེང་གཞི་ནང་གྱེས; འདུལ་བ་དང་འགལ་བ будд. нарушивший правила нравственного поведения;",
+    "sanskrit": "vinaya; vinaya-tisāry; vinayavādin"
+  },
+  {
+    "tibetan": "འདུལ་བ་འཛིན་པ",
+    "wylie": "'dul ba 'dzin pa",
+    "russian": "поэт. буддийс-",
+    "continues_next_page": true
+  }
+]

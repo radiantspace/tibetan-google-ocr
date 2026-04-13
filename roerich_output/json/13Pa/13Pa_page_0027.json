@@ -1,0 +1,332 @@
+[
+  {
+    "continued_from_prev_page": true,
+    "english": "well-proportioned; handsome.",
+    "russian": "ный, гармоничный; красивый"
+  },
+  {
+    "tibetan": "དཔེ་བྱད་སྤད",
+    "wylie": "dpe byad spad",
+    "english": "see above.",
+    "russian": "см. выше"
+  },
+  {
+    "tibetan": "དཔེ་བྱད་བཟང་པོ",
+    "wylie": "dpe byad bzang po",
+    "english": "buddh. secondary mark or token (of Buddha);",
+    "russian": "будд. вторичный телесный признак или примета (Будды) /",
+    "sanskrit": "anuvyañjana"
+  },
+  {
+    "tibetan": "དཔེ་བྱད་བརྒྱད་ཅུ",
+    "wylie": "dpe byad brgyad cu",
+    "english": "the eighty secondary corporeal marks or the eighty physical perfections (of Buddha):",
+    "russian": "восемьдесят вторичных телесных признаков или восемьдесят физических совершенств (Будды) /",
+    "sanskrit": "aśītyanuvyañjanāni"
+  },
+  {
+    "tibetan": "སེན་མོ་ཟངས་ཀྱི་མདོག་ལྟ་བུ",
+    "wylie": "sen mo zangs kyi mdog lta bu",
+    "sanskrit": "ātāmra-nakha"
+  },
+  {
+    "tibetan": "སེན་མོའི་མདོག་སྣུམ་པ",
+    "wylie": "sen mo'i mdog snum pa",
+    "sanskrit": "snigdha-nakha"
+  },
+  {
+    "tibetan": "སེན་མོ་མཐོ་བ",
+    "wylie": "sen mo mtho ba",
+    "sanskrit": "tuṅga-nakha"
+  },
+  {
+    "tibetan": "སོར་མོ་ཟླུམ་པ",
+    "wylie": "sor mo zlum pa",
+    "sanskrit": "vṛttāṅguli"
+  },
+  {
+    "tibetan": "སོར་མོ་བྱིན་གྱིས་ཕྲ་བ",
+    "wylie": "sor mo byin gyis phra ba",
+    "sanskrit": "anupūrva-aṅguli"
+  },
+  {
+    "tibetan": "སོར་མོ་རྣམས་རྒྱས་པ",
+    "wylie": "sor mo rnams rgyas pa",
+    "sanskrit": "citāṅguli"
+  },
+  {
+    "tibetan": "རྩ་མི་མངོན་པ",
+    "wylie": "rtsa mi mngon pa",
+    "sanskrit": "nigūḍha-śira"
+  },
+  {
+    "tibetan": "རྩ་མདུད་མེད་པ",
+    "wylie": "rtsa mdud med pa",
+    "sanskrit": "nirgranthi-śira"
+  },
+  {
+    "tibetan": "ལོང་བུ་མི་མངོན་པ",
+    "wylie": "long bu mi mngon pa",
+    "sanskrit": "gūḍha-gulpha"
+  },
+  {
+    "tibetan": "ཞབས་མི་མཉམ་པ་མེད་པ",
+    "wylie": "zhabs mi mnyam pa med pa",
+    "sanskrit": "aviṣama-pāda"
+  },
+  {
+    "tibetan": "སེང་གེའི་སྟབས་སུ་གཤེགས་པ",
+    "wylie": "seng ge'i stabs su gshegs pa",
+    "sanskrit": "siṃha-vikrānta-gāmin"
+  },
+  {
+    "tibetan": "གླང་པོ་ཆེའི་སྟབས་སུ་གཤེགས་པ",
+    "wylie": "glang po che'i stabs su gshegs pa",
+    "sanskrit": "nāga-vikrānta-gāmin"
+  },
+  {
+    "tibetan": "ངང་པའི་སྟབས་སུ་གཤེགས་པ",
+    "wylie": "ngang pa'i stabs su gshegs pa",
+    "sanskrit": "haṃsa-vikrānta-gāmin"
+  },
+  {
+    "tibetan": "ཁྱུ་མཆོག་གི་སྟབས་སུ་གཤེགས་པ",
+    "wylie": "khyu mchog gi stabs su gshegs pa",
+    "sanskrit": "vṛṣabha-vikrānta-gāmin"
+  },
+  {
+    "tibetan": "གྱས་ཕྱོགས་སུ་ལྡོག་ཅིང་གཤེགས་པ",
+    "wylie": "gyas phyogs su ldog cing gshegs pa",
+    "sanskrit": "pradakṣiṇāvarta-gāmin"
+  },
+  {
+    "tibetan": "མཛེས་པར་གཤེགས་པ",
+    "wylie": "mdzes par gshegs pa",
+    "sanskrit": "cāru-gāmin"
+  },
+  {
+    "tibetan": "མི་གཡོ་བར་གཤེགས་པ",
+    "wylie": "mi g.yo bar gshegs pa",
+    "sanskrit": "avakra-gāmin"
+  },
+  {
+    "tibetan": "སྐུ་འཁྲིལ་བག་ཆགས་པ",
+    "wylie": "sku 'khril bag chags pa",
+    "sanskrit": "vṛtta-gātra"
+  },
+  {
+    "tibetan": "སྐུ་བྱི་དོར་བྱས་པ",
+    "wylie": "sku byi dor byas pa",
+    "sanskrit": "mṛṣṭa-gātra"
+  },
+  {
+    "tibetan": "སྐུ་རིམ་པར་འཚམ་པ",
+    "wylie": "sku rim par 'tsham pa",
+    "sanskrit": "anupūrva-gātra"
+  },
+  {
+    "tibetan": "སྐུ་གཙང་བ",
+    "wylie": "sku gtsang ba",
+    "sanskrit": "śuci-gātra"
+  },
+  {
+    "tibetan": "སྐུ་འཇམ་པ",
+    "wylie": "sku 'jam pa",
+    "sanskrit": "mṛdu-gātra"
+  },
+  {
+    "tibetan": "སྐུ་རྣམ་པར་དག་པ",
+    "wylie": "sku rnam par dag pa",
+    "sanskrit": "viśuddha-gātra"
+  },
+  {
+    "tibetan": "མཚན་ཡོངས་སུ་རྫོགས་པ",
+    "wylie": "mtshan yongs su rdzogs pa",
+    "sanskrit": "paripūrṇa-vyañjana"
+  },
+  {
+    "tibetan": "སྐུ་ཁོ་ལག་ཡངས་ཤིང་བཟང་བ",
+    "wylie": "sku kho lag yangs shing bzang ba",
+    "sanskrit": "pṛthu-cāru-maṇḍala-gātra"
+  },
+  {
+    "tibetan": "གོམ་པ་སྙོམས་པ",
+    "wylie": "gom pa snyoms pa",
+    "sanskrit": "sama-krama"
+  },
+  {
+    "tibetan": "སྐུ་ཤིན་ཏུ་གཞོན་མདོག་ཅན",
+    "wylie": "sku shin tu gzhon mdog can",
+    "sanskrit": "sukumāra-gātra"
+  },
+  {
+    "tibetan": "སྐུ་ཞུམ་པ་མེད་པ",
+    "wylie": "sku zhum pa med pa",
+    "sanskrit": "adīna-gātra"
+  },
+  {
+    "tibetan": "སྐུ་རྒྱས་པ",
+    "wylie": "sku rgyas pa",
+    "sanskrit": "unnata-gātra"
+  },
+  {
+    "tibetan": "སྐུ་ཤིན་ཏུ་གྲིམས་པ",
+    "wylie": "sku shin tu grims pa",
+    "sanskrit": "susaṃhita-gātra"
+  },
+  {
+    "tibetan": "སྐུ་ཡན་ལག་དང་ཉིང་ལག་ཤིན་ཏུ་རྣམ་པར་འབྱེད་པ",
+    "wylie": "sku yan lag dang nying lag shin tu rnam par 'byed pa",
+    "sanskrit": "suvibhaktāṅga-pratyaṅga"
+  },
+  {
+    "tibetan": "གཟིགས་པ་རབ་རིབ་མེད་ཅིང་རྣམ་པར་དག་པ",
+    "wylie": "gzigs pa rab rib med cing rnam par dag pa",
+    "sanskrit": "vitimira-viśuddhāloka"
+  },
+  {
+    "tibetan": "དཀུ་ཟླུམ་པ",
+    "wylie": "dku zlum pa",
+    "sanskrit": "vṛtta-kukṣi"
+  },
+  {
+    "tibetan": "དཀུ་སྐབས་ཕྱིན་པ",
+    "wylie": "dku skabs phyin pa",
+    "sanskrit": "mṛṣṭa-kukṣi"
+  },
+  {
+    "tibetan": "དཀུ་མ་རྙོང་མ",
+    "wylie": "dku ma rnyong ma",
+    "sanskrit": "abhugna-kukṣi"
+  },
+  {
+    "tibetan": "ཕྱལ་ཕྱང་ངེ་བ",
+    "wylie": "phyal phyang nge ba",
+    "sanskrit": "kṣāmodara"
+  },
+  {
+    "tibetan": "ལྟེ་བ་ཟབ་པ",
+    "wylie": "lte ba zab pa",
+    "sanskrit": "gambhīra-nābhi"
+  },
+  {
+    "tibetan": "ལྟེ་བ་གཡས་ཕྱོགས་སུ་འཁྱིལ་བ",
+    "wylie": "lte ba g.yas phyogs su 'khyil ba",
+    "sanskrit": "pradakṣiṇāvarta-nābhi"
+  },
+  {
+    "tibetan": "ཀུན་ནས་མཛེས་པ",
+    "wylie": "kun nas mdzes pa",
+    "sanskrit": "samanta-prāsādika"
+  },
+  {
+    "tibetan": "ཀུན་ཏུ་སྤྱོད་པ་གཙང་བ",
+    "wylie": "kun tu spyod pa gtsang ba",
+    "sanskrit": "śuci-samācāra"
+  },
+  {
+    "tibetan": "སྐུ་ལ་སྨེ་བ་དང་གནག་བག་མེད་པ",
+    "wylie": "sku la sme ba dang gnag bag med pa",
+    "sanskrit": "vyapagata-tilaka-kāla-gātra"
+  },
+  {
+    "tibetan": "ཕྱག་ཤིན་ཏུ་ཤིང་བལ་ལྟར་འཇམ་དུ་འཇམ་པ",
+    "wylie": "phyag shin tu shing bal ltar 'jam du 'jam pa",
+    "sanskrit": "tūla-sadṛśa-sukumāra-pāṇi"
+  },
+  {
+    "tibetan": "ཕྱག་གི་རི་མོ་མདངས་ཡོད་པ",
+    "wylie": "phyag gi ri mo mdangs yod pa",
+    "sanskrit": "snigdha-pāṇi-lekha"
+  },
+  {
+    "tibetan": "ཕྱག་གི་རི་མོ་ཟབ་པ",
+    "wylie": "phyag gi ri mo zab pa",
+    "sanskrit": "gambhīra-pāṇi-lekha"
+  },
+  {
+    "tibetan": "ཕྱག་གི་རི་མོ་རིང་བ",
+    "wylie": "phyag gi ri mo ring ba",
+    "sanskrit": "āyata-pāṇi-lekha"
+  },
+  {
+    "tibetan": "ཞལ་ཧ་ཅང་ཡང་མི་རིང་བ",
+    "wylie": "zhal ha cang yang mi ring ba",
+    "sanskrit": "nātyāyata-vadana"
+  },
+  {
+    "tibetan": "ཞལ་གཟུགས་ཀྱི་གཟུགས་བརྙན་སྣང་བ",
+    "wylie": "zhal gzugs kyi gzugs brnyan snang ba",
+    "sanskrit": "bimba-pratibimba-darśana-vadana"
+  },
+  {
+    "tibetan": "ལྗགས་མཉེན་པ",
+    "wylie": "ljags mnyen pa",
+    "sanskrit": "mṛdu-jihva"
+  },
+  {
+    "tibetan": "ལྗགས་སྲབ་པ",
+    "wylie": "ljags srab pa",
+    "sanskrit": "tanu-jihva"
+  },
+  {
+    "tibetan": "ལྗགས་དམར་བ",
+    "wylie": "ljags dmar ba",
+    "sanskrit": "rakta-jihva"
+  },
+  {
+    "tibetan": "གླང་པོ་ཆེའི་ང་རོ་དང་ལྡན་པ",
+    "wylie": "glang po che'i nga ro dang ldan pa",
+    "sanskrit": "gaja-garjita-jīmūta-ghoṣa"
+  },
+  {
+    "tibetan": "གསུང་སྙན་ཅིང་མཉེན་ལ་འཇམ་པ",
+    "wylie": "gsung snyan cing mnyen la 'jam pa",
+    "sanskrit": "madhura-cāru-mañju-svara"
+  },
+  {
+    "tibetan": "མཆེ་བ་ཟླུམ་པ",
+    "wylie": "mche ba zlum pa",
+    "sanskrit": "vṛtta-daṃṣṭra"
+  },
+  {
+    "tibetan": "མཆེ་བ་རྣོ་བ",
+    "wylie": "mche ba rno ba",
+    "sanskrit": "tīkṣṇa-daṃṣṭra"
+  },
+  {
+    "tibetan": "མཆེ་བ་དཀར་བ",
+    "wylie": "mche ba dkar ba",
+    "sanskrit": "śukla-daṃṣṭra"
+  },
+  {
+    "tibetan": "མཆེ་བ་མཉམ་པ",
+    "wylie": "mche ba mnyam pa",
+    "sanskrit": "sama-daṃṣṭra"
+  },
+  {
+    "tibetan": "མཆེ་བ་བྱིན་གྱིས་ཕྲ་བ",
+    "wylie": "mche ba byin gyis phra ba",
+    "sanskrit": "anupūrva-daṃṣṭra"
+  },
+  {
+    "tibetan": "ཤངས་མཐོ་བ",
+    "wylie": "shangs mtho ba",
+    "sanskrit": "tuṅga-nāsa"
+  },
+  {
+    "tibetan": "ཤངས་གཙང་བ",
+    "wylie": "shangs gtsang ba",
+    "sanskrit": "śuci-nāsa"
+  },
+  {
+    "tibetan": "སྤྱན་རྣམ་པར་དག་པ",
+    "wylie": "spyan rnam par dag pa",
+    "sanskrit": "viśuddha-netra"
+  },
+  {
+    "tibetan": "སྤྱན་ཡངས་པ",
+    "wylie": "spyan yangs pa",
+    "continues_next_page": true
+  }
+]
