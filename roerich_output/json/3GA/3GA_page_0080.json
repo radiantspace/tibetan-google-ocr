@@ -1,0 +1,161 @@
+[
+  {
+    "tibetan": "བགོད།",
+    "wylie": "bgod",
+    "english": "classifying; distribution.",
+    "russian": "классифицирование; распределение",
+    "sanskrit": "vibhāga"
+  },
+  {
+    "tibetan": "བགོ། I",
+    "wylie": "bgo I",
+    "russian": "см. བགོ་སྐལ།"
+  },
+  {
+    "tibetan": "བགོ། II",
+    "wylie": "bgo II",
+    "russian": "см. བགོ་བ། I."
+  },
+  {
+    "tibetan": "བགོ། III",
+    "wylie": "bgo III",
+    "russian": "буд. вр. от བགོད།"
+  },
+  {
+    "tibetan": "བགོ་སྐལ།",
+    "wylie": "bgo skal",
+    "english": "I) portion, share; ~ ལ་སྤྱོད་པ། to enjoy one's own share; 2) buddh. the doctrine of strict retribution; སྔོན་གྱི་ལས་ཀྱི་ ~ the lot on account of one's former acts.",
+    "russian": "I) часть, доля; ~ ལ་སྤྱོད་པ། пользоваться причитающейся долей; 2) будд. учение о карме (т.е. о неизбежности воздаяния за плохие или хорошие поступки); སྔོན་གྱི་ལས་ཀྱི་ ~ судьба, обусловленная прежними деяниями",
+    "sanskrit": "bhāga, sapiṇḍa, pratyaṃśa"
+  },
+  {
+    "tibetan": "བགོ་བ། I",
+    "wylie": "bgo ba I",
+    "english": "1. I) to put on (clothes); to wear; 2) to apply on, to paste; 2. clothing; clothes; ~ ངན་པ། kuprāvaraṇa putting on bad clothes; ~ དང་བཟའ་བ། food and clothes; བགོ་བར་བྱེད་པ། to put on clothes.",
+    "russian": "1. I) одевать; носить (одежду, обувь); 2) прош. вр. གོས། прилагать, прикладывать; наклеивать, приклеивать; 2. платье, одежда; ~ ངན་པ། kuprāvaraṇa плохо одетый; ~ དང་བཟའ་བ། пища и одежда; བགོ་བར་བྱེད་པ། одеваться"
+  },
+  {
+    "tibetan": "བགོ་བ། II",
+    "wylie": "bgo ba II",
+    "english": "share, portion; བགོ་བར་བྱེད་པ། to divide into parts.",
+    "russian": "часть, доля; བགོ་བར་བྱེད་པ། делить на части"
+  },
+  {
+    "tibetan": "བགོ་ཤ།",
+    "wylie": "bgo sha",
+    "russian": "см. བགོ་བཤའ།"
+  },
+  {
+    "tibetan": "བགོ་བཤའ།",
+    "wylie": "bgo bsha'",
+    "english": "portion, share; ~ རྒྱག་པ།, ~ བྱེད་པ། a. to divide; b. division.",
+    "russian": "доля, часть; надел; ~ རྒྱག་པ།, ~ བྱེད་པ། a. делить на части, разделять, распределять; б. разделение, распределение",
+    "sanskrit": "saṃvibhāga"
+  },
+  {
+    "tibetan": "བགོད་པ།",
+    "wylie": "bgod pa",
+    "english": "1. to divide; to distribute; 2. division; distribution.",
+    "russian": "1. прош. вр. བགོས།, буд. вр. བགོ། делить, разделять; распределять; 2. деление; раздел, распределение"
+  },
+  {
+    "tibetan": "བགོད་པ་པོ།",
+    "wylie": "bgod pa po",
+    "english": "divider.",
+    "russian": "тот, кто делит, делящий"
+  },
+  {
+    "tibetan": "བགོད་བྱེད།",
+    "wylie": "bgod byed",
+    "russian": "см. བགོད་པ་པོ།"
+  },
+  {
+    "tibetan": "བགོད་ཡས། I",
+    "wylie": "bgod yas I",
+    "english": "n. of a great number.",
+    "russian": "назв. большого числа",
+    "sanskrit": "avana"
+  },
+  {
+    "tibetan": "བགོད་ཡས། II",
+    "wylie": "bgod yas II",
+    "english": "protection.",
+    "russian": "защита, покровительство"
+  },
+  {
+    "tibetan": "བགོད་ར།",
+    "wylie": "bgod ra",
+    "english": "share.",
+    "russian": "доля, часть"
+  },
+  {
+    "tibetan": "བགོམ།",
+    "wylie": "bgom",
+    "english": "pace, step; བགོམ་འགྲོས། to pace.",
+    "russian": "шаг; བགོམ་འགྲོས། шагать, идти"
+  },
+  {
+    "tibetan": "བགོམ་རྒྱུ།",
+    "wylie": "bgom rgyu",
+    "english": "way, road (lit. that over which one walks).",
+    "russian": "путь, дорога (букв. то, по чему шагают)"
+  },
+  {
+    "tibetan": "བགོམ་པ།",
+    "wylie": "bgom pa",
+    "english": "1. to step, to pace; 2. step, pace; ~ བགོམ་པ། to make steps.",
+    "russian": "1. прош. вр. བགོམས། шагать, идти пешком; 2. шаг; ~ བགོམ་པ། шагать"
+  },
+  {
+    "tibetan": "བགོམ་བྱ།",
+    "wylie": "bgom bya",
+    "english": "way, road (lit. that over which one walks).",
+    "russian": "путь, дорога (букв. то, по чему шагают)",
+    "sanskrit": "patha"
+  },
+  {
+    "tibetan": "བགོམས།",
+    "wylie": "bgoms",
+    "russian": "прош. вр. от བགོམ་པ།"
+  },
+  {
+    "tibetan": "བགོམས་འབྲབ་པ།",
+    "wylie": "bgoms 'brab pa",
+    "english": "to begin to walk (of a child or a person recovering from illness).",
+    "russian": "начинать ходить (о ребёнке, о выздоравливающем больном)"
+  },
+  {
+    "tibetan": "བགོར་བ།",
+    "wylie": "bgor ba",
+    "english": "to linger, to loiter (in the way).",
+    "russian": "мешкать, медлить, задерживаться (в пути)"
+  },
+  {
+    "tibetan": "བགོས།",
+    "wylie": "bgos",
+    "russian": "прош. вр. от བགོ་བ།"
+  },
+  {
+    "tibetan": "བགྱི།",
+    "wylie": "bgyi",
+    "russian": "буд. вр. от བགྱིད་པ།"
+  },
+  {
+    "tibetan": "བགྱི་བ།",
+    "wylie": "bgyi ba",
+    "english": "action, deed.",
+    "russian": "деяние, поступок"
+  },
+  {
+    "tibetan": "བགྱིད་པ།",
+    "wylie": "bgyid pa",
+    "english": "hon. to do, to act, to perform; to make, to manufacture; ཉེ་གནས་ ~ to be a disciple; བུ་ཡོད་པར་གྱིས་ཤིག། make it about, that a child be (born); མི་ལ་གནོད་པ་ ~ to hurt a man; ལས་ ~ to do a work.",
+    "russian": "прош. вр. བགྱིས།, буд. вр. བགྱི།, пов. གྱིས། почт. делать, действовать; совершать; изготовлять; ཉེ་གནས་ ~ стать учеником, быть учеником; བུ་ཡོད་པར་གྱིས་ཤིག། сделай так, чтобы был (родился) сын; མི་ལ་གནོད་པ་ ~ причинять вред человеку; ལས་ ~ выполнять работу, работать"
+  },
+  {
+    "tibetan": "བགྱིས།",
+    "wylie": "bgyis",
+    "russian": "1. прош. вр. от",
+    "continues_next_page": true
+  }
+]
