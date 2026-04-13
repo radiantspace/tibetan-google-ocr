@@ -5,10 +5,17 @@ ocr_results/
 roerich/
 roerich_output/pages/
 roerich_output/batch_state.json
+roerich_output/roerich_dictionary.json
+roerich_output/roerich_dictionary.md
+roerich_output/roe.csv
+roerich_output/ror.csv
 roerich_test_output/
 jaeschke/
 jaeschke_output/pages/
 jaeschke_output/batch_state.json
+jaeschke_output/jaeschke_dictionary.json
+jaeschke_output/jaeschke_dictionary.md
+jaeschke_output/jae.csv
 jaeschke_test_output/
 __pycache__/
 *.pyc
