@@ -1,0 +1,255 @@
+[
+  {
+    "tibetan": " གླིང་འཛིན།",
+    "wylie": " gling 'dzin",
+    "english": " poet. land; continent.",
+    "russian": " поэт. земля; континент."
+  },
+  {
+    "tibetan": " གླིང་ལོག།",
+    "wylie": " gling log",
+    "english": " internal dissension.",
+    "russian": " возмущение, мятеж; беспорядки."
+  },
+  {
+    "tibetan": " གླུ།",
+    "wylie": " glu",
+    "english": " song, ditty; tune;",
+    "russian": " песня, песенка; мелодия, мотив",
+    "sanskrit": " gīta, geya"
+  },
+  {
+    "tibetan": " གླུ་མཁན།",
+    "wylie": " glu mkhan",
+    "english": " singer;",
+    "russian": " певец",
+    "sanskrit": " gāthaka"
+  },
+  {
+    "tibetan": " གླུ་གར།",
+    "wylie": " glu gar",
+    "english": " song and dance;",
+    "russian": " танец с пением"
+  },
+  {
+    "tibetan": " གླུ་གར་རྩེད་པ།",
+    "wylie": " glu gar rtsed pa",
+    "english": " merry-making;",
+    "russian": " веселье, потеха"
+  },
+  {
+    "tibetan": " གླུ་རྒྱག་པ།",
+    "wylie": " glu rgyag pa",
+    "english": " to sing;",
+    "russian": " петь"
+  },
+  {
+    "tibetan": " གླུ་སྒྲ།",
+    "wylie": " glu sgra",
+    "english": " tune in singing;",
+    "russian": " мотив, мелодия песни; звук песни"
+  },
+  {
+    "tibetan": " གླུ་ཆུང།",
+    "wylie": " glu chung",
+    "english": " little song, ditty;",
+    "russian": " маленькая песня, песенка"
+  },
+  {
+    "tibetan": " གླུ་སྙན་ལེན་པ།",
+    "wylie": " glu snyan len pa",
+    "english": " to sing a pleasant song;",
+    "russian": " петь приятные песни"
+  },
+  {
+    "tibetan": " གླུ་གཏོང་མཁན།",
+    "wylie": " glu gtong mkhan",
+    "english": " bard, singer;",
+    "russian": " певец"
+  },
+  {
+    "tibetan": " གླུ་གཏོང་བ།",
+    "wylie": " glu gtong ba",
+    "english": " to sing;",
+    "russian": " петь"
+  },
+  {
+    "tibetan": " གླུ་བླང་མཁན།",
+    "wylie": " glu blang mkhan",
+    "english": " singer;",
+    "russian": " певец"
+  },
+  {
+    "tibetan": " གླུ་བླང་བ།",
+    "wylie": " glu blang ba",
+    "english": " to sing;",
+    "russian": " петь"
+  },
+  {
+    "tibetan": " གླུ་དབྱངས།",
+    "wylie": " glu dbyangs",
+    "english": " singing;",
+    "russian": " пение",
+    "sanskrit": " saṃgīti"
+  },
+  {
+    "tibetan": " གླུ་དབྱངས་ཀྱི་ཁང་པ།",
+    "wylie": " glu dbyangs kyi khang pa",
+    "english": " stage; place where singing is done;",
+    "russian": " сцена, эстрада; место, где выступают певцы",
+    "sanskrit": " saṃgītiprāsāda"
+  },
+  {
+    "tibetan": " གླུ་དབྱངས་ཀྱི་ངེས་པ་བདུན།",
+    "wylie": " glu dbyangs kyi nges pa bdun",
+    "english": " the seven notes of the Indian gamut;",
+    "russian": " семь ступеней индийской гаммы"
+  },
+  {
+    "tibetan": " བར་མ།",
+    "wylie": " bar ma",
+    "english": " a) n. of the fourth (or the fifth) of the gamut note;",
+    "russian": " а) назв. четвёртой (или пятой) ступени 7-ступенной индийской гаммы",
+    "sanskrit": " madhyama"
+  },
+  {
+    "tibetan": " དྲང་སྲོང་།",
+    "wylie": " drang srong",
+    "english": " б) n. of the second note of the gamut;",
+    "russian": " б) назв. второй ступени 7-ступенной индийской гаммы",
+    "sanskrit": " ṛṣabha"
+  },
+  {
+    "tibetan": " ས་འཛིན།",
+    "wylie": " sa 'dzin",
+    "english": " в) n. of the third note of the gamut;",
+    "russian": " в) назв. третьей ступени 7-ступенной индийской гаммы",
+    "sanskrit": " gāndhāra"
+  },
+  {
+    "tibetan": " དྲུག་ལྡན།",
+    "wylie": " drug ldan",
+    "english": " г) n. of the first or (accord. to some) of the fourth note of the gamut;",
+    "russian": " г) назв. первой (или четвёртой) ступени 7-ступенной индийской гаммы",
+    "sanskrit": " ṣaḍja"
+  },
+  {
+    "tibetan": " ལྔ་པ།",
+    "wylie": " lnga pa",
+    "english": " д) n. of the fifth note of the gamut;",
+    "russian": " д) назв. пятой ступени 7-ступенной индийской гаммы",
+    "sanskrit": " pañcama"
+  },
+  {
+    "tibetan": " བློ་གསལ།",
+    "wylie": " blo gsal",
+    "english": " e) n. of the sixth note of the gamut;",
+    "russian": " е) назв. шестой ступени 7-ступенной индийской гаммы",
+    "sanskrit": " dhaivata"
+  },
+  {
+    "tibetan": " འཁོར་ཉན།",
+    "wylie": " 'khor nyan",
+    "english": " x) n. of the first or seventh note of the gamut;",
+    "russian": " ж) назв. первой (или седьмой) ступени 7-ступенной индийской гаммы",
+    "sanskrit": " niṣāda"
+  },
+  {
+    "tibetan": " གླུ་དབྱངས་མཁན།",
+    "wylie": " glu dbyangs mkhan",
+    "english": " a) bard, singer; б) one who instructs in singing;",
+    "russian": " а) певец; б) учитель пения",
+    "sanskrit": " vaitālika"
+  },
+  {
+    "tibetan": " གླུ་དབྱངས་ཟླ་བ།",
+    "wylie": " glu dbyangs zla ba",
+    "english": " a) October - November or the month of Kārtika; б) Balance (the sign of the Zodiac);",
+    "russian": " поэт. а) октябрь-ноябрь месяц лунного календаря; б) Весы (созвездие и знак зодиака)"
+  },
+  {
+    "tibetan": " གླུ་གཞས།",
+    "wylie": " glu gzhas",
+    "english": " song; song and dance;",
+    "russian": " песня, песня, сопровождаемая танцем"
+  },
+  {
+    "tibetan": " གླུ་ལེན།",
+    "wylie": " glu len",
+    "english": " see above;",
+    "russian": " см. выше"
+  },
+  {
+    "tibetan": " གླུ་རེས།",
+    "wylie": " glu res",
+    "english": " alternate song;",
+    "russian": " песня, исполняемая несколькими певцами, сменяющими друг друга"
+  },
+  {
+    "tibetan": " གླུ་ལེན་མཁན།",
+    "wylie": " glu len mkhan",
+    "english": " singer;",
+    "russian": " певец"
+  },
+  {
+    "tibetan": " གླུ་ལེན་པ།",
+    "wylie": " glu len pa",
+    "english": " a. to sing; б. singing; singer;",
+    "russian": " а. петь; б. пение; певец"
+  },
+  {
+    "tibetan": " གླུ་ལེན་མ།",
+    "wylie": " glu len ma",
+    "english": " woman singer.",
+    "russian": " певица"
+  },
+  {
+    "tibetan": " གླུ་པ།",
+    "wylie": " glu pa",
+    "english": " singer.",
+    "russian": " певец"
+  },
+  {
+    "tibetan": " གླུད།",
+    "wylie": " glud",
+    "english": " ransom; a thing given as a ransom;",
+    "russian": " тж. གླུད་འགོང་, གླུད་ཚབ, གླུད་ལན། выкуп; вещь, предлагаемая в качестве выкупа"
+  },
+  {
+    "tibetan": " གླུད་ལ་གཏོང་བ།",
+    "wylie": " glud la gtong ba",
+    "english": " a) to give as a ransom; б) to make a scape-goat;",
+    "russian": " а) давать в качестве выкупа; б) делать козлом отпущения"
+  },
+  {
+    "tibetan": " སྲོག་གི་གླུད།",
+    "wylie": " srog gi glud",
+    "english": " ransom for a life.",
+    "russian": " выкуп за жизнь"
+  },
+  {
+    "tibetan": " གླུམ།",
+    "wylie": " glum",
+    "english": " fresh fermented rice, barley or wheat (used instead of malt in brewing beer).",
+    "russian": " свежезаквашенный рис, ячмень или пшеница (используются в качестве солода при варке пива)"
+  },
+  {
+    "tibetan": " གླུམ་རྩི།",
+    "wylie": " glum rtsi",
+    "english": " ferment, yeast.",
+    "russian": " закваска, дрожжи"
+  },
+  {
+    "tibetan": " གླུམ་རྫ།",
+    "wylie": " glum rdza",
+    "english": " jug of wine.",
+    "russian": " кувшин с вином"
+  },
+  {
+    "tibetan": " གླེ།",
+    "wylie": " gle",
+    "english": " 1) small uncultivated",
+    "russian": " 1) маленький дикий островок",
+    "continues_next_page": true
+  }
+]

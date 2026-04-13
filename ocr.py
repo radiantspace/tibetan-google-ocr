@@ -91,7 +91,7 @@ class OCR(object):
             flow.user_agent = self.APPLICATION_NAME
             if flags:
                 credentials = tools.run_flow(flow, store, flags)
-            else:  # Needed only for compatibility with Python 2.6
+            else:  # Needed only for compatibility with python3 2.6
                 credentials = tools.run(flow, store)
             logger.debug('Storing credentials to ' + credential_path)
         return credentials
@@ -278,7 +278,7 @@ if __name__ == '__main__':
             epilog="Installation instructions.\n\n"
             "1. Use the guidelines from here: "
             "https://developers.google.com/drive/v3/web/quickstart/python\n"
-            "The script works with Python 3.* only (due to Wylie conversion part)\n"
+            "The script works with python3 3.* only (due to Wylie conversion part)\n"
             "2. pip3 install --upgrade google-api-python-client\n"
             "3. chmod +x ocr.py\n\n"
             "Note.\n\n"

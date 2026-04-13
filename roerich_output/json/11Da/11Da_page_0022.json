@@ -1,0 +1,114 @@
+[
+  {
+    "tibetan": "དུབ་ཅན",
+    "wylie": "dub can",
+    "english": "fatigued, tired out.",
+    "russian": "усталый, утомлённый"
+  },
+  {
+    "tibetan": "དུབ་པ",
+    "wylie": "dub pa",
+    "english": "to tire, to be tired out, to be fatigued.",
+    "russian": "уставать, утомляться; быть усталым, утомлённым"
+  },
+  {
+    "tibetan": "དུབ་བུར",
+    "wylie": "dub bur",
+    "english": "separately; དུབ་བུར་བཀར་བ to separate.",
+    "russian": "отдельно, раздельно; དུབ་བུར་བཀར་བ разобщать, разъединять"
+  },
+  {
+    "tibetan": "དུབ་མེད",
+    "wylie": "dub med",
+    "english": "without fatigue; indefatigable, untiring.",
+    "russian": "неутомимый; неустанный; без устали"
+  },
+  {
+    "tibetan": "དུམ",
+    "wylie": "dum",
+    "english": "I) small plate or vessel; 2) piece; part; a bit.",
+    "russian": "I) небольшая тарелка; небольшой сосуд; 2) кусок; часть; небольшое количество"
+  },
+  {
+    "tibetan": "དུམ་ཅིག",
+    "wylie": "dum cig",
+    "english": "one part; a bit.",
+    "russian": "часть, кусочек, небольшое количество"
+  },
+  {
+    "tibetan": "དུམ་པ",
+    "wylie": "dum pa",
+    "english": "I some; དུམ་པ་ཅི somewhat.",
+    "russian": "I kañcit несколько, немного; དུམ་པ་ཅི что-то, кое-что; отчасти, до некоторой степени",
+    "sanskrit": "kañcit"
+  },
+  {
+    "tibetan": "དུམ་པ",
+    "wylie": "dum pa",
+    "english": "II volume; division (Amdo).",
+    "russian": "II том, книга; часть, раздел (Амдо)"
+  },
+  {
+    "tibetan": "དུམ་པ་གསུམ་བུ",
+    "wylie": "dum pa gsum bu",
+    "english": "see དུམ་བྱེད.",
+    "russian": "см. དུམ་བྱེད"
+  },
+  {
+    "tibetan": "དུམ་བུ",
+    "wylie": "dum bu",
+    "english": "fragment, piece; khaṇḍa piece, fragment, fraction, part; དུམ་བུ་གཅོད་པ to cut into pieces; to break; དུམ་བུར་དུམ་བུར་བྱེད་པ to cut into pieces; to break; དུམ་བུ་མེད akhaṇḍa entire; དུམ་བུ་གསུམ trikhaṇḍaka three parts; triple division; དུམ་བུ་མི་མཛེས་མ poet. passionate woman; lustful woman; དུམ་བུར་གྱུར་པ divided into parts;",
+    "russian": "кусок, фрагмент, часть; khaṇḍa кусок; часть; фрагмент, обломок, осколок; དུམ་བུ་གཅོད་པ резать на куски; ломать, разбивать; དུམ་བུར་དུམ་བུར་བྱེད་པ резать на куски; ломать, разбивать; དུམ་བུ་མེད akhaṇḍa целый, цельный; དུམ་བུ་གསུམ trikhaṇḍaka три части; тройное деление; དུམ་བུ་མི་མཛེས་མ поэт. страстная (пылкая) женщина; похотливая женщина; དུམ་བུར་གྱུར་པ разделившийся на части",
+    "sanskrit": "khaṇḍa; akhaṇḍa; trikhaṇḍaka"
+  },
+  {
+    "tibetan": "དུམ་བུར་བྱེད་པ",
+    "wylie": "dum bur byed pa",
+    "english": "to cut into pieces, to break; to divide.",
+    "russian": "резать на куски, ломать, разбивать; отделять"
+  },
+  {
+    "tibetan": "དུམ་བུ་གསུམ་པ",
+    "wylie": "dum bu gsum pa",
+    "english": "see དུམ་བྱེད.",
+    "russian": "см. དུམ་བྱེད"
+  },
+  {
+    "tibetan": "དུམ་ཕུག",
+    "wylie": "dum phug",
+    "english": "rock-cavern.",
+    "russian": "пещера в скале"
+  },
+  {
+    "tibetan": "དུམ་ཞིག",
+    "wylie": "dum zhig",
+    "english": "for a moment, for a short period.",
+    "russian": "на момент, на короткое время"
+  },
+  {
+    "tibetan": "དུམ་ཡང",
+    "wylie": "dum yang",
+    "english": "head workman (Sikkim).",
+    "russian": "старший рабочий (Сикким)"
+  },
+  {
+    "tibetan": "དུམ་རེ",
+    "wylie": "dum re",
+    "english": "a little; for a moment.",
+    "russian": "немного; на момент, на мгновение"
+  },
+  {
+    "tibetan": "དུའུ་ཕུ",
+    "wylie": "du'u phu",
+    "english": "curds made from soy-bean.",
+    "russian": "кит. доуфу, бобовый сыр, соевый творог"
+  },
+  {
+    "tibetan": "དུར",
+    "wylie": "dur",
+    "english": "cemetery ground; དུར་རྐུན grave robber; དུར་རྐོ་བ to dig a grave; དུར་ཁང sepulchre, tomb; དུར་ཁུང grave, tomb; དུར་ཁྲོད śmaśāna cemetery; cremation ground; དུར་ཁྲོད་ཆེན་པོ་བརྒྱད the eight great cemeteries of Magadha: а) ཙནྡན་ཚལ situated in a forest of sandal trees; б) ཨ་ཤྭ་ཏྠའི་ཚལ situated in a forest of bodhi trees; в) མྱ་ངན་མེད་པའི་ཚལ situated in a forest of Jonesia asoka; г) ཤིང་ཨ་རུ་རའི་ཚལ situated in a forest of myrobalan; д) བསིལ་བ་ཚལ་ или བསིལ་བའི་ཚལ sitavana situated in a forest of sandal trees (kasañja); е) མུན་པ་ནག་པོ situated in a forest of smo-",
+    "russian": "могила; кладбище; དུར་རྐུན грабитель могил; དུར་རྐོ་བ копать(рыть) могилу; དུར་ཁང могила, гробница; དུར་ཁུང могила, гробница; དུར་ཁྲོད śmaśāna кладбище; место сжигания трупов; དུར་ཁྲོད་ཆེན་པོ་བརྒྱད восемь великих кладбищ Магадхи: а) ཙནྡན་ཚལ расположенное в лесу из сандаловых деревьев; б) ཨ་ཤྭ་ཏྠའི་ཚལ в лесу из деревьев бодхи; в) མྱ་ངན་མེད་པའི་ཚལ в лесу из Jonesia asoka; г) ཤིང་ཨ་རུ་རའི་ཚལ в миробалановом лесу; д) བསིལ་བ་ཚལ་ или བསིལ་བའི་ཚལ sitavana в лесу из сандаловых деревьев (kasañja); е) མུན་པ་ནག་པོ в лесу из смо-",
+    "sanskrit": "śmaśāna; sitavana",
+    "continues_next_page": true
+  }
+]

@@ -5,13 +5,13 @@ Reads per-page JSON files and produces a single merged JSON with split entries c
 
 Usage:
     # Merge all pages from a single PDF volume
-    python merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json -o merged/1Ka.json
+    python3 merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json -o merged/1Ka.json
 
     # Merge with verbose output showing detected splits
-    python merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json -o merged/1Ka.json -v
+    python3 merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json -o merged/1Ka.json -v
 
     # Dry run - show what would be merged without writing
-    python merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json --dry-run
+    python3 merge_pages.py ocr_results/1Ka_page_*_gemini_31_pro.json --dry-run
 """
 
 import argparse

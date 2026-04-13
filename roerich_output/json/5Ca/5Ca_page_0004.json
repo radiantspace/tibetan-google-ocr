@@ -1,0 +1,326 @@
+[
+  {
+    "continued_from_prev_page": true,
+    "english": "interrogative morpheme what; how; why; which;",
+    "russian": "сительная морфема что; как; почему; какой; который"
+  },
+  {
+    "tibetan": "ཅི་སྐད",
+    "wylie": "ci skad",
+    "english": "what was said?",
+    "russian": "что было сказано?"
+  },
+  {
+    "tibetan": "ཅི་ག",
+    "wylie": "ci ga",
+    "english": "what?",
+    "russian": "что?"
+  },
+  {
+    "tibetan": "ཅི་གར",
+    "wylie": "ci gar",
+    "english": "how?, in what manner?",
+    "russian": "как?, каким образом?",
+    "sanskrit": "yatha"
+  },
+  {
+    "tibetan": "ཅི་དགའ་བར (тж. ཅི་དགར )",
+    "wylie": "ci dga' bar",
+    "english": "at pleasure; whatever one may wish;",
+    "russian": "по желанию, как нравится; всё, что хочется"
+  },
+  {
+    "tibetan": "ཅི་དགུ",
+    "wylie": "ci dgu",
+    "english": "all; however many(much) there be;",
+    "russian": "сколько бы ни было, всё"
+  },
+  {
+    "tibetan": "ཅི་བགྱི (тж. ཅི་བགྱིས )",
+    "wylie": "ci bgyi",
+    "english": "servant(lit. one who does what he is ordered to do);",
+    "russian": "слуга, прислужник (букв. всё делающий)",
+    "sanskrit": "kimkara"
+  },
+  {
+    "tibetan": "ཅི་བགྱིད",
+    "wylie": "ci bgyid",
+    "english": "see above;",
+    "russian": "см. выше"
+  },
+  {
+    "tibetan": "ཅི་བདེ",
+    "wylie": "ci bde",
+    "english": "whatever is better, whatever suits best;",
+    "russian": "как лучше; что более подходит"
+  },
+  {
+    "tibetan": "ཅི་འདྲེར",
+    "wylie": "ci 'drer",
+    "english": "a) from where; б) how;",
+    "russian": "а) откуда; б) как",
+    "sanskrit": "kutas"
+  },
+  {
+    "tibetan": "ཅི་ལྕོགས",
+    "wylie": "ci lcogs",
+    "english": "whatever possible;",
+    "russian": "всё, что возможно; как возможно"
+  },
+  {
+    "tibetan": "ཅི་ཆ་མེད་པ",
+    "wylie": "ci cha med pa",
+    "english": "a) indefinite; б) inkomprehensible;",
+    "russian": "а) неопределённый; б) непонятный"
+  },
+  {
+    "tibetan": "ཅི་ཆ་ཡོད་པ",
+    "wylie": "ci cha yod pa",
+    "english": "definite; б) comprehensible;",
+    "russian": "определённый; б) понятный"
+  },
+  {
+    "tibetan": "ཅི་ཆེར",
+    "wylie": "ci cher",
+    "english": "where;",
+    "russian": "куда"
+  },
+  {
+    "tibetan": "ཅི་ཆོས",
+    "wylie": "ci chos",
+    "english": "exhaustive; brought to perfection;",
+    "russian": "исчерпывающий, полный; всеобъемлющий"
+  },
+  {
+    "tibetan": "ཅི་ཆེད་",
+    "wylie": "ci ched",
+    "english": "for what purpose?;",
+    "russian": "для чего?, почему?"
+  },
+  {
+    "tibetan": "ཅི་ཆོག",
+    "wylie": "ci chog",
+    "english": "in whatever way;",
+    "russian": "как угодно"
+  },
+  {
+    "tibetan": "ཅི་མཆིས་པ",
+    "wylie": "ci mchis pa",
+    "russian": "см. ཅི་དགུ;"
+  },
+  {
+    "tibetan": "ཅི་བརྗོད",
+    "wylie": "ci brjod",
+    "english": "what has been told?;",
+    "russian": "что было сказано?",
+    "sanskrit": "kimuktam"
+  },
+  {
+    "tibetan": "ཅི་སྙམ",
+    "wylie": "ci snyam",
+    "english": "what do you think?;",
+    "russian": "как думаете?"
+  },
+  {
+    "tibetan": "ཅི་སྙེད",
+    "wylie": "ci snyed",
+    "english": "how much?;",
+    "russian": "сколько?"
+  },
+  {
+    "tibetan": "ཅི་སྙེད་པ",
+    "wylie": "ci snyed pa",
+    "english": "number;",
+    "russian": "число, количество"
+  },
+  {
+    "tibetan": "ཅི་ལྟ",
+    "wylie": "ci lta",
+    "english": "how, in what way;",
+    "russian": "как, каким образом"
+  },
+  {
+    "tibetan": "ཅི་ལྟ་བ་ཉིད",
+    "wylie": "ci lta ba nyid",
+    "english": "property;",
+    "russian": "качество, свойство"
+  },
+  {
+    "tibetan": "ཅི་ལྟ་བུ",
+    "wylie": "ci lta bu",
+    "english": "of what kind? of what manner?;",
+    "russian": "какой?, какого рода?",
+    "sanskrit": "kīdrśa"
+  },
+  {
+    "tibetan": "ཅི་ལྟ་བུ་ཞིག",
+    "wylie": "ci lta bu zhig",
+    "english": "of what nature?;",
+    "russian": "какого сорта или вида?",
+    "sanskrit": "kimbhūta"
+  },
+  {
+    "tibetan": "ཅི་ལྟར (тж. ཅི་ལྟ་ན )",
+    "wylie": "ci ltar",
+    "english": "how?, in what manner?;",
+    "russian": "как?, каким образом?",
+    "sanskrit": "katham"
+  },
+  {
+    "tibetan": "ཅི་སྟེ",
+    "wylie": "ci ste",
+    "english": "a) so that, so; б) though, although;",
+    "russian": "а) так, таким образом; б) хотя",
+    "sanskrit": "a) yathā, kathāpi б) yadyapi"
+  },
+  {
+    "tibetan": "ཅི་སྟ",
+    "wylie": "ci sta",
+    "english": "what does is matter;",
+    "russian": "ну и что; ничего"
+  },
+  {
+    "tibetan": "ཅི་དྲག་བྲང",
+    "wylie": "ci drag brang",
+    "english": "inspite of anything;",
+    "russian": "несмотря ни на что"
+  },
+  {
+    "tibetan": "ཅི་བྱ",
+    "wylie": "ci bya",
+    "english": "what to do?; what is to be done?; what is the matter?;",
+    "russian": "как быть?; что делать?; в чём дело?"
+  },
+  {
+    "tibetan": "ཅི་བྱ་བདེར",
+    "wylie": "ci bya bder",
+    "english": "as you like;",
+    "russian": "как Вам удобно"
+  },
+  {
+    "tibetan": "ཅི་འདོད",
+    "wylie": "ci 'dod",
+    "english": "whatever one wishes;",
+    "russian": "как хотите, по желанию"
+  },
+  {
+    "tibetan": "ཅི་འདྲ་བ",
+    "wylie": "ci 'dra ba",
+    "english": "of what kind?, like what?;",
+    "russian": "какого сорта или вида?, какой?",
+    "sanskrit": "kīdrśa"
+  },
+  {
+    "tibetan": "ཅི་འདྲ་བ་ཉིད",
+    "wylie": "ci 'dra ba nyid",
+    "english": "property;",
+    "russian": "качество"
+  },
+  {
+    "tibetan": "ཅི་ནར",
+    "wylie": "ci nar",
+    "russian": "см. ཅི་གར;"
+  },
+  {
+    "tibetan": "ཅི་ནས་ཀྱང",
+    "wylie": "ci nas kyang",
+    "english": "in any case;",
+    "russian": "как бы то ни было, в любом случае"
+  },
+  {
+    "tibetan": "ཅི་ཕྱིར",
+    "wylie": "ci phyir",
+    "english": "why?, for what reason?; how?;",
+    "russian": "почему?, отчего?, как?",
+    "sanskrit": "katham"
+  },
+  {
+    "tibetan": "ཅི་འབྱོར་བ",
+    "wylie": "ci 'byor ba",
+    "english": "all that exists; all;",
+    "russian": "всё имеющееся, всё"
+  },
+  {
+    "tibetan": "ཅི་སྨོས་ཀྱང",
+    "wylie": "ci smos kyang",
+    "english": "what is there to say;",
+    "russian": "что ещё можно сказать; что можно добавить",
+    "sanskrit": "kịm vaktavyam, kim uktam"
+  },
+  {
+    "tibetan": "ཅི་ཙམ",
+    "wylie": "ci tsam",
+    "english": "how much?;",
+    "russian": "сколько?"
+  },
+  {
+    "tibetan": "ཅི་ཙམ་དྲང",
+    "wylie": "ci tsam drang",
+    "english": "how far?;",
+    "russian": "как далеко?"
+  },
+  {
+    "tibetan": "ཅི་ཙམ་ནས",
+    "wylie": "ci tsam nas",
+    "english": "is it from afar?;",
+    "russian": "издалека ли?"
+  },
+  {
+    "tibetan": "ཅི་ཚུག་པ",
+    "wylie": "ci tshug pa",
+    "english": "how, in what manner?; like what?;",
+    "russian": "как?, каким образом?; какой?"
+  },
+  {
+    "tibetan": "ཅི་ཞིག",
+    "wylie": "ci zhig",
+    "english": "what?; whatever?;",
+    "russian": "что; всё то, что; что-нибудь; какой бы ни?; что бы ни",
+    "sanskrit": "kim"
+  },
+  {
+    "tibetan": "ཅི་ཞིག་ཏུ",
+    "wylie": "ci zhig tu",
+    "english": "for what purpose?;",
+    "russian": "для чего?, чего ради?"
+  },
+  {
+    "tibetan": "ཅི་ཞེས་བསྟན་པ",
+    "wylie": "ci zhes bstan pa",
+    "english": "whatever has been demonstrated;",
+    "russian": "всё то, что было указано"
+  },
+  {
+    "tibetan": "ཅི་ཟེར",
+    "wylie": "ci zer",
+    "english": "what does he say?;",
+    "russian": "что он говорит?",
+    "sanskrit": "kiṃ vacana"
+  },
+  {
+    "tibetan": "ཅི་ཡང",
+    "wylie": "ci yang",
+    "english": "whatever; anything, any, somewhat;",
+    "russian": "что бы ни было; всё то, что; какой бы ни; любой; как-нибудь",
+    "sanskrit": "kiṃcid, kiñcana"
+  },
+  {
+    "tibetan": "ཅི་ཡང་འཇིགས",
+    "wylie": "ci yang 'jigs",
+    "english": "\"All-destructing\" (epith. of Yamarāja, lord of the dead);",
+    "russian": "\"Всё разрушающий\" (эпит. Ямараджи, владыки мёртвых)"
+  },
+  {
+    "tibetan": "ཅི་ཡང་མི་ནུས",
+    "wylie": "ci yang mi nus",
+    "english": "not to be able to do anything;",
+    "russian": "ничего не мочь, быть не в состоянии что-л. сделать"
+  },
+  {
+    "tibetan": "ཅི་ཡང་མེད་པ",
+    "wylie": "ci yang med pa",
+    "english": "one who has got nothing;",
+    "russian": "ничего не имеющий; ничего",
+    "sanskrit": "akiñcana"
+  }
+]

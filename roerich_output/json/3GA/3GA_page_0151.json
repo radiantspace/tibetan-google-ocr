@@ -1,0 +1,144 @@
+[
+  {
+    "tibetan": "སྒྲིབས",
+    "wylie": "sgribs",
+    "russian": "пов. от སྒྲིབ་པ།"
+  },
+  {
+    "tibetan": "སྒྲིམ་ཅན",
+    "wylie": "sgrim can",
+    "russian": "см. སྒྲིམ་པོ།"
+  },
+  {
+    "tibetan": "སྒྲིམ་པ",
+    "wylie": "sgrim pa",
+    "english": "1) to repeat; 2) to mix; to put together; to put or place in order; to collate.",
+    "russian": "I прош. вр. བསྒྲིམས།, буд. вр. བསྒྲིམ། 1) повторять; 2) смешивать; класть вместе; располагать по порядку; сличать, сравнивать"
+  },
+  {
+    "tibetan": "*སྒྲིམ་པ",
+    "wylie": "sgrim pa",
+    "russian": "II см. སྒྲིལ་བ།"
+  },
+  {
+    "tibetan": "*སྒྲེ",
+    "wylie": "sgre",
+    "english": "uncovered; bare; naked; bald; ཆོས་ཀྱི་གླེགས་བམ་ ~ ལ་བཞག་མི་རུང་། a sacred volume should not be kept uncovered; ས་ ~ bare ground.",
+    "russian": "непокрытый; неприкрытый; голый (лишённый растительности); нагой; лысый; ཆོས་ཀྱི་གླེགས་བམ་ ~ ལ་བཞག་མི་རུང་། священную книгу нельзя хранить непокрытой; ས་ ~ голая земля."
+  },
+  {
+    "tibetan": "སྒྲེ་འུ",
+    "wylie": "sgre 'u",
+    "russian": "см. སྒྲེའུ་བོ།"
+  },
+  {
+    "tibetan": "སྒྲེ་ལྡེར",
+    "wylie": "sgre lder",
+    "russian": "см. སྒྲེ་བོ།"
+  },
+  {
+    "tibetan": "སྒྲེ་ཟུག",
+    "wylie": "sgre zug",
+    "english": "river bank constantly submerged by water.",
+    "russian": "затопляемый берег реки"
+  },
+  {
+    "tibetan": "སྒྲེ་ལོག",
+    "wylie": "sgre log",
+    "english": "rolling over; ~ རྒྱག་པ།, ~ བྱེད་པ། to roll over.",
+    "russian": "перекатывание; ~ རྒྱག་པ།, ~ བྱེད་པ། перекатывать"
+  },
+  {
+    "tibetan": "སྒྲེག་པ",
+    "wylie": "sgreg pa",
+    "english": "1) to belch; 2) eructation, belch; སྒྲེག་པ་འབྱིན་པ།, སྒྲེག་པ་ར་འདོན་པ། to belch.",
+    "russian": "I. прош. вр. и пов. བསྒྲེགས། 1) рыгать, отрыгивать; 2) отрыжка, рыганье; སྒྲེག་པ་འབྱིན་པ།, སྒྲེག་པ་ར་འདོན་པ། рыгать.",
+    "sanskrit": "nigāra"
+  },
+  {
+    "tibetan": "བསྒྲེགས",
+    "wylie": "bsgregs",
+    "russian": "прош. вр. и пов. от སྒྲེག་པ།"
+  },
+  {
+    "tibetan": "སྒྲེགས་པ",
+    "wylie": "sgregs pa",
+    "russian": "см. སྒྲེག་པ། 2."
+  },
+  {
+    "tibetan": "སྒྲེང་སྒྲེང",
+    "wylie": "sgreng sgreng",
+    "english": "firm and well fixed; རྒྱབ་རྐྱ་ ~ back stiff and unbending.",
+    "russian": "устойчивый, хорошо закреплённый; རྒྱབ་རྐྱ་ ~ негнущаяся спина"
+  },
+  {
+    "tibetan": "སྒྲེང་པོ",
+    "wylie": "sgreng po",
+    "russian": "см. སྒྲེང་བ་པོ།"
+  },
+  {
+    "tibetan": "སྒྲེང་བ",
+    "wylie": "sgreng ba",
+    "english": "1) to lift, to raise up, to hoist, to erect; 2) to stretch out (a limb and hold it stiff).",
+    "russian": "прош. вр. བསྒྲེངས།, буд. вр. བསྒྲེང་།, пов. སྒྲེངས། 1) поднимать, вздымать; воздвигать; 2) вытягивать (руку, ногу)"
+  },
+  {
+    "tibetan": "སྒྲེང་བ་པོ",
+    "wylie": "sgreng ba po",
+    "english": "one who lifts.",
+    "russian": "поднимающий, вздымающий"
+  },
+  {
+    "tibetan": "སྒྲེངས",
+    "wylie": "sgrengs",
+    "russian": "пов. от སྒྲེང་བ།"
+  },
+  {
+    "tibetan": "སྒྲེན་པོ",
+    "wylie": "sgren po",
+    "russian": "см. སྒྲེར་མོ།"
+  },
+  {
+    "tibetan": "སྒྲེར་མོ",
+    "wylie": "sgrer mo",
+    "english": "1) nacked, without cover; སྒྲེར་མོར་འབྱུང་བ། to appear in a naked state; 2) destitute; beggar; ~ གསུམ། \"the three destitutes\": a) ཀླུང་རི་ཆུ་མེད། valley without water; б) ཡུལ་འཁོར་མགོན་མེད། country without a protecting deity; в) (གལ་ཏེ་མིང་པོ་བཅུ་ཡོད་ཀྱང་) ཁྱོ་མེད་བུད་མེད། woman who is without husband (though she may have ten brothers).",
+    "russian": "1) голый, обнажённый; སྒྲེར་མོར་འབྱུང་བ། появиться в голом виде; 2) лишённый чего-л.; нуждающийся; бедный, нищий; ~ གསུམ། \"трое обездоленных\": a) ཀླུང་རི་ཆུ་མེད། долина без воды; б) ཡུལ་འཁོར་མགོན་མེད། местность без охраняющего божества; в) (གལ་ཏེ་མིང་པོ་བཅུ་ཡོད་ཀྱང་) ཁྱོ་མེད་བུད་མེད། женщина без мужа (пусть даже она имеет десять братьев)."
+  },
+  {
+    "tibetan": "སྒྲེན་མོ་པ",
+    "wylie": "sgren mo pa",
+    "english": "naked man.",
+    "russian": "нагой мужчина"
+  },
+  {
+    "tibetan": "སྒྲེན་མོ་མ",
+    "wylie": "sgren mo ma",
+    "english": "naked woman.",
+    "russian": "нагая женщина"
+  },
+  {
+    "tibetan": "སྒྲེའུ་ཆུང",
+    "wylie": "sgre'u chung",
+    "english": "leaking small vessel or pot (?)."
+  },
+  {
+    "tibetan": "སྒྲེས་པ",
+    "wylie": "sgres pa",
+    "english": "n. of a numeral figure in Buddhist astrology.",
+    "russian": "назв. числа в буддийской астрологии."
+  },
+  {
+    "tibetan": "སྒྲོ",
+    "wylie": "sgro",
+    "english": "feather; large feather; སྒྲོ་རྐང་། feather-fir; སྒྲོ་སྐུར་ < སྒྲོ་འདོགས་པ་དང་སྐུར་པ་འདེབས་པ། buddh. exaggeration and depreciation (lit. decorating with feathers and casting a buse); སྒྲོ་སྐུར་བྲལ། buddh. rejection of the groundless exaggeration or depreciation (of smb.'s qualities).",
+    "russian": "перо (птичье); большое перо (из хвоста или крыла птицы); སྒྲོ་རྐང་། ствол пера; སྒྲོ་སྐུར་ < སྒྲོ་འདོགས་པ་དང་སྐུར་པ་འདེབས་པ། будд. превозношение и умаление (качеств кого-л.) (букв. украшение пером [как знаком достоинства] и возведение напраслины); སྒྲོ་སྐུར་བྲལ། будд. отказ от неосновательного превозношения или умаления (качеств кого-л.)",
+    "sanskrit": "garut, pakṣa"
+  },
+  {
+    "tibetan": "སྒྲོ་ཅན",
+    "wylie": "sgro can",
+    "english": "\"feathered; with feathers\": a) bird;",
+    "russian": "\"оперённый; покрытый перьями\": а) птица;",
+    "continues_next_page": true
+  }
+]

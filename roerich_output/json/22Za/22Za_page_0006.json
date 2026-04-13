@@ -1,0 +1,232 @@
+[
+  {
+    "continued_from_prev_page": true,
+    "english": "decrease.",
+    "russian": "вание, убавление."
+  },
+  {
+    "tibetan": "ཟད་པ I",
+    "wylie": "zad pa I",
+    "english": "archer; thrower.",
+    "russian": "стрелок из лука; метатель",
+    "sanskrit": "kṣipaka"
+  },
+  {
+    "tibetan": "ཟད་པ II",
+    "wylie": "zad pa II",
+    "english": "night.",
+    "russian": "ночь"
+  },
+  {
+    "tibetan": "ཟད་མི་ཤེས་པ",
+    "wylie": "zad mi shes pa",
+    "english": "inexhaustible.",
+    "russian": "неистощимый",
+    "sanskrit": "akṣatyā, akṣaya"
+  },
+  {
+    "tibetan": "ཟད་ཙམ",
+    "wylie": "zad tsam",
+    "english": "a little, some.",
+    "russian": "немного, чуть-чуть"
+  },
+  {
+    "tibetan": "ཟན I)",
+    "wylie": "zan I)",
+    "english": "1) food; cooked food; 2) -eater (as a second part of compound); ཉ་ཟན fish-eater; ཤ་ཟན meat-eater; ཕག་ཟན pork-eater.",
+    "russian": "1) еда, пища; варёная (приготовленная) пища; тесто; густой кисель; 2) едок, едящий (в сочетании); ཉ་ཟན едящий рыбу; ཤ་ཟན едящий мясо; ཕག་ཟན едящий свинину",
+    "sanskrit": "odana, anna bhakta"
+  },
+  {
+    "tibetan": "ཟན་ཁུ",
+    "wylie": "zan khu",
+    "english": "soup of flour.",
+    "russian": "мучной суп"
+  },
+  {
+    "tibetan": "ཟན་སྣོད",
+    "wylie": "zan snod",
+    "english": "cup in which dough balls are made of barley flour with a water, tea or whey.",
+    "russian": "чашка для приготовления шариков из цзамбы, разведённой водой, чаем или молочной сывороткой"
+  },
+  {
+    "tibetan": "ཟན་གྲང་",
+    "wylie": "zan grang",
+    "english": "cold food.",
+    "russian": "холодное кушанье, холодное блюдо"
+  },
+  {
+    "tibetan": "ཟན་ཆང་",
+    "wylie": "zan chang",
+    "english": "food and beer.",
+    "russian": "еда и пиво"
+  },
+  {
+    "tibetan": "ཟན་ཆངས",
+    "wylie": "zan changs",
+    "english": "dough-ball made of barley-flour with a water, tea or whey.",
+    "russian": "шарик из цзамбы, разведённой водой, чаем или молочной сывороткой"
+  },
+  {
+    "tibetan": "ཟན་ཉེས",
+    "wylie": "zan nyes",
+    "english": "1) mistake; 2) bad food.",
+    "russian": "1) ошибка; 2) плохая пища"
+  },
+  {
+    "tibetan": "ཟན་སྟེར་བ",
+    "wylie": "zan ster ba",
+    "english": "to feed, to give food.",
+    "russian": "кормить, давать пищу"
+  },
+  {
+    "tibetan": "ཟན་དྲོན",
+    "wylie": "zan dron",
+    "english": "warm food.",
+    "russian": "тёплая пища"
+  },
+  {
+    "tibetan": "ཟན་པ",
+    "wylie": "zan pa",
+    "english": "advice, suggestion.",
+    "russian": "совет, предложение"
+  },
+  {
+    "tibetan": "ཟན་པོ",
+    "wylie": "zan po",
+    "russian": "см. གཟན་པོ"
+  },
+  {
+    "tibetan": "ཟན་མ",
+    "wylie": "zan ma",
+    "english": "1) cook; 2) parched barley ground into meal.",
+    "russian": "1) повар; 2) цзамба (мука из поджаренного ячменя)"
+  },
+  {
+    "tibetan": "ཟན་བཙོས་པ",
+    "wylie": "zan btsos pa",
+    "english": "boiled food.",
+    "russian": "варёная пища"
+  },
+  {
+    "tibetan": "ཟན་ཚོས",
+    "wylie": "zan tshos",
+    "english": "pie.",
+    "russian": "пирог",
+    "sanskrit": "apupa"
+  },
+  {
+    "tibetan": "ཟན་ཚ",
+    "wylie": "zan tsha",
+    "english": "hot food.",
+    "russian": "горячая пища"
+  },
+  {
+    "tibetan": "ཟན་རྫ",
+    "wylie": "zan rdza",
+    "english": "frying-pan; stew-pan.",
+    "russian": "сковорода; мелкая кастрюля"
+  },
+  {
+    "tibetan": "ཟན་རྫི་བ",
+    "wylie": "zan rdzi ba",
+    "english": "to knead barley-dough.",
+    "russian": "замешивать тесто из цзамбы (ячменной муки)"
+  },
+  {
+    "tibetan": "ཟན་བཟོས",
+    "wylie": "zan bzos",
+    "russian": "прош. вр. от ཟན་བཟོ"
+  },
+  {
+    "tibetan": "ཟན་ཟ",
+    "wylie": "zan za",
+    "english": "to eat, to take food.",
+    "russian": "есть, принимать пищу"
+  },
+  {
+    "tibetan": "ཟན་ཟ་དུས",
+    "wylie": "zan za dus",
+    "english": "the time of taking food.",
+    "russian": "время еды"
+  },
+  {
+    "tibetan": "ཟན་ཟོས",
+    "wylie": "zan zos",
+    "english": "meal.",
+    "russian": "принятие пищи, еда"
+  },
+  {
+    "tibetan": "ཟན་གཡོ་བ",
+    "wylie": "zan g.yo ba",
+    "english": "to cook.",
+    "russian": "готовить пищу"
+  },
+  {
+    "tibetan": "ཟན་ཡང",
+    "wylie": "zan yang",
+    "english": "\"triple style of architecture\" (the monastery of Sam-ye is called Zan-yang because it is built in Tibeta Indian and Chinese styles).",
+    "russian": "\"тройной стиль архитектуры\" (о монастыре Самье, в архитектуре которого использованы тибетский, индийский и китайский стили)",
+    "sanskrit": "кит. sānyàng"
+  },
+  {
+    "tibetan": "ཟབ I",
+    "wylie": "zab I",
+    "english": "silk, Chinese satin.",
+    "russian": "шёлк, китайский атлас"
+  },
+  {
+    "tibetan": "ཟབ II",
+    "wylie": "zab II",
+    "russian": "см. ཟབ་པ"
+  },
+  {
+    "tibetan": "ཟབ་སྐུད",
+    "wylie": "zab skud",
+    "english": "silk thread.",
+    "russian": "шёлковая нить"
+  },
+  {
+    "tibetan": "ཟབ་ཁོག་ནས",
+    "wylie": "zab khog nas",
+    "english": "secretly, confidentially.",
+    "russian": "тайно, секретно"
+  },
+  {
+    "tibetan": "ཟབ་གྲངས",
+    "wylie": "zab grangs",
+    "english": "n. of a number.",
+    "russian": "назв. числа",
+    "sanskrit": "ayava"
+  },
+  {
+    "tibetan": "ཟབ་འབྲེན",
+    "wylie": "zab 'bren",
+    "english": "n. of an expensive silk-cloth.",
+    "russian": "назв. дорогой шёлковой ткани"
+  },
+  {
+    "tibetan": "ཟབ་རྒྱས",
+    "wylie": "zab rgyas",
+    "english": "solemnity, splendour;",
+    "russian": "торжественность, пышность"
+  },
+  {
+    "tibetan": "ཟབ་རྒྱས་ཀྱི་སྒོ་ནས",
+    "wylie": "zab rgyas kyi sgo nas",
+    "english": "solemnly.",
+    "russian": "торжественно, пышно"
+  },
+  {
+    "tibetan": "ཟབ་ཆེན",
+    "wylie": "zab chen",
+    "english": "Chinese silk of highest quality, satin.",
+    "russian": "высший сорт китайского шёлка, атлас"
+  },
+  {
+    "tibetan": "ཟབ་ཆོས",
+    "wylie": "zab chos",
+    "english": "secret teaching.",
+    "russian": "тайное учение"
+  }
+]

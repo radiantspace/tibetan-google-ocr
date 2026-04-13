@@ -1,0 +1,161 @@
+[
+  {
+    "tibetan": "ཕྱོགས་གཏོགས",
+    "wylie": "phyogs gtogs",
+    "english": "belonging to a certain side; group, fraction;",
+    "russian": "принадлежность (к какой-л. стороне); группировка, фракция"
+  },
+  {
+    "tibetan": "ཕྱོགས་གཏོགས་རྒྱལ་ཁབ",
+    "wylie": "phyogs gtogs rgyal khab",
+    "english": "dependent country, satellite.",
+    "russian": "зависимая страна, сателлит"
+  },
+  {
+    "tibetan": "ཕྱོགས་ལྟ་འཁོར་ལོ",
+    "wylie": "phyogs lta 'khor lo",
+    "english": "compass.",
+    "russian": "компас"
+  },
+  {
+    "tibetan": "ཕྱོགས་ལྟར་སྣང་བ",
+    "wylie": "phyogs ltar snang ba",
+    "english": "fallacious argument.",
+    "russian": "ошибочный (ложный) аргумент",
+    "sanskrit": "pakṣābhāsa"
+  },
+  {
+    "tibetan": "ཕྱོགས་སྟོན",
+    "wylie": "phyogs ston",
+    "english": "distinguished.",
+    "russian": "отличающийся, выдающийся",
+    "sanskrit": "kakubha"
+  },
+  {
+    "tibetan": "ཕྱོགས་བལྟ་འཁོར་ལོ",
+    "wylie": "phyogs blta 'khor lo",
+    "english": "compass.",
+    "russian": "компас"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཐམས་ཅད",
+    "wylie": "phyogs thams cad",
+    "english": "general, total;",
+    "russian": "всеобщий, тотальный;"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཐམས་ཅད་དུ",
+    "wylie": "phyogs thams cad du",
+    "english": "in all directions.",
+    "russian": "во все стороны, во всех направлениях"
+  },
+  {
+    "tibetan": "ཕྱོགས་མཐའ",
+    "wylie": "phyogs mtha'",
+    "english": "1) the full moon; 2) the fifteenth day of the diminishing moon; 3) wings of a military force arranged in battle formation.",
+    "russian": "1) полнолуние, 15-й день прибывающей луны; 2) 15-й день убывающей луны; 3) фланги (крылья) армии, приготовившейся к битве",
+    "sanskrit": "pakṣānta"
+  },
+  {
+    "tibetan": "ཕྱོགས་མཐུན",
+    "wylie": "phyogs mthun",
+    "english": "appropriate, suitable; in accord, unanimous.",
+    "russian": "подходящий, годный; согласный, единодушный"
+  },
+  {
+    "tibetan": "ཕྱོགས་མཐུན་དུ",
+    "wylie": "phyogs mthun du",
+    "english": "appropriately; unanimously.",
+    "russian": "подходяще, годно; согласно, единодушно"
+  },
+  {
+    "tibetan": "ཕྱོགས་དང་མཐུན",
+    "wylie": "phyogs dang mthun",
+    "russian": "см. ཕྱོགས་མཐུན;"
+  },
+  {
+    "tibetan": "ཕྱོགས་དང་མཐུན་པར་འགྱུར་བ",
+    "wylie": "phyogs dang mthun par 'gyur ba",
+    "english": "to be similar, kindred; to be in accord.",
+    "russian": "быть подобным, сходным; быть согласным",
+    "sanskrit": "sapakṣabhūta"
+  },
+  {
+    "tibetan": "ཕྱོགས་བདག",
+    "wylie": "phyogs bdag",
+    "english": "1) the guardian of a quarter; 2) the lord of the earth; 3) poet. the sun.",
+    "russian": "1) божество-хранитель страны света; 2) божество земли; 3) поэт. солнце",
+    "sanskrit": "diśāmpati, gopati"
+  },
+  {
+    "tibetan": "ཕྱོགས་འདྲ་བ",
+    "wylie": "phyogs 'dra ba",
+    "english": "similar.",
+    "russian": "подобный, сходный"
+  },
+  {
+    "tibetan": "ཕྱོགས་ལྡན",
+    "wylie": "phyogs ldan",
+    "english": "1) siding with; 2) \"winged\": a) night; b) bird.",
+    "russian": "1) ставший на-(чью-л.) сторону; 2) \"крылатый\": а) ночь; б) птица",
+    "sanskrit": "pakṣin, pakṣiṇī"
+  },
+  {
+    "tibetan": "ཕྱོགས་ན་མི་གནས",
+    "wylie": "phyogs na mi gnas",
+    "english": "not of a short duration.",
+    "sanskrit": "apradiśas-ha"
+  },
+  {
+    "tibetan": "ཕྱོགས་སྣང་བྱེད",
+    "wylie": "phyogs snang byed",
+    "english": "poet. the sun (lit. the illuminator of the quarters).",
+    "russian": "поэт. солнце (букв. освещающий страны света)",
+    "sanskrit": "gabhasti"
+  },
+  {
+    "tibetan": "ཕྱོགས་པ",
+    "wylie": "phyogs pa",
+    "english": "1. to go aside; to diverge; to turn; འཁོར་བ་ལ་རྒྱབ་ཀྱིས་ཕྱོགས་པ buddh. to turn one's back on wordly transmigration; འཆི་བར་ཕྱོགས་པ turned to dying (nearing death); 2. adherent, following.",
+    "russian": "1. идти в сторону; уклоняться, отклоняться; поворачиваться к ...; འཁོར་བ་ལ་རྒྱབ་ཀྱིས་ཕྱོགས་པ будд. поворачиваться спиной к сансаре; འཆི་བར་ཕྱོགས་པ повернувшийся к смерти (т.е. находящийся при смерти); 2. сторонник, последователь"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཕྱི་མ",
+    "wylie": "phyogs phyi ma",
+    "english": "\"back side\" a) the dark half of a lunar month; b) the answer in a dispute; reply; c) the second part of an argument; d) the minor proposition of a syllogism.",
+    "russian": "\"задняя сторона\" а) тёмная половина лунного месяца; третья четверть луны; б) ответное выступление (в споре, диспуте); ответ; в) вторая часть аргумента; г) меньшая посылка в силлогизме",
+    "sanskrit": "uttara-pakṣa"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཕྱོགས",
+    "wylie": "phyogs phyogs",
+    "english": "all quarters; all directions;",
+    "russian": "все направления; все части света"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཕྱོགས་ནས",
+    "wylie": "phyogs phyogs nas",
+    "english": "from all directions;",
+    "russian": "со всех сторон"
+  },
+  {
+    "tibetan": "ཕྱོགས་ཕྱོགས་སུ",
+    "wylie": "phyogs phyogs su",
+    "english": "in every direction.",
+    "russian": "во все стороны, во всех направлениях"
+  },
+  {
+    "tibetan": "ཕྱོགས་བྱེད་པ",
+    "wylie": "phyogs byed pa",
+    "english": "to side with; to show partiality.",
+    "russian": "становиться (на чью-л.) сторону; выказывать пристрастность"
+  },
+  {
+    "tibetan": "ཕྱོགས་བྲལ",
+    "wylie": "phyogs bral",
+    "english": "inter-",
+    "russian": "промежуточные деления компаса",
+    "sanskrit": "vidiś",
+    "continues_next_page": true
+  }
+]

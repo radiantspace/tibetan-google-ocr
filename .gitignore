@@ -4,9 +4,11 @@ test_pages/
 ocr_results/
 roerich/
 roerich_output/pages/
+roerich_output/batch_state.json
 roerich_test_output/
 __pycache__/
 *.pyc
 .venv/
 ROERICH.zip
 *.error
+_batch_*.jsonl

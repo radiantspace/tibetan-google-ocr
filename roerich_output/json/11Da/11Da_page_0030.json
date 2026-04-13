@@ -1,0 +1,281 @@
+[
+  {
+    "tibetan": "དེ་པས",
+    "wylie": "de pas",
+    "english": "by that very.",
+    "russian": "тем, тем самым"
+  },
+  {
+    "tibetan": "དེ་རྒྱབ་ནས",
+    "wylie": "de rgyab nas",
+    "english": "after; afterwards.",
+    "russian": "за, позади; после, потом"
+  },
+  {
+    "tibetan": "དེ་སྔ",
+    "wylie": "de snga",
+    "english": "before, formerly.",
+    "russian": "прежде, раньше"
+  },
+  {
+    "tibetan": "དེ་སྔོན",
+    "wylie": "de sngon",
+    "english": "see above.",
+    "russian": "см. выше"
+  },
+  {
+    "tibetan": "དེ་ཅིའི་ཕྱིར་ཞེན",
+    "wylie": "de ci'i phyir zhen",
+    "english": "why so?",
+    "russian": "почему же?, отчего же?"
+  },
+  {
+    "tibetan": "དེ་ཅིའི་སླད་དུ་ཞེ་ན",
+    "wylie": "de ci'i slad du zhe na",
+    "english": "see above.",
+    "russian": "см. выше"
+  },
+  {
+    "tibetan": "དེ་ཉིད",
+    "wylie": "de nyid",
+    "english": "1) that itself, that very; 2) essence, nature, reality;",
+    "russian": "1) тот самый; то самое; 2) сущность, природа, натура",
+    "sanskrit": "1) tadeva; 2) tattva"
+  },
+  {
+    "tibetan": "དེ་མ་ཡིན",
+    "wylie": "de ma yin",
+    "english": "not that, not the same;",
+    "russian": "не тот, не тот же самый"
+  },
+  {
+    "tibetan": "དེ་ཉིད་ཀྱི་ཕྱིར",
+    "wylie": "de nyid kyi phyir",
+    "english": "because of that;",
+    "russian": "вследствие того, из-за того"
+  },
+  {
+    "tibetan": "དེ་ཉིད་རྟོགས་བརྗོད",
+    "wylie": "de nyid rtogs brjod",
+    "english": "poet. pratyekabuddha;",
+    "russian": "поэт. пратьекабудда"
+  },
+  {
+    "tibetan": "དེ་ཉིད་བྲལ",
+    "wylie": "de nyid bral",
+    "english": "unreal;",
+    "russian": "нереальный",
+    "sanskrit": "asāra"
+  },
+  {
+    "tibetan": "དེ་ཉིད་མེད",
+    "wylie": "de nyid med",
+    "english": "gossip;",
+    "russian": "болтовня"
+  },
+  {
+    "tibetan": "དེ་ཉིད་སྨྲ་བ",
+    "wylie": "de nyid smra ba",
+    "english": "one who expounds the truth; one who preaches the truth;",
+    "russian": "разъясняющий истину; проповедующий истину",
+    "sanskrit": "tattva vādin"
+  },
+  {
+    "tibetan": "དེ་ཉིད་ཚེ",
+    "wylie": "de nyid tshe",
+    "english": "that very time, that very moment.",
+    "russian": "то самое время, тот самый момент"
+  },
+  {
+    "tibetan": "དེ་གཤིས",
+    "wylie": "de gshis",
+    "english": "natural; true; sincere.",
+    "russian": "естественный, натуральный; истинный, настоящий; искренний"
+  },
+  {
+    "tibetan": "དེ་སྙེད",
+    "wylie": "de snyed",
+    "english": "so much, so many; so great.",
+    "russian": "столько, так много",
+    "sanskrit": "tāvat"
+  },
+  {
+    "tibetan": "དེ་ལྟ",
+    "wylie": "de lta",
+    "english": "like that, thus, in that manner;",
+    "russian": "подобно, соответственно, так",
+    "sanskrit": "tādṛśa"
+  },
+  {
+    "tibetan": "དེ་ལྟ་ནའང",
+    "wylie": "de lta na'ang",
+    "english": "nevertheless, so also yet;",
+    "russian": "тем не менее, несмотря на",
+    "sanskrit": "tathāca"
+  },
+  {
+    "tibetan": "དེ་ལྟ་བས་ན",
+    "wylie": "de lta bas na",
+    "english": "therefore; thus; then;",
+    "russian": "потому; таким образом; тогда",
+    "sanskrit": "athas, iti, tasmāt"
+  },
+  {
+    "tibetan": "དེ་ལྟ་བུ",
+    "wylie": "de lta bu",
+    "english": "like that, similar, such;",
+    "russian": "такой, подобный",
+    "sanskrit": "etad, evam"
+  },
+  {
+    "tibetan": "དེ་ལྟ་བུའི་རབ",
+    "wylie": "de lta bu'i rab",
+    "english": "buddh. oral tradition, le-",
+    "russian": "будд. устная традиция, легенда; история/",
+    "continues_next_page": true
+  },
+  {
+    "continued_from_prev_page": true,
+    "english": "gend; history;"
+  },
+  {
+    "tibetan": "དེ་ལྟ་མ་ཡིན་ན",
+    "wylie": "de lta ma yin na",
+    "english": "otherwise, else, differently;",
+    "russian": "иначе, в противном случае",
+    "sanskrit": "anyathā, itarathā"
+  },
+  {
+    "tibetan": "དེ་ལྟ་ཡོད་ཀྱང",
+    "wylie": "de lta yod kyang",
+    "english": "nevertheless, yet;",
+    "russian": "тем не менее, несмотря на, всё же",
+    "sanskrit": "nāma, apināma, tathāpi"
+  },
+  {
+    "tibetan": "དེ་ལྟ་ཡང",
+    "wylie": "de lta yang",
+    "english": "and yet;",
+    "russian": "и всё же"
+  },
+  {
+    "tibetan": "དེ་ལྟ་ཡིན་པ་དེ་བས་ན",
+    "wylie": "de lta yin pa de bas na",
+    "english": "because of this reason.",
+    "russian": "вследствие этой причины",
+    "sanskrit": "etasmāt-kāraṇāt"
+  },
+  {
+    "tibetan": "དེ་ལྟར",
+    "wylie": "de ltar",
+    "english": "thus, so; like that; accordingly; because of;",
+    "russian": "так, подобно тому; но, в соответствии; поэтому",
+    "sanskrit": "atas, evam"
+  },
+  {
+    "tibetan": "དེ་ལྟར་གྱུར་པ",
+    "wylie": "de ltar gyur pa",
+    "english": "tradition; legend; story; history.",
+    "russian": "традиция; легенда; рассказ; история",
+    "sanskrit": "idihāsa"
+  },
+  {
+    "tibetan": "དེ་སྟེ",
+    "wylie": "de ste",
+    "english": "but; if; although.",
+    "russian": "но; если; хотя"
+  },
+  {
+    "tibetan": "དེ་ཐད",
+    "wylie": "de thad",
+    "english": "1) for that purpose; 2) therefore.",
+    "russian": "1) ради, для; 2) поэтому, следовательно."
+  },
+  {
+    "tibetan": "དེ་དང",
+    "wylie": "de dang",
+    "english": "there, in that place;",
+    "russian": "там, в том месте",
+    "sanskrit": "tatra"
+  },
+  {
+    "tibetan": "དེ་དང་དེ་ན",
+    "wylie": "de dang de na",
+    "english": "in such place;",
+    "russian": "в таком месте"
+  },
+  {
+    "tibetan": "དེ་དང་དེ་ནས",
+    "wylie": "de dang de nas",
+    "english": "from such a place;",
+    "russian": "из такого места"
+  },
+  {
+    "tibetan": "དེ་དང་འདྲ་བ",
+    "wylie": "de dang 'dra ba",
+    "english": "such; of such manner.",
+    "russian": "такой, подобный",
+    "sanskrit": "tādṛśa"
+  },
+  {
+    "tibetan": "དེ་དུས",
+    "wylie": "de dus",
+    "english": "that time;",
+    "russian": "то время, тогда",
+    "sanskrit": "tatkāla"
+  },
+  {
+    "tibetan": "དེ་དུས་སུ་འོས་པ",
+    "wylie": "de dus su 'os pa",
+    "english": "fit for that time.",
+    "russian": "подходящий (соответствующий) для того времени",
+    "sanskrit": "tatkāla sadṛśa"
+  },
+  {
+    "tibetan": "དེ་དེ",
+    "wylie": "de de",
+    "english": "exactly that.",
+    "russian": "точно тот"
+  },
+  {
+    "tibetan": "དེ་དོན",
+    "wylie": "de don",
+    "english": "for that.",
+    "russian": "ради, для",
+    "sanskrit": "tadaraka"
+  },
+  {
+    "tibetan": "དེ་འདྲ་བ",
+    "wylie": "de 'dra ba",
+    "english": "thus like that, similar.",
+    "russian": "такой, подобный, похожий",
+    "sanskrit": "tathā, yothā"
+  },
+  {
+    "tibetan": "དེ་བདེན",
+    "wylie": "de bden",
+    "english": "truth.",
+    "russian": "истина, правда",
+    "sanskrit": "satya"
+  },
+  {
+    "tibetan": "དེ་ན",
+    "wylie": "de na",
+    "english": "there.",
+    "russian": "там",
+    "sanskrit": "tatra"
+  },
+  {
+    "tibetan": "དེ་ནས",
+    "wylie": "de nas",
+    "english": "1) from that, thence; 2) then, after that;",
+    "russian": "1) оттуда; 2) после того, затем",
+    "sanskrit": "tadā, tatas, tarhi"
+  },
+  {
+    "tibetan": "དེ་ནས་ཕན་ཆད",
+    "wylie": "de nas phan chad",
+    "english": "henceforth.",
+    "russian": "с этого времени, впредь"
+  }
+]
