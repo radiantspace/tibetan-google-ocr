@@ -225,19 +225,25 @@ def export_json(entries, output_path):
     print(f"Wrote {len(entries)} entries to {output_path}", file=sys.stderr)
 
 
-def export_csv(entries, output_path, lang_field, lang_col_name):
+def export_csv(entries, output_path, lang_field, lang_col_name, include_sanskrit=False):
     """Export entries to CSV for SQLite import."""
     count = 0
+    header = ["wylie", "unicode", lang_col_name]
+    if include_sanskrit:
+        header.append("sanskrit")
     with open(output_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["wylie", "unicode", lang_col_name])
+        writer.writerow(header)
         for entry in entries:
             wylie = entry.get("wylie", "")
             tibetan = entry.get("tibetan", "")
             lang_val = entry.get(lang_field, "")
             if not lang_val or not wylie:
                 continue
-            writer.writerow([wylie, tibetan, lang_val])
+            row = [wylie, tibetan, lang_val]
+            if include_sanskrit:
+                row.append(entry.get("sanskrit", ""))
+            writer.writerow(row)
             count += 1
     print(f"Wrote {count} rows to {output_path}", file=sys.stderr)
 
@@ -283,8 +289,8 @@ DICT_PRESETS = {
         "name": "roerich",
         "title": "Roerich Tibetan-Russian-English Dictionary",
         "csv_specs": [
-            ("roe.csv", "english", "english"),
-            ("ror.csv", "russian", "russian"),
+            ("roe.csv", "english", "english", True),
+            ("ror.csv", "russian", "russian", False),
         ],
     },
     "jaeschke": {
@@ -293,7 +299,7 @@ DICT_PRESETS = {
         "name": "jaeschke",
         "title": "Jaeschke Tibetan-English Dictionary (1882)",
         "csv_specs": [
-            ("jae.csv", "english", "english"),
+            ("jae.csv", "english", "english", True),
         ],
     },
 }
@@ -340,7 +346,7 @@ def main():
     output_dir = args.output_dir or preset.get("output_dir", ".")
     name = args.name or preset.get("name", "dictionary")
     title = preset.get("title", f"{name} Dictionary")
-    csv_specs = preset.get("csv_specs", [("dictionary.csv", "english", "english")])
+    csv_specs = preset.get("csv_specs", [("dictionary.csv", "english", "english", False)])
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -350,8 +356,8 @@ def main():
         export_json(entries, os.path.join(output_dir, f"{name}_dictionary.json"))
 
     if not args.skip_csv:
-        for csv_name, lang_field, col_name in csv_specs:
-            export_csv(entries, os.path.join(output_dir, csv_name), lang_field, col_name)
+        for csv_name, lang_field, col_name, sanskrit in csv_specs:
+            export_csv(entries, os.path.join(output_dir, csv_name), lang_field, col_name, sanskrit)
 
     if not args.skip_md:
         export_markdown(entries, os.path.join(output_dir, f"{name}_dictionary.md"), title)
