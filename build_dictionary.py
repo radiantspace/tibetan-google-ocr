@@ -222,18 +222,11 @@ def export_csv(entries, output_path, lang_field, lang_col_name):
 
 def export_markdown(entries, output_path):
     """Export entries to a searchable Markdown file."""
-    current_letter = None
     lines = ["# Roerich Tibetan-Russian-English Dictionary\n"]
 
     for entry in entries:
         wylie = entry.get("wylie", "")
         tibetan = entry.get("tibetan", "")
-
-        # Detect chapter letter change (first letter of wylie, uppercase)
-        first_letter = wylie.lstrip(" ~").upper()[:1] if wylie else ""
-        if first_letter and first_letter != current_letter:
-            current_letter = first_letter
-            lines.append(f"\n## {current_letter}\n")
 
         # Entry header
         if tibetan and wylie:
@@ -245,17 +238,12 @@ def export_markdown(entries, output_path):
         else:
             lines.append("### (unknown headword)")
 
-        # Sanskrit
         if entry.get("sanskrit"):
-            lines.append(f"*Skt.* {entry['sanskrit']}  ")
-
-        # English
+            lines.append(entry["sanskrit"])
         if entry.get("english"):
-            lines.append(f"**English:** {entry['english']}  ")
-
-        # Russian
+            lines.append(entry["english"])
         if entry.get("russian"):
-            lines.append(f"**Russian:** {entry['russian']}  ")
+            lines.append(entry["russian"])
 
         lines.append("")
 
