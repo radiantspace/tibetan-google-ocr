@@ -15,7 +15,7 @@ import tempfile
 import threading
 import unittest
 
-from ocr_roerich import BatchState, parse_compact_entries
+from ocr import BatchState, parse_compact_entries
 
 
 class TestBasicParsing(unittest.TestCase):
@@ -322,6 +322,83 @@ R:первый
         entries = parse_compact_entries(text)
         self.assertEqual(len(entries), 1)
         self.assertEqual(entries[0]["english"], "first.")
+
+
+class TestJaeschkeFormat(unittest.TestCase):
+    """Tests for Jaeschke dictionary format with J: field."""
+
+    def test_jaeschke_field_parsed(self):
+        text = """T:སྐྱེན་པ་
+J:skyeN-pa
+W:skyen pa
+E:adj. 1. quick, swift.
+==="""
+        entries = parse_compact_entries(text)
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["tibetan"], "སྐྱེན་པ་")
+        self.assertEqual(entries[0]["jaeschke"], "skyeN-pa")
+        self.assertEqual(entries[0]["wylie"], "skyen pa")
+        self.assertEqual(entries[0]["english"], "adj. 1. quick, swift.")
+
+    def test_jaeschke_with_sanskrit(self):
+        text = """T:སྐྱེར་པ་
+J:skyer-pa
+W:skyer pa
+E:Lex.: curcuma, turmeric; in W. barberry.
+S:harita
+==="""
+        entries = parse_compact_entries(text)
+        self.assertEqual(entries[0]["jaeschke"], "skyer-pa")
+        self.assertEqual(entries[0]["sanskrit"], "harita")
+
+    def test_jaeschke_wylie_annotations_in_english(self):
+        """E: field should preserve inline Wylie annotations."""
+        text = """T:སྐྱེན་པ་
+J:skyeN-pa
+W:skyen pa
+E:adj. 1. quick, swift Lex., kro- (khro-) or sdaN-skyen-pa (sdang skyen pa) quick to wrath.
+==="""
+        entries = parse_compact_entries(text)
+        self.assertIn("(khro-)", entries[0]["english"])
+        self.assertIn("(sdang skyen pa)", entries[0]["english"])
+
+    def test_leading_space_stripped_except_english(self):
+        """Leading whitespace stripped from T/J/W/S/R but not E."""
+        text = """T:  སྐྱེན་པ་
+J:  skyeN-pa
+W:  skyen pa
+E:  adj. quick.
+S:  harita
+R:  быстрый
+==="""
+        entries = parse_compact_entries(text)
+        self.assertEqual(entries[0]["tibetan"], "སྐྱེན་པ་")
+        self.assertEqual(entries[0]["jaeschke"], "skyeN-pa")
+        self.assertEqual(entries[0]["wylie"], "skyen pa")
+        self.assertEqual(entries[0]["english"], "  adj. quick.")
+        self.assertEqual(entries[0]["sanskrit"], "harita")
+        self.assertEqual(entries[0]["russian"], "быстрый")
+
+    def test_jaeschke_no_russian(self):
+        """Jaeschke entries typically have no Russian field."""
+        text = """T:སྐྱེམ་པ་
+J:skyem-pa
+W:skyem pa
+E:resp. to be thirsty.
+==="""
+        entries = parse_compact_entries(text)
+        self.assertNotIn("russian", entries[0])
+
+    def test_jaeschke_backward_compatible(self):
+        """Roerich-style entries (no J:) still parse correctly."""
+        text = """T:ཀ་པ
+W:ka pa
+E:first.
+R:первый
+==="""
+        entries = parse_compact_entries(text)
+        self.assertNotIn("jaeschke", entries[0])
+        self.assertEqual(entries[0]["tibetan"], "ཀ་པ")
 
 
 class TestRealGeminiOutput(unittest.TestCase):

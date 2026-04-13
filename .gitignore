@@ -6,6 +6,10 @@ roerich/
 roerich_output/pages/
 roerich_output/batch_state.json
 roerich_test_output/
+jaeschke/
+jaeschke_output/pages/
+jaeschke_output/batch_state.json
+jaeschke_test_output/
 __pycache__/
 *.pyc
 .venv/
