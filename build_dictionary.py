@@ -74,6 +74,33 @@ def should_concatenate(prev_entry, curr_entry, prev_has_continues, curr_has_cont
     return False, None
 
 
+def join_text(prev_text, curr_text):
+    """
+    Join two text fragments, fixing page-break hyphenation.
+    If prev ends with '- ' or '-' and curr starts with a letter (possibly
+    after a leading space), drop the trailing hyphen+space and leading space
+    to rejoin the word.
+    """
+    if not prev_text:
+        return curr_text
+    if not curr_text:
+        return prev_text
+
+    import re
+    # Check for hyphenation: prev ends with "- " or "-", curr starts with optional space + letter
+    m_prev = re.search(r"-\s*$", prev_text)
+    m_curr = re.match(r"\s*", curr_text)
+    if m_prev:
+        stem = prev_text[: m_prev.start()]
+        rest = curr_text[m_curr.end() :]
+        return stem + rest
+
+    # Normal join
+    if not prev_text.endswith(" ") and not curr_text.startswith(" "):
+        return prev_text + " " + curr_text
+    return prev_text + curr_text
+
+
 def merge_entries(prev, curr):
     """
     Merge curr into prev by concatenating text fields.
@@ -81,21 +108,11 @@ def merge_entries(prev, curr):
     """
     # Concatenate english
     if curr.get("english"):
-        prev_eng = prev.get("english", "")
-        curr_eng = curr["english"]
-        if prev_eng and not prev_eng.endswith(" ") and not curr_eng.startswith(" "):
-            prev["english"] = prev_eng + " " + curr_eng
-        else:
-            prev["english"] = prev_eng + curr_eng
+        prev["english"] = join_text(prev.get("english", ""), curr["english"])
 
     # Concatenate russian
     if curr.get("russian"):
-        prev_rus = prev.get("russian", "")
-        curr_rus = curr["russian"]
-        if prev_rus and not prev_rus.endswith(" ") and not curr_rus.startswith(" "):
-            prev["russian"] = prev_rus + " " + curr_rus
-        else:
-            prev["russian"] = prev_rus + curr_rus
+        prev["russian"] = join_text(prev.get("russian", ""), curr["russian"])
 
     # Concatenate sanskrit if present in curr but not in prev, or append
     if curr.get("sanskrit"):
@@ -160,11 +177,12 @@ def build_merged_dictionary(json_dir):
                 clean["_continues_next"] = True
             merged.append(clean)
 
-    # Final cleanup: remove internal tracking fields, finalize concat_info
+    # Final cleanup: remove internal tracking fields
     for entry in merged:
         entry.pop("_continues_next", None)
+        # Only include concat_info if entry was actually concatenated
         if "concat_info" not in entry:
-            entry["concat_info"] = None
+            pass  # no concat_info field at all for non-concatenated entries
         # Strip leading/trailing whitespace from text fields
         for field in ("english", "russian", "tibetan", "wylie", "sanskrit"):
             if entry.get(field):
