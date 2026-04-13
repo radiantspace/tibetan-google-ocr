@@ -15,7 +15,7 @@ import tempfile
 import threading
 import unittest
 
-from ocr_roerich import BatchState, parse_compact_entries
+from ocr import BatchState, parse_compact_entries
 
 
 class TestBasicParsing(unittest.TestCase):
